@@ -62,11 +62,13 @@ define(
             generateCSS: function() {
                 var transformations = this.model.get("transformations");
                 var len = transformations.length;
-                var styleSheet = document.createElement("style");
+                var styleSheet = document.getElementById("styleTest");
                 var tInitial = transformations[0].time
                 var duration = transformations[len-1].time - tInitial;                
                 var matrix = transformations[0].cssMatrix;
                 var percentage = 0;
+                
+                styleSheet.innerHTML  = "";
 
 
                 styleSheet.innerHTML = "div {border:2px solid red;}";
@@ -79,14 +81,16 @@ define(
                     styleSheet.innerHTML += "\n"+percentage+"% {-webkit-transform:matrix("+matrix+");}"
                 }
                 styleSheet.innerHTML += "\n}";
+                styleSheet.innerHTML += "\n\n.animate {\n-webkit-animation: mymove "+duration/1000+"s \n}";
 
 
                 // TODO: testing...
                 document.body.appendChild(styleSheet);
-                console.log(styleSheet);
                 var test =  document.getElementById("test");
-                console.log(test)
-                $(test).css({"-webkit-animation": ("mymove " + duration/1000 + "s infinite")});
+                $(test).addClass("animate");
+                document.getElementById("text").innerHTML = styleSheet.innerHTML;
+                this.model.set("transformations", []);
+                console.log(styleSheet.innerHTML);
             },
 
             mouseEnd: function(e) {
