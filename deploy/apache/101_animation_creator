@@ -1,0 +1,7 @@
+
+Alias /animation-creator /opt/animationCreator/
+<Directory "/opt/animationCreator">
+    Options Indexes MultiViews FollowSymLinks
+    AllowOverride None
+    Order deny,allow
+</Directory>

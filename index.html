@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <title>Animation Creator!</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script data-main="require_config.js" src="vendor/require/requirejs.js"></script>
+    <style>
+        #test {
+            position:absolute;
+            top:50%;
+            left:50%;
+            width:50px;
+            height:50px;
+            background: rgba(100,100,200,0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="target"></div>
+        
+
+    <div id="test"></div>
+
+    <script>
+        window.setTimeout(function() {
+            console.log('loading');
+            window.animationCreator = new AnimationCreator({width:"800px", target:"#target"});
+            window.animationCreator.render();
+        },500);
+    </script>
+</body>
+</html>
