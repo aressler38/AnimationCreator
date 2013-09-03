@@ -81,7 +81,9 @@ define(
                     styleSheet.innerHTML += "\n"+percentage+"% {-webkit-transform:matrix("+matrix+");}"
                 }
                 styleSheet.innerHTML += "\n}";
-                styleSheet.innerHTML += "\n\n.animate {\n-webkit-animation: mymove "+duration/1000+"s \n}";
+                styleSheet.innerHTML += "\n\n.animate {\n-webkit-animation: mymove "+duration/1000+"s infinite;";
+                styleSheet.innerHTML +=               "\n-webkit-transform:matrix("+matrix+");";
+                styleSheet.innerHTML +=               "\n}";
 
 
                 // TODO: testing...
