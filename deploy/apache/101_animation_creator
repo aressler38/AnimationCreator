@@ -1,6 +1,6 @@
 
-Alias /animation-creator /opt/animationCreator/
-<Directory "/opt/animationCreator">
+Alias /animation-creator /opt/AnimationCreator/
+<Directory "/opt/AnimationCreator">
     Options Indexes MultiViews FollowSymLinks
     AllowOverride None
     Order deny,allow
