@@ -24,9 +24,6 @@ define(
                 document.body.appendChild(this.loadIcon);
 
                 this.subProcess = new Worker("build/worker.js");
-                //this.subProcess.onmessage = function(d) {
-                //}
-                //this.subProcess.postMessage({message:"hello hello hello"});
             },
             
             events: function() {
@@ -95,24 +92,21 @@ define(
                     vendors: vendors,
                 }
 
-                this.subProcess.addEventListener("message", processCSS);
-                this.subProcess.postMessage({message:"generateCSS", workerData:workerData});
-                
-                this.spinerIcon.on.call(this);
-                
                 function processCSS (d) {
+                    console.log("running processCSS");
                     styleSheet.innerHTML = d.data;
                     that.spinerIcon.off.call(that);
-                    document.body.appendChild(styleSheet);
                     var test =  document.getElementById("test");
                     $(test).addClass("animate");
                     document.getElementById("text").innerHTML = styleSheet.innerHTML;
                     this.removeEventListener("message", processCSS);
                 }
-                    
-                
 
                 // TODO: testing...
+                this.spinerIcon.on.call(this);
+                this.subProcess.addEventListener("message", processCSS);
+                this.subProcess.postMessage({message:"generateCSS", workerData:workerData});
+                $(test).removeClass("animate");
                 this.model.set("transformations", []);
             },
 
