@@ -28,10 +28,10 @@ define(
             
             events: function() {
                 var events = new Object();
-                events["touchstart"] = "touchStart";               
-                events["touchend"]   = "mouseEnd";               
-                events["mousedown"]  = "mouseStart";
-                events["mouseup"]    = "mouseEnd";
+                events["touchstart"] = "animationStart";               
+                events["touchend"]   = "animationEnd";               
+                events["mousedown"]  = "animationStart";
+                events["mouseup"]    = "animationEnd";
                 return events;
             },
             
@@ -110,7 +110,7 @@ define(
                 this.model.set("transformations", []);
             },
 
-            mouseEnd: function(e) {
+            animationEnd: function(e) {
                 this.generateCSS();
             },
             
@@ -124,7 +124,7 @@ define(
                 console.log(e);
             },
 
-            mouseStart: function(e) {
+            animationStart: function(e) {
                 var model = this.model;
                 var transformations = model.get("transformations");
                 var transformation = model.get("transformation");
@@ -140,10 +140,25 @@ define(
                     context.lineTo(x,y);
                 }
                 function mouseMove (e) {
+                    console.log(e)
                     var time = new Date().getTime();
                     var offsets = $(this).offset();
                     var x = e.pageX - offsets.left;
                     var y = e.pageY - offsets.top;
+                    var centerX = el.width/2.0
+                    var centerY = el.height/2.0
+                    drawBox(x,y);
+                    // do more stuff!!!
+                    savePath(x-centerX,y-centerY,time);
+                    renderPath();
+                    
+                }
+                function touchMove (e) {
+                    e.preventDefault();
+                    var time = new Date().getTime();
+                    var offsets = $(this).offset();
+                    var x = e.touches[0].pageX - offsets.left;
+                    var y = e.touches[0].pageY - offsets.top;
                     var centerX = el.width/2.0
                     var centerY = el.height/2.0
                     drawBox(x,y);
@@ -171,6 +186,7 @@ define(
                 }
 
                 el.addEventListener("mousemove", mouseMove);
+                el.addEventListener("touchmove", touchMove);
                 el.addEventListener("mouseup", function() {
                     el.removeEventListener("mousemove", mouseMove);    
                 });
