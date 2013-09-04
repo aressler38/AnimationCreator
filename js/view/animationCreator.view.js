@@ -20,13 +20,21 @@ define(
                 // line up the target
                 this.model.get("target").css({width: this.el.width});
                 this.model.get("target").css({height: this.el.height});
+                this.loadIcon = document.createElement("div");
+                document.body.appendChild(this.loadIcon);
+
+                this.subProcess = new Worker("build/worker.js");
+                //this.subProcess.onmessage = function(d) {
+                //}
+                //this.subProcess.postMessage({message:"hello hello hello"});
             },
             
             events: function() {
                 var events = new Object();
                 events["touchstart"] = "touchStart";               
-                events["mousedown"] = "mouseStart";
-                events["mouseup"] = "mouseEnd";
+                events["touchend"]   = "mouseEnd";               
+                events["mousedown"]  = "mouseStart";
+                events["mouseup"]    = "mouseEnd";
                 return events;
             },
             
@@ -59,40 +67,53 @@ define(
                 });
             },
 
+            spinerIcon: {
+                on:function(){
+                    $(this.loadIcon).addClass("animation-creator-loading"); 
+                },
+                off: function(){
+                    $(this.loadIcon).removeClass("animation-creator-loading"); 
+                }
+            },
+
             generateCSS: function() {
-                var transformations = this.model.get("transformations");
-                var len = transformations.length;
+                var transformations = this.model.get("transformations"),
+                    tLen = transformations.length;
                 var styleSheet = document.getElementById("styleTest");
                 var tInitial = transformations[0].time
-                var duration = transformations[len-1].time - tInitial;                
+                var duration = transformations[tLen-1].time - tInitial;                
                 var matrix = transformations[0].cssMatrix;
                 var percentage = 0;
-                
-                styleSheet.innerHTML  = "";
+                var vendors = ["-webkit-", "-moz-", ""],
+                    vLen=vendors.length;
+                var that = this;
 
-
-                styleSheet.innerHTML = "div {border:2px solid red;}";
-                styleSheet.innerHTML += "\n@-webkit-keyframes mymove {";
-
-                for (var i=0; i<len; i++) {
-                    percentage = (transformations[i].time - tInitial) / duration;
-                    percentage = (percentage.toFixed(4)*100).toPrecision(4);
-                    matrix = transformations[i].cssMatrix;
-                    styleSheet.innerHTML += "\n"+percentage+"% {-webkit-transform:matrix("+matrix+");}"
+                var workerData = {
+                    vLen: vLen,
+                    tLen: tLen,
+                    transformations: transformations,
+                    vendors: vendors,
                 }
-                styleSheet.innerHTML += "\n}";
-                styleSheet.innerHTML += "\n\n.animate {\n-webkit-animation: mymove "+duration/1000+"s infinite;";
-                styleSheet.innerHTML +=               "\n-webkit-transform:matrix("+matrix+");";
-                styleSheet.innerHTML +=               "\n}";
 
+                this.subProcess.addEventListener("message", processCSS);
+                this.subProcess.postMessage({message:"generateCSS", workerData:workerData});
+                
+                this.spinerIcon.on.call(this);
+                
+                function processCSS (d) {
+                    styleSheet.innerHTML = d.data;
+                    that.spinerIcon.off.call(that);
+                    document.body.appendChild(styleSheet);
+                    var test =  document.getElementById("test");
+                    $(test).addClass("animate");
+                    document.getElementById("text").innerHTML = styleSheet.innerHTML;
+                    this.removeEventListener("message", processCSS);
+                }
+                    
+                
 
                 // TODO: testing...
-                document.body.appendChild(styleSheet);
-                var test =  document.getElementById("test");
-                $(test).addClass("animate");
-                document.getElementById("text").innerHTML = styleSheet.innerHTML;
                 this.model.set("transformations", []);
-                console.log(styleSheet.innerHTML);
             },
 
             mouseEnd: function(e) {

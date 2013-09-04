@@ -1,3 +1,12 @@
 .animation-creator {
     border:1px dotted black;
 }
+
+.animation-creator-loading {
+    position:fixed;
+    top:50%;
+    left:50%;
+    height:50px;
+    width:50px;
+    background-image: url(../img/loader.gif);
+}

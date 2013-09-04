@@ -21,6 +21,7 @@
         "jQuery"                : "vendor/jquery/jquery-1.10.2.min",
         "Backbone"              : "vendor/backbone/backbone-min",
         "underscore"            : "vendor/underscore/underscore-min",
+        "worker"                : "worker",
         "AnimationCreatorModel" : "js/model/animationCreator.model",
         "AnimationCreatorView"  : "js/view/animationCreator.view"
     },
