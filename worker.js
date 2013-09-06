@@ -29,14 +29,17 @@ function generateCSS(data) {
     var matrix = transformations[0].cssMatrix;
     var duration = transformations[tLen-1].time - tInitial;                
     
-    cssText += "div {border:2px solid red;}";
+    //cssText += "div {border:2px solid red;}";
     for (var j=0; j<vLen; j++) {
         cssText += "\n@"+vendors[j]+"keyframes mymove {";
         for (var i=0; i<tLen; i++) {
             percentage = (transformations[i].time - tInitial) / duration;
             percentage = (percentage.toFixed(4)*100).toPrecision(4);
             matrix = transformations[i].cssMatrix;
-            cssText += "\n    "+percentage+"% {"+vendors[j]+"transform: matrix("+matrix+");}";
+            cssText += "\n    "+percentage+"% {"
+                                    +vendors[j]+"transform: matrix("+matrix+");"
+                                    +"z-index: "+(transformations[i].time-tInitial)+";"
+                               +"}";
         }
         cssText += "\n}";
     }

@@ -72,6 +72,49 @@ define(
                 }
             },
 
+            replay: function() {
+
+                // requestAnimationFrame replay implementation 
+
+
+                // currently no time checking is happening, but this method sucks anyway cause the animation
+                // plays back slower..
+
+                
+                // suggest using the keyframe animation and listening to content changes
+        
+                var transformations = this.model.get("transformations"),
+                    tLen = transformations.length;
+                var tInitial = transformations[0].time
+                var duration = transformations[tLen-1].time - tInitial;                
+                var matrix = transformations[0].cssMatrix;
+
+                var $test = $(document.getElementById("test"));
+                
+                var counter = 0;
+                console.log(tLen);
+
+                var time;
+                function draw(){
+                    console.log(arguments)
+                    var now = new Date().getTime(),
+                        dt = now - (time || now);
+                 
+                    time = now;
+                    
+                 
+                    // Drawing code goes here... for example updating an 'x' position:
+                   // this.x += 10 * dt; // Increase 'x' by 10 units per millisecond
+                    $test.css({"-webkit-transform":"matrix("+transformations[counter].cssMatrix+")"});
+                    counter++
+                    if((counter<tLen)) 
+                        window.requestAnimationFrame(draw);
+                }
+                draw();
+                
+
+            },
+
             generateCSS: function() {
                 var transformations = this.model.get("transformations"),
                     tLen = transformations.length;
@@ -104,8 +147,8 @@ define(
                 this.spinerIcon.on.call(this);
                 this.subProcess.addEventListener("message", processCSS);
                 this.subProcess.postMessage({message:"generateCSS", workerData:workerData});
-                $(test).removeClass("animate");
-                this.model.set("transformations", []);
+                //$(test).removeClass("animate");
+                //this.model.set("transformations", []);
             },
 
             animationEnd: function(e) {

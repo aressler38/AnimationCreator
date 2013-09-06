@@ -35,6 +35,15 @@ require(
     ],
     function($, None, _, Backbone, AnimationCreatorModel, AnimationCreatorView) {
 
+        window.requestAnimationFrame = (function(){
+            return  window.requestAnimationFrame       ||
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame    ||
+                    function( callback ){
+                        window.setTimeout(callback, 1000 / 60);
+                    };
+        })();
+
         function AnimationCreator(config) {
             var model = new AnimationCreatorModel(config);
             var view = new AnimationCreatorView({model:model});
