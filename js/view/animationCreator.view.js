@@ -42,7 +42,6 @@ define(
                 return this.$el;
             },
 
-
             drawAxes: function() {
                 var width = this.model.get("width");
                 var height = this.model.get("height");
@@ -93,7 +92,6 @@ define(
                 }
 
                 function processCSS (d) {
-                    console.log("running processCSS");
                     styleSheet.innerHTML = d.data;
                     that.spinerIcon.off.call(that);
                     var test =  document.getElementById("test");
@@ -120,10 +118,6 @@ define(
                 height  : 50
             }, 
             
-            touchStart: function(e) {
-                console.log(e);
-            },
-
             animationStart: function(e) {
                 var model = this.model;
                 var transformations = model.get("transformations");
@@ -140,7 +134,6 @@ define(
                     context.lineTo(x,y);
                 }
                 function mouseMove (e) {
-                    console.log(e)
                     var time = new Date().getTime();
                     var offsets = $(this).offset();
                     var x = e.pageX - offsets.left;
@@ -190,6 +183,22 @@ define(
                 el.addEventListener("mouseup", function() {
                     el.removeEventListener("mousemove", mouseMove);    
                 });
+            },
+            
+            matrixMultiplication: function(A, B) {
+                /* defined as:
+                 *
+                 *     [ a11 a12 a13 ]       [ b11 b12 b13 ]
+                 * A = [ a21 a22 a23 ] , B = [ b21 b22 b23 ]
+                 *
+                 *      [ a11b11+a12b21   a11b12+a12b22   a13+b13]
+                 * AB = [ a21b11+a22b21   a21b12+a22b22   a23+b23]
+                 *  
+                 *  where the mapping to the argument A is A := [a11,a12,a21,a22,a13,a23], or indexed A := [0,1,4,2,3,5]
+                 *  note: first 2 columns treated as standard 2x2 matrix -- multiplication as usual, 3rd columns add
+                */
+
+                return [ (A[0]*B[0]+A[1]*B[2]), (A[0]*B[1]+A[1]*B[3]), (A[2]*B[0]+A[3]*B[2]), (A[2]*B[1]+A[3]*B[3]), (A[4]+B[4]), (A[5]+B[5]) ];
             }
 
 
