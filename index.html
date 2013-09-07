@@ -5,13 +5,13 @@
     <link rel="stylesheet" href="css/main.css">
     <script data-main="require_config.js" src="vendor/require/requirejs.js"></script>
     <style>
-        #test {
+        #test, #testhelper {
             position:absolute;
             top:50%;
             left:50%;
             width:50px;
             height:50px;
-            background: rgba(100,100,200,0.4);
+            background: rgba(100,0,200,0.4);
         }
         #text {
             width:800px;
@@ -19,6 +19,9 @@
         body textarea {
             height:900px;
         }
+
+
+
     </style>
 </head>
 
@@ -27,6 +30,7 @@
         
 
     <div id="test"></div>
+    <div id="testhelper"></div>
 
     <script>
         window.setTimeout(function() {

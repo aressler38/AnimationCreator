@@ -37,13 +37,29 @@ function generateCSS(data) {
             percentage = (percentage.toFixed(4)*100).toPrecision(4);
             matrix = transformations[i].cssMatrix;
             cssText += "\n    "+percentage+"% {"
-                                    +vendors[j]+"transform: matrix("+matrix+");"
-                                    +"z-index: "+(transformations[i].time-tInitial)+";"
+                                    +vendors[j]+"transform: matrix("+matrix+");\n"
+                                    +"    color:blue;\n"
                                +"}";
         }
         cssText += "\n}";
     }
 
+    cssText += "\n"
+        +"@-webkit-keyframes testDuration {"
+        +"    from {  "
+        +"        opacity: 0;"
+        +"    }"
+        +"    to {"
+        +"        opacity: 1;"
+        +"    }"
+        +"}";
+
+    cssText += "\n\n.testhelper {\n";
+    for(var j=0; j<vLen; j++) {
+        cssText += "\n    "+vendors[j]+"animation: testDuration "+duration/1000+"s infinite;";
+        cssText += "\n    "+vendors[j]+"transform: matrix("+matrix+");";
+    }
+    cssText += "           }\n";
     
     cssText += "\n\n.animate {";
     for(var j=0; j<vLen; j++) {

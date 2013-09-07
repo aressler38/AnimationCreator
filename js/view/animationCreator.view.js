@@ -23,7 +23,7 @@ define(
                 this.loadIcon = document.createElement("div");
                 document.body.appendChild(this.loadIcon);
 
-                this.subProcess = new Worker("build/worker.js");
+                this.subProcess = new Worker("./worker.js");
             },
             
             events: function() {
@@ -101,7 +101,6 @@ define(
                         dt = now - (time || now);
                  
                     time = now;
-                    
                  
                     // Drawing code goes here... for example updating an 'x' position:
                    // this.x += 10 * dt; // Increase 'x' by 10 units per millisecond
@@ -111,8 +110,6 @@ define(
                         window.requestAnimationFrame(draw);
                 }
                 draw();
-                
-
             },
 
             generateCSS: function() {
@@ -139,6 +136,7 @@ define(
                     that.spinerIcon.off.call(that);
                     var test =  document.getElementById("test");
                     $(test).addClass("animate");
+                    $("#testhelper").addClass("testhelper");
                     document.getElementById("text").innerHTML = styleSheet.innerHTML;
                     this.removeEventListener("message", processCSS);
                 }
@@ -147,8 +145,8 @@ define(
                 this.spinerIcon.on.call(this);
                 this.subProcess.addEventListener("message", processCSS);
                 this.subProcess.postMessage({message:"generateCSS", workerData:workerData});
-                //$(test).removeClass("animate");
-                //this.model.set("transformations", []);
+                $(test).removeClass("animate");
+                $("#testhelper").removeClass("testhelper");
             },
 
             animationEnd: function(e) {
@@ -162,6 +160,7 @@ define(
             }, 
             
             animationStart: function(e) {
+                this.model.set("transformations", []);
                 var model = this.model;
                 var transformations = model.get("transformations");
                 var transformation = model.get("transformation");
