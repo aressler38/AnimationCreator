@@ -115,7 +115,8 @@ define(
             generateCSS: function() {
                 var transformations = this.model.get("transformations"),
                     tLen = transformations.length;
-                var styleSheet = document.getElementById("styleTest");
+                var styleSheet = document.getElementById("styleSheet");
+                var styleSheetHelper = document.getElementById("styleSheetHelper");
                 var tInitial = transformations[0].time
                 var duration = transformations[tLen-1].time - tInitial;                
                 var matrix = transformations[0].cssMatrix;
@@ -132,12 +133,13 @@ define(
                 }
 
                 function processCSS (d) {
-                    styleSheet.innerHTML = d.data;
+                    styleSheet.innerHTML = d.data[0];
+                    styleSheetHelper.innerHTML = d.data[1];
                     that.spinerIcon.off.call(that);
-                    var test =  document.getElementById("test");
-                    $(test).addClass("animate");
+                    $("#test").addClass("animate");
                     $("#testhelper").addClass("testhelper");
                     document.getElementById("text").innerHTML = styleSheet.innerHTML;
+                    document.getElementById("text").innerHTML += styleSheetHelper.innerHTML;
                     this.removeEventListener("message", processCSS);
                 }
 
@@ -145,12 +147,32 @@ define(
                 this.spinerIcon.on.call(this);
                 this.subProcess.addEventListener("message", processCSS);
                 this.subProcess.postMessage({message:"generateCSS", workerData:workerData});
-                $(test).removeClass("animate");
+                $("#test").removeClass("animate");
                 $("#testhelper").removeClass("testhelper");
+
+                this.styleSheet = styleSheet;
+                this.styleSheetHelper = styleSheetHelper;
+            },
+
+            query: function() {
+                var styleSheet = this.styleSheetHelper;
+                var percentage = parseFloat($("#testhelper").css("opacity"));
+
+                percentage = parseFloat(((percentage.toFixed(4)*100).toPrecision(4)/100).toPrecision(4));
+                if (styleSheet.innerHTML.match(percentage)) {
+                    console.log('matched!');
+                    console.log(percentage);
+                }
+                else {
+                    console.log('failed match');
+                    console.log('your query: '+percentage);
+                    console.log(styleSheetHelper.innerHTML);
+                }
+                return percentage;
             },
 
             animationEnd: function(e) {
-                this.generateCSS();
+                if (this.model.get("transformations")[0]) this.generateCSS();
             },
             
             // defaults for moving box on canvas
