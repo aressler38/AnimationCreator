@@ -155,20 +155,23 @@ define(
             },
 
             query: function() {
-                var styleSheet = this.styleSheetHelper;
+                var styleSheetHelper = this.styleSheetHelper;
+                var styleSheet = this.styleSheet;
                 var percentage = parseFloat($("#testhelper").css("opacity"));
-
-                percentage = parseFloat(((percentage.toFixed(4)*100).toPrecision(4)/100).toPrecision(4));
-                if (styleSheet.innerHTML.match(percentage)) {
+                
+                cssPercentage = (percentage.toFixed(4)*100).toPrecision(4)
+               
+                console.log(cssPercentage)
+                opacityPercentage = parseFloat(((percentage.toFixed(4)*100).toPrecision(4)/100).toPrecision(4));
+                if (styleSheet.innerHTML.match(cssPercentage)) {
                     console.log('matched!');
-                    console.log(percentage);
                 }
                 else {
                     console.log('failed match');
-                    console.log('your query: '+percentage);
+                    console.log('your query: '+cssPercentage);
                     console.log(styleSheetHelper.innerHTML);
                 }
-                return percentage;
+                return cssPercentage;
             },
 
             animationEnd: function(e) {
