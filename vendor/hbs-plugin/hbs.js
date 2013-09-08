@@ -179,13 +179,16 @@ define(['module', "Handlebars"], function (module, Handlebars) {
 
             masterConfig.isBuild = config.isBuild;
 
-            var parsed = text.parseName(name),
-                nonStripName = parsed.moduleName +
+            var parsed = text.parseName(name);
+            parsed.ext="hbs"
+            var nonStripName = parsed.moduleName +
                     (parsed.ext ? '.' + parsed.ext : ''),
                 url = req.toUrl(nonStripName),
                 useXhr = (masterConfig.useXhr) ||
                          text.useXhr;
 
+            console.log(parsed);
+            
             //Load the text. Use XHR if possible and in a browser.
             if (!hasLocation || useXhr(url, defaultProtocol, defaultHostName, defaultPort)) {
                 text.get(url, function (content) {

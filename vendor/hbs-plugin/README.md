@@ -5,16 +5,19 @@ resources.
 
 This is based on the text plugin here: https://github.com/requirejs/text
 
-Example:
+Example
+-------
 
+```
 require(
-["hbs!templates/mytemplate.hbs"],
-function(template){
+    ["hbs!templates/mytemplate"],
+    function(template){
+        var templateConfig = {test:"test"};
+        document.write(template(templateConfig));
+    }
+);
 
-    var templateConfig = {test:"test"};
-    document.write(template(templateConfig));
-});
-
+```
 
 ## License
 

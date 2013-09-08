@@ -4,7 +4,7 @@ define(
         "underscore",
         "Backbone",
         "renderTemplate",
-        "hbs!templates/test.hbs"
+        "hbs!templates/test"
     ],
     function($, underscore ,Backbone, renderTemplate, template) {
         var AnimationCreatorView = Backbone.View.extend({
