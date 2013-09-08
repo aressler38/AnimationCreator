@@ -1,0 +1,32 @@
+{
+    "name": "hbs-plugin",
+    "version": "1.0",
+    "description": "An AMD loader plugin for loading handlebars resources (based on text plugin).",
+    "categories": [
+        "Loader plugins"
+    ],
+    "main": "text.js",
+    "github": "https://github.com/aressler38/hbs-plugin",
+    "bugs": {
+        "web": "https://github.com/aressler38/hbs-plugin/issues"
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/aressler38/hbs-plugin.git"
+        }
+    ],
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://www.opensource.org/licenses/mit-license.php"
+        },
+        {
+            "type": "BSD New",
+            "url": "http://opensource.org/licenses/BSD-3-Clause"
+        }
+    ],
+    "volo": {
+        "url": "https://raw.github.com/aressler38/hbs-plugin/{version}/hbs.js"
+    }
+}
