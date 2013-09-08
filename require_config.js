@@ -19,6 +19,9 @@ require.config({
         "Backbone"              : "vendor/backbone/backbone-min",
         "underscore"            : "vendor/underscore/underscore-min",
         "noUiSlider"            : "vendor/noUiSlider/jquery.nouislider",
+        "hbs"                   : "vendor/hbs-plugin/hbs",
+        "Handlebars"            : "vendor/handlebars/handlebars",
+        "renderTemplate"        : "js/utils/renderTemplate",
         "AnimationCreatorModel" : "js/model/animationCreator.model",
         "AnimationCreatorView"  : "js/view/animationCreator.view"
     }

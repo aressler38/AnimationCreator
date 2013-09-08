@@ -1,3 +1,7 @@
+.clear {
+    clear:both;
+}
+
 .animation-creator {
     border:1px dotted black;
 }
@@ -9,6 +13,21 @@
     height:50px;
     width:50px;
     background-image: url(../img/loader.gif);
+}
+
+#test, #testhelper {
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:50px;
+    height:50px;
+    background: rgb(100,0,200);
+}
+#text {
+    width:800px;
+}
+body textarea {
+    height:900px;
 }
 
 

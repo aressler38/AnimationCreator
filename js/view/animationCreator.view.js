@@ -3,8 +3,10 @@ define(
         "jQuery",
         "underscore",
         "Backbone",
+        "renderTemplate",
+        "hbs!templates/test.hbs"
     ],
-    function($, underscore ,Backbone) {
+    function($, underscore ,Backbone, renderTemplate, template) {
         var AnimationCreatorView = Backbone.View.extend({
             className: "animation-creator",
 
@@ -24,6 +26,9 @@ define(
                 document.body.appendChild(this.loadIcon);
 
                 this.subProcess = new Worker("./worker.js");
+                
+                var stuff = renderTemplate(template, {test:"stuff"});
+                $("#mybox").html(stuff);
             },
             
             events: function() {
@@ -162,7 +167,8 @@ define(
                 cssPercentage = (percentage.toFixed(4)*100).toPrecision(4)
                
                 console.log(cssPercentage)
-                opacityPercentage = parseFloat(((percentage.toFixed(4)*100).toPrecision(4)/100).toPrecision(4));
+                opacityPercentage = ((percentage.toFixed(4)*100).toPrecision(4)/100).toPrecision(4);
+                opacityPercentage = parseFloat(opacityPercentage);
                 if (styleSheet.innerHTML.match(cssPercentage)) {
                     console.log('matched!');
                 }
@@ -193,7 +199,6 @@ define(
                 var el = this.el;
                 var boxWidth = this.boxDefaults.width;
                 var boxHeight = this.boxDefaults.height;
-
 
                 function drawBox(x,y) {
                     el.width = el.width; // reset canvas    
