@@ -187,7 +187,6 @@ define(['module', "Handlebars"], function (module, Handlebars) {
                 useXhr = (masterConfig.useXhr) ||
                          text.useXhr;
 
-            console.log(parsed);
             
             //Load the text. Use XHR if possible and in a browser.
             if (!hasLocation || useXhr(url, defaultProtocol, defaultHostName, defaultPort)) {

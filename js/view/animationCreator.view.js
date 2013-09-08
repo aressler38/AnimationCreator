@@ -6,35 +6,40 @@ define(
         "renderTemplate",
         "hbs!templates/test"
     ],
-    function($, underscore ,Backbone, renderTemplate, template) {
+    function($, underscore, Backbone, renderTemplate, template) {
         var AnimationCreatorView = Backbone.View.extend({
             className: "animation-creator",
 
             tagName: "canvas",
-            
+
             initialize: function() {
                 this.el.setAttribute("id", this.model.get("id"));
                 this.el.setAttribute("width", this.model.get("width"));
                 this.el.setAttribute("height", this.model.get("height"));
 
+                this.subProcess = new Worker("./worker.js");
                 this.context = this.el.getContext("2d");
+                this.loadIcon = document.createElement("div");
 
                 // line up the target
                 this.model.get("target").css({width: this.el.width});
                 this.model.get("target").css({height: this.el.height});
-                this.loadIcon = document.createElement("div");
-                document.body.appendChild(this.loadIcon);
 
-                this.subProcess = new Worker("./worker.js");
-                
-                var stuff = renderTemplate(template, {test:"stuff"});
+                var templateConfig = {
+                    name:"fred",
+                    age: 59,
+                    food: "cheese sticks"
+                }   
+
+                var stuff = renderTemplate(template, templateConfig);
                 $("#mybox").html(stuff);
+
             },
             
             events: function() {
                 var events = new Object();
-                events["touchstart"] = "animationStart";               
-                events["touchend"]   = "animationEnd";               
+                events["touchstart"] = "animationStart";
+                events["touchend"]   = "animationEnd";
                 events["mousedown"]  = "animationStart";
                 events["mouseup"]    = "animationEnd";
                 return events;
@@ -44,6 +49,7 @@ define(
                 console.log('rendering');
                 this.model.get("target").html(this.el);
                 this.drawAxes();
+                document.body.appendChild(this.loadIcon);
                 return this.$el;
             },
 
@@ -87,15 +93,15 @@ define(
 
                 
                 // suggest using the keyframe animation and listening to content changes
-        
+
                 var transformations = this.model.get("transformations"),
                     tLen = transformations.length;
                 var tInitial = transformations[0].time
-                var duration = transformations[tLen-1].time - tInitial;                
+                var duration = transformations[tLen-1].time - tInitial;
                 var matrix = transformations[0].cssMatrix;
 
                 var $test = $(document.getElementById("test"));
-                
+
                 var counter = 0;
                 console.log(tLen);
 
@@ -104,9 +110,9 @@ define(
                     console.log(arguments)
                     var now = new Date().getTime(),
                         dt = now - (time || now);
-                 
+
                     time = now;
-                 
+
                     // Drawing code goes here... for example updating an 'x' position:
                    // this.x += 10 * dt; // Increase 'x' by 10 units per millisecond
                     $test.css({"-webkit-transform":"matrix("+transformations[counter].cssMatrix+")"});
@@ -123,7 +129,7 @@ define(
                 var styleSheet = document.getElementById("styleSheet");
                 var styleSheetHelper = document.getElementById("styleSheetHelper");
                 var tInitial = transformations[0].time
-                var duration = transformations[tLen-1].time - tInitial;                
+                var duration = transformations[tLen-1].time - tInitial;
                 var matrix = transformations[0].cssMatrix;
                 var percentage = 0;
                 var vendors = ["-webkit-", "-moz-", ""],
@@ -163,19 +169,19 @@ define(
                 var styleSheetHelper = this.styleSheetHelper;
                 var styleSheet = this.styleSheet;
                 var percentage = parseFloat($("#testhelper").css("opacity"));
-                
+
                 cssPercentage = (percentage.toFixed(4)*100).toPrecision(4)
-               
-                console.log(cssPercentage)
                 opacityPercentage = ((percentage.toFixed(4)*100).toPrecision(4)/100).toPrecision(4);
                 opacityPercentage = parseFloat(opacityPercentage);
+
                 if (styleSheet.innerHTML.match(cssPercentage)) {
                     console.log('matched!');
                 }
                 else {
-                    console.log('failed match');
-                    console.log('your query: '+cssPercentage);
+                    console.log("failed match");
+                    console.log("your query: "+cssPercentage);
                     console.log(styleSheetHelper.innerHTML);
+                    throw new Error("failed query");
                 }
                 return cssPercentage;
             },
@@ -183,13 +189,13 @@ define(
             animationEnd: function(e) {
                 if (this.model.get("transformations")[0]) this.generateCSS();
             },
-            
+
             // defaults for moving box on canvas
             boxDefaults: {
                 width   : 50,
                 height  : 50
-            }, 
-            
+            },
+
             animationStart: function(e) {
                 this.model.set("transformations", []);
                 var model = this.model;
@@ -216,7 +222,6 @@ define(
                     // do more stuff!!!
                     savePath(x-centerX,y-centerY,time);
                     renderPath();
-                    
                 }
                 function touchMove (e) {
                     e.preventDefault();
@@ -230,13 +235,11 @@ define(
                     // do more stuff!!!
                     savePath(x-centerX,y-centerY,time);
                     renderPath();
-                    
                 }
                 function renderPath() {
                     var len = transformations.length;
                     var centerX = el.width/2.0
                     var centerY = el.height/2.0
-                    
                     context.beginPath();
                     for (var i=0; i<len; i++) {
                         context.lineTo(
