@@ -23,7 +23,9 @@ require.config({
         "Handlebars"            : "vendor/handlebars/handlebars",
         "renderTemplate"        : "js/utils/renderTemplate",
         "AnimationCreatorModel" : "js/model/animationCreator.model",
-        "AnimationCreatorView"  : "js/view/animationCreator.view"
+        "AnimationCreatorView"  : "js/view/animationCreator.view",
+        "CanvasView"            : "js/view/canvas.view",
+        "CanvasModel"           : "js/model/canvas.model"
     }
 });
 

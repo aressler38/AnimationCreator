@@ -7,30 +7,11 @@
 </head>
 
 <body>
-    <div id="target"></div>
-        
-
-    <div id="test"></div>
-    <div id="testhelper"></div>
-
+    <div id="animation-creator-container"></div>
     <script>
-        window.setTimeout(function() {
-            console.log('loading');
-            window.animationCreator = new AnimationCreator({width:"800px", target:"#target"});
-            window.animationCreator.render();
-        },500);
+        setTimeout(function(){
+            window.a = new AnimationCreator({target:"#animation-creator-container"});
+        },2000);
     </script>
-
-    <div id="myslider" class="noUislider"></div>
-
-    <div class="clear"></div>
-
-    <div id="mybox"></div>
-
-    <div class="clear"></div>
-
-    <textarea id="text"></textarea>
-    <style id="styleSheet"></style>
-    <style id="styleSheetHelper"></style>
 </body>
 </html>
