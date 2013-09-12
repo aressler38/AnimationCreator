@@ -8,10 +8,9 @@ define(
         "CanvasModel",
 
         "renderTemplate",
-        "hbs!templates/test"
         "hbs!templates/main"
     ],
-    function($, underscore, Backbone, CanvasView, CanvasModel, renderTemplate, template, mainTemplate) {
+    function($, underscore, Backbone, CanvasView, CanvasModel, renderTemplate, mainTemplate) {
         var AnimationCreatorView = Backbone.View.extend({
             
             /*
@@ -29,52 +28,48 @@ define(
                 this.el.setAttribute("height", this.model.get("height"));
 
                 this.subProcess = new Worker("./worker.js");
-                this.context    = this.el.getContext("2d");
                 this.loadIcon   = document.createElement("div");
 
                 
                 // initialize main axis and tool kit
-                this.mainAxis = new CanvasView({model:CanvasModel(canvasConfgi)});
+                var mainTemplateConfig = {
+                    headerLeft      : _.uniqueId("leftheader-"), 
+                    headerCenter    : _.uniqueId("centerheader-"), 
+                    headerRight     : _.uniqueId("rightheader-"), 
+                    mainAxis        : _.uniqueId("mainaxis-"),
+                    toolKit         : _.uniqueId("toolkit-"),
+                    footerLeft      : _.uniqueId("footerleft"), 
+                    footerCenter    : _.uniqueId("footercenter"), 
+                    footerRight     : _.uniqueId("footerright") 
+                };
+                this.model.set("mainTemplate",mainTemplateConfig);
                 
+                var canvasConfig = {
+                    target : mainTemplateConfig.mainAxis
+                };
+
+
+                this.mainAxis = new CanvasView({model:new CanvasModel(canvasConfig)});
             },
             
             events: function() {
                 var events = new Object();
-                events["touchstart"] = "animationStart";
-                events["touchend"]   = "animationEnd";
-                events["mousedown"]  = "animationStart";
-                events["mouseup"]    = "animationEnd";
                 return events;
             },
             
+
             render: function() {
-                var template = renderTemplate(mainTemplate, { });
-                console.log('rendering');
+                var mainTemplateConfig = this.model.get("mainTemplate");
+                var template = renderTemplate(mainTemplate, mainTemplateConfig);
+                this.$el.html(template);
                 this.model.get("target").html(this.el);
-                this.drawAxes();
+
+                console.log(mainTemplateConfig.mainAxis)
+                document.getElementById(mainTemplateConfig.mainAxis).appendChild(this.mainAxis.render());
                 document.body.appendChild(this.loadIcon);
-                return this.$el;
-            },
 
-            drawAxes: function() {
-                var width = this.model.get("width");
-                var height = this.model.get("height");
 
-                this.context.beginPath();
-                this.context.moveTo(width/2.0, height);
-                this.context.lineTo(width/2.0, 0);
-                this.context.stroke();
-                this.context.beginPath();
-                this.context.moveTo(0, height/2.0);
-                this.context.lineTo(width, height/2.0);
-                this.context.stroke();
-                var img = this.el.toDataURL()
-
-                // make the axes permanent by setting the background-image
-                this.$el.css({
-                    "background-image" : "url("+img+")",
-                    "background-repeat": "no-repeat"
-                });
+                return null;
             },
 
             spinerIcon: {
@@ -84,46 +79,6 @@ define(
                 off: function(){
                     $(this.loadIcon).removeClass("animation-creator-loading"); 
                 }
-            },
-
-            replay: function() {
-
-                // requestAnimationFrame replay implementation 
-
-
-                // currently no time checking is happening, but this method sucks anyway cause the animation
-                // plays back slower..
-
-                
-                // suggest using the keyframe animation and listening to content changes
-
-                var transformations = this.model.get("transformations"),
-                    tLen = transformations.length;
-                var tInitial = transformations[0].time
-                var duration = transformations[tLen-1].time - tInitial;
-                var matrix = transformations[0].cssMatrix;
-
-                var $test = $(document.getElementById("test"));
-
-                var counter = 0;
-                console.log(tLen);
-
-                var time;
-                function draw(){
-                    console.log(arguments)
-                    var now = new Date().getTime(),
-                        dt = now - (time || now);
-
-                    time = now;
-
-                    // Drawing code goes here... for example updating an 'x' position:
-                   // this.x += 10 * dt; // Increase 'x' by 10 units per millisecond
-                    $test.css({"-webkit-transform":"matrix("+transformations[counter].cssMatrix+")"});
-                    counter++
-                    if((counter<tLen)) 
-                        window.requestAnimationFrame(draw);
-                }
-                draw();
             },
 
             generateCSS: function() {

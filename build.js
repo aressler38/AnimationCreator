@@ -21,9 +21,15 @@
         "jQuery"                : "vendor/jquery/jquery-1.10.2.min",
         "Backbone"              : "vendor/backbone/backbone-min",
         "underscore"            : "vendor/underscore/underscore-min",
-        "worker"                : "worker",
+        "noUiSlider"            : "vendor/noUiSlider/jquery.nouislider",
+        "hbs"                   : "vendor/hbs-plugin/hbs",
+        "Handlebars"            : "vendor/handlebars/handlebars",
+        "renderTemplate"        : "js/utils/renderTemplate",
         "AnimationCreatorModel" : "js/model/animationCreator.model",
-        "AnimationCreatorView"  : "js/view/animationCreator.view"
+        "AnimationCreatorView"  : "js/view/animationCreator.view",
+        "CanvasView"            : "js/view/canvas.view",
+        "CanvasModel"           : "js/model/canvas.model"
+
     },
 
 

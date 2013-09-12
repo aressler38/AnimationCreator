@@ -4,7 +4,7 @@ define(
         "underscore",
         "Backbone"
     ],
-    function($, underscore, Backbone, renderTemplate) {
+    function($, underscore, Backbone) {
         var CanvasView = Backbone.View.extend({
 
             tagName: "canvas",
@@ -15,7 +15,6 @@ define(
                 this.el.setAttribute("height", this.model.get("height"));
 
                 this.context = this.el.getContext("2d");
-
             },
             
             events: function() {
@@ -27,10 +26,9 @@ define(
                 return events;
             },
 
-            render: function() {
-                this.model.get("target").html(this.el);
+            render: function(target) {
                 this.drawAxes();
-                return null;
+                return this.el;
             },
 
             drawAxes: function() {
@@ -54,43 +52,9 @@ define(
                 });
             },
 
-            replay: function() {
-
-                // requestAnimationFrame replay implementation 
-                // currently no time checking is happening, but this method sucks anyway cause the animation
-                // plays back slower..
-                // suggest using the keyframe animation and listening to content changes
-
-                var transformations = this.model.get("transformations"),
-                    tLen = transformations.length;
-                var tInitial = transformations[0].time
-                var duration = transformations[tLen-1].time - tInitial;
-                var matrix = transformations[0].cssMatrix;
-
-                var $test = $(document.getElementById("test"));
-
-                var counter = 0;
-                console.log(tLen);
-
-                var time;
-                function draw(){
-                    console.log(arguments)
-                    var now = new Date().getTime(),
-                        dt = now - (time || now);
-
-                    time = now;
-
-                    // Drawing code goes here... for example updating an 'x' position:
-                   // this.x += 10 * dt; // Increase 'x' by 10 units per millisecond
-                    $test.css({"-webkit-transform":"matrix("+transformations[counter].cssMatrix+")"});
-                    counter++
-                    if((counter<tLen)) 
-                        window.requestAnimationFrame(draw);
-                }
-                draw();
-            },
-
             animationEnd: function(e) {
+                console.log(this.model.get("transformations"))
+                return null;
             },
 
             // defaults for moving box on canvas
@@ -100,7 +64,6 @@ define(
             },
 
             animationStart: function(e) {
-                this.model.set("transformations", []);
                 var model = this.model;
                 var transformations = model.get("transformations");
                 var transformation = model.get("transformation");
