@@ -53,14 +53,15 @@ define(
             },
 
             animationEnd: function(e) {
-                console.log(this.model.get("transformations"))
+                this.model.trigger("change:transformations", this.model.get("transformations"));
+                this.$el.removeClass("animation-creator-canvas-active");
                 return null;
             },
 
             // defaults for moving box on canvas
             boxDefaults: {
-                width   : 50,
-                height  : 50
+                width   : 5,
+                height  : 5
             },
 
             animationStart: function(e) {
@@ -71,22 +72,28 @@ define(
                 var el = this.el;
                 var boxWidth = this.boxDefaults.width;
                 var boxHeight = this.boxDefaults.height;
+                var offsets = $(el).offset();
+                var xRelative = e.pageX - offsets.left - el.width/2.0;
+                var yRelative = e.pageY - offsets.top - el.height/2.0;
 
                 function drawBox(x,y) {
                     el.width = el.width; // reset canvas    
                     context.fillRect((x - boxWidth/2.0), (y - boxHeight/2.0) ,boxWidth, boxHeight);
-                    context.lineTo(x,y);
                 }
+
                 function mouseMove (e) {
+                    e.preventDefault();
                     var time = new Date().getTime();
                     var offsets = $(this).offset();
                     var x = e.pageX - offsets.left;
                     var y = e.pageY - offsets.top;
-                    var centerX = el.width/2.0
-                    var centerY = el.height/2.0
+                    var centerX = el.width/2.0;
+                    var centerY = el.height/2.0;
+                    var xRelative = x - centerX;
+                    var yRelative = y - centerY;
+
                     drawBox(x,y);
-                    // do more stuff!!!
-                    savePath(x-centerX,y-centerY,time);
+                    savePath(xRelative,yRelative,time);
                     renderPath();
                 }
                 function touchMove (e) {
@@ -97,27 +104,34 @@ define(
                     var y = e.touches[0].pageY - offsets.top;
                     var centerX = el.width/2.0
                     var centerY = el.height/2.0
+
                     drawBox(x,y);
-                    // do more stuff!!!
-                    savePath(x-centerX,y-centerY,time);
+                    savePath(x,y,time);
                     renderPath();
                 }
-                function renderPath() {
+                function renderPath(x,y) {
                     var len = transformations.length;
                     var centerX = el.width/2.0
                     var centerY = el.height/2.0
+                    
                     context.beginPath();
-                    for (var i=0; i<len; i++) {
-                        context.lineTo(
+                    for (var i=0; i<len-1; i++) {
+                        context[transformations[i].type](
                             centerX+transformations[i].cssMatrix[4], 
                             centerY+transformations[i].cssMatrix[5]
                         );
                     }
                     context.stroke();
                 }
+
                 function savePath(x,y,t) {
-                    transformations.push(new transformation([1,0,0,1,x,y], t));
+                    transformations.push(new transformation([1,0,0,1,x,y], t, "lineTo"));
                 }
+
+                e.preventDefault();
+                this.$el.addClass("animation-creator-canvas-active");
+
+                transformations.push(new transformation([1,0,0,1,xRelative,yRelative], new Date().getTime(), "moveTo"));
 
                 el.addEventListener("mousemove", mouseMove);
                 el.addEventListener("touchmove", touchMove);

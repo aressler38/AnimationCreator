@@ -24,8 +24,6 @@ define(
 
             initialize: function() {
                 this.el.setAttribute("id", this.model.get("id"));
-                this.el.setAttribute("width", this.model.get("width"));
-                this.el.setAttribute("height", this.model.get("height"));
 
                 this.subProcess = new Worker("./worker.js");
                 this.loadIcon   = document.createElement("div");
@@ -33,14 +31,8 @@ define(
                 
                 // initialize main axis and tool kit
                 var mainTemplateConfig = {
-                    headerLeft      : _.uniqueId("leftheader-"), 
-                    headerCenter    : _.uniqueId("centerheader-"), 
-                    headerRight     : _.uniqueId("rightheader-"), 
                     mainAxis        : _.uniqueId("mainaxis-"),
                     toolKit         : _.uniqueId("toolkit-"),
-                    footerLeft      : _.uniqueId("footerleft"), 
-                    footerCenter    : _.uniqueId("footercenter"), 
-                    footerRight     : _.uniqueId("footerright") 
                 };
                 this.model.set("mainTemplate",mainTemplateConfig);
                 
@@ -50,6 +42,8 @@ define(
 
 
                 this.mainAxis = new CanvasView({model:new CanvasModel(canvasConfig)});
+                console.log(this.mainAxis.model);
+                this.mainAxis.model.on("change:transformations", function(){console.log(arguments);});
             },
             
             events: function() {
@@ -64,7 +58,6 @@ define(
                 this.$el.html(template);
                 this.model.get("target").html(this.el);
 
-                console.log(mainTemplateConfig.mainAxis)
                 document.getElementById(mainTemplateConfig.mainAxis).appendChild(this.mainAxis.render());
                 document.body.appendChild(this.loadIcon);
 
