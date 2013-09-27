@@ -3,7 +3,6 @@
 <head>
     <title>Animation Creator!</title>
     <link rel="stylesheet" href="css/main.css">
-    <script data-main="require_config.js" src="vendor/require/requirejs.js"></script>
 </head>
 
 <body>
@@ -18,11 +17,14 @@
         <div class="animation-creator-footer-center"> footerCenter </div>
         <div class="animation-creator-footer-right"> footerRight </div>
     </div>
+
+    <script data-main="AnimationCreator.js" src="vendor/require/require-full-2.1.8.js"></script>
     <script>
-        setTimeout(function(){
-            window.a = new AnimationCreator({target:"#animation-creator-container"});
-            a.render()
-        },2900);
+        var ac_loader = (window.AnimationCreator) ? window.AnimationCreator.require : window.require;
+        ac_loader(["AnimationCreator"], function(AnimationCreator) {
+            window.animationCreator = new AnimationCreator({target:"#animation-creator-container"});
+            animationCreator.render();
+        });
     </script>
 </body>
 </html>

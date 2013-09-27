@@ -6,6 +6,6 @@ Realtime CSS animation generator!
 License
 =======
 
-(c) copyright 2013 by Alexander Ressler.
+Copyright (c) 2013 by Alexander Ressler. All Rights Reserved. 
 
 

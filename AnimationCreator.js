@@ -1,10 +1,11 @@
-// Description: configuration file for requirejs
-
+/* Description: configuration file for requirejs,
+ *              contains the main module at the bottom.
+*/
 require.config({
     baseURL: "/opt/animationCreator",
     shim: {
         jQuery: {
-            exports: "$"
+            exports: "jQuery"
         },
         underscore: {
             exports: "_"
@@ -16,6 +17,7 @@ require.config({
     },
     paths: {
         "jQuery"                : "vendor/jquery/jquery-1.10.2.min",
+        "jQueryNC"              : "js/utils/noConflict/jQueryNC",
         "Backbone"              : "vendor/backbone/backbone-min",
         "underscore"            : "vendor/underscore/underscore-min",
         "noUiSlider"            : "vendor/noUiSlider/jquery.nouislider",
@@ -26,10 +28,19 @@ require.config({
         "AnimationCreatorView"  : "js/view/animationCreator.view",
         "CanvasView"            : "js/view/canvas.view",
         "CanvasModel"           : "js/model/canvas.model"
+    },
+    map: {
+        "*" : {
+            "jQuery"    : "jQueryNC"
+        },
+        "jQueryNC": {
+            "jQuery" : "jQuery"    
+        }
     }
 });
 
-require(
+
+define(
     [
         "jQuery",
         "noUiSlider",
@@ -39,29 +50,21 @@ require(
         "AnimationCreatorView"
     ],
     function($, None, _, Backbone, AnimationCreatorModel, AnimationCreatorView) {
+        _.noConflict();
+        Backbone.noConflict();
+        Backbone.$ = $;
 
-/*
-        window.requestAnimationFrame = (function(){
-            return  window.requestAnimationFrame       ||
-                    window.webkitRequestAnimationFrame ||
-                    window.mozRequestAnimationFrame    ||
-                    function( callback ) {
-                        window.setTimeout(callback, 1000 / 60);
-                    };
-        })();
-
-*/
         function AnimationCreator(config) {
             var model = new AnimationCreatorModel(config);
             var view = new AnimationCreatorView({model:model});
+
             return ({
-                view:view, model:model,
+                view:view,
+                model:model,
                 render:function(){return view.render();}
             });
         }
 
-        window.AnimationCreator = AnimationCreator;
-
-        return null; 
+        return AnimationCreator;
     }
 );

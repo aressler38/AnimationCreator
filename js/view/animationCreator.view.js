@@ -10,9 +10,8 @@ define(
         "renderTemplate",
         "hbs!templates/main"
     ],
-    function($, underscore, Backbone, CanvasView, CanvasModel, renderTemplate, mainTemplate) {
+    function($, _, Backbone, CanvasView, CanvasModel, renderTemplate, mainTemplate) {
         var AnimationCreatorView = Backbone.View.extend({
-            
             /*
              * I want this to be the main app view.
              * It's viewport ratio should be 16:10. 
@@ -28,7 +27,6 @@ define(
                 this.subProcess = new Worker("./worker.js");
                 this.loadIcon   = document.createElement("div");
 
-                
                 // initialize main axis and tool kit
                 var mainTemplateConfig = {
                     mainAxis        : _.uniqueId("mainaxis-"),
@@ -40,10 +38,10 @@ define(
                     target : mainTemplateConfig.mainAxis
                 };
 
-
                 this.mainAxis = new CanvasView({model:new CanvasModel(canvasConfig)});
-                console.log(this.mainAxis.model);
-                this.mainAxis.model.on("change:transformations", function(){console.log(arguments);});
+                this.mainAxis.model.on("change:transformations", function(){
+                    console.log(arguments);
+                });
             },
             
             events: function() {
@@ -51,7 +49,6 @@ define(
                 return events;
             },
             
-
             render: function() {
                 var mainTemplateConfig = this.model.get("mainTemplate");
                 var template = renderTemplate(mainTemplate, mainTemplateConfig);
@@ -121,8 +118,8 @@ define(
                 var styleSheet = this.styleSheet;
                 var percentage = parseFloat($("#testhelper").css("opacity"));
 
-                cssPercentage = (percentage.toFixed(4)*100).toPrecision(4)
-                opacityPercentage = ((percentage.toFixed(4)*100).toPrecision(4)/100).toPrecision(4);
+                var cssPercentage = (percentage.toFixed(4)*100).toPrecision(4)
+                var opacityPercentage = ((percentage.toFixed(4)*100).toPrecision(4)/100).toPrecision(4);
                 opacityPercentage = parseFloat(opacityPercentage);
 
                 if (styleSheet.innerHTML.match(cssPercentage)) {
@@ -135,6 +132,16 @@ define(
                     throw new Error("failed query");
                 }
                 return cssPercentage;
+            },
+
+            overdub: function() {
+                /* 
+                 *  Rewrite the current transformation loaded. 
+                 *  The process will actively listen for changes 
+                 *  from the set of active tools and make edits to
+                 *  the stylesheet as desired. 
+                 */
+
             },
 
             animationEnd: function(e) {
