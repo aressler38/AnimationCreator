@@ -21,9 +21,15 @@ is specified in an object literal:
 
 ## General Architecture
 
-The application is divided into two parts: the main axes, and a tool kit. The main axes is a 
-large portion of the screen devoted to direct x-y manipulation. It is currently rendered in 
-HTML canvas; however, it is possible to render it in other forms, like SVG DOM elements. 
+The two cornerstones of this application is the css generator view and the preview / replay view.
+
+The css generation part of the application is divided into two parts: the main axes, and a tool kit. 
+The main axes is a large portion of the screen devoted to direct x-y manipulation. It is currently 
+rendered in HTML canvas; however, it is possible to render it in other forms, like SVG DOM elements. 
 The tool kit is a collection of objects each with a view and model pair. It is used to hold 
 additional ui gadgets for user manipulation and access to application functionalities. 
 
+The replay / preview view is another view that is for the user to see the css animation in action.
+While in this view, the user still has access to the controlls that were used to create the animation, 
+and the user is able to overdub additional animation commands in real time during the playback of
+the animation. 
