@@ -27,7 +27,9 @@ require.config({
         "AnimationCreatorModel" : "js/model/animationCreator.model",
         "AnimationCreatorView"  : "js/view/animationCreator.view",
         "CanvasView"            : "js/view/canvas.view",
-        "CanvasModel"           : "js/model/canvas.model"
+        "CanvasModel"           : "js/model/canvas.model",
+        "Tools"                 : "js/collection/tools",
+        "ToolModel"             : "js/model/tool.model"
     },
     map: {
         "*" : {
