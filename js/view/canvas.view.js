@@ -78,7 +78,7 @@ define(
 
                 function drawBox(x,y) {
                     el.width = el.width; // reset canvas    
-                    context.fillRect((x - boxWidth/2.0), (y - boxHeight/2.0) ,boxWidth, boxHeight);
+                    context.fillRect((x - boxWidth/2.0), (y - boxHeight/2.0), boxWidth, boxHeight);
                 }
 
                 function mouseMove (e) {

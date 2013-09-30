@@ -1,33 +1,33 @@
+function response(type, data) {
+    postMessage({type:type, data:data});
+    return null;
+}
 
-postMessage("loading worker...");
+var vendors = ["-webkit-", "-moz-", ""],
+    vLen=vendors.length;
 
 onmessage = function(d) {
-    if (d.data.message) {
-        switch (d.data.message) {
-            case "generateCSS": 
-                postMessage(generateCSS(d.data.workerData));
-                break;
-            default:
-                test();
-        }
+    var parsedD = (d.data && d.data.message ) ? d.data.message : "error";
+
+    switch (parsedD) {
+        case "generateCSS": 
+            response("generateCSS", generateCSS(d.data.workerData));
+            break;
+        default:
+            response("error", "no event handler");
     }
-}
-function test() {
-    postMessage("testing the default!");
 }
 
 function generateCSS(data) {
     var cssText = "";
     var cssHelperText = "";
-    var vLen = data.vLen;
-    var tLen = data.tLen;
     var transformations = data.transformations;
-    var vendors = data.vendors;
+    var tLen = transformations.length;
     var percentage = 0;
     var tInitial = transformations[0].time;
     var matrix = transformations[0].cssMatrix;
-    var duration = transformations[tLen-1].time - tInitial;                
-    
+    var duration = transformations[tLen-1].time - tInitial;
+
     for (var j=0; j<vLen; j++) {
         cssText += "\n@"+vendors[j]+"keyframes mymove {";
         for (var i=0; i<tLen; i++) {
@@ -55,7 +55,8 @@ function generateCSS(data) {
 
     cssHelperText += "\n\n.testhelper {\n";
     for(var j=0; j<vLen; j++) {
-        cssHelperText += "\n    "+vendors[j]+"animation: testDuration "+duration/1000+"s step-end "+"infinite;";
+        cssHelperText += "\n    "+vendors[j]+"animation: testDuration "
+                         +duration/1000+"s step-end "+"infinite;";
         cssHelperText += "\n    "+vendors[j]+"transform: matrix("+matrix+");";
     }
     cssHelperText += "\n}\n";

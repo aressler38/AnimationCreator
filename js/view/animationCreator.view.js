@@ -4,123 +4,126 @@ define(
         "underscore",
         "Backbone",
 
-        "CanvasView", 
+        "CanvasView",
         "CanvasModel",
+
+        "Tools",
+        "ToolModel",
 
         "renderTemplate",
         "hbs!templates/main"
     ],
-    function($, _, Backbone, CanvasView, CanvasModel, renderTemplate, mainTemplate) {
+    function($, _, Backbone, CanvasView, CanvasModel, Tools, 
+               ToolModel, renderTemplate, mainTemplate) {
+
         var AnimationCreatorView = Backbone.View.extend({
-            /*
-             * I want this to be the main app view.
-             * It's viewport ratio should be 16:10. 
-            */
 
             className: "animation-creator-main",
 
             tagName: "div",
 
             initialize: function() {
+                var model = this.model;
+                this.SubProcess = new Worker("./worker.js");
+
                 this.el.setAttribute("id", this.model.get("id"));
 
-                this.subProcess = new Worker("./worker.js");
-                this.loadIcon   = document.createElement("div");
-
-                // initialize main axis and tool kit
-                var mainTemplateConfig = {
-                    mainAxis        : _.uniqueId("mainaxis-"),
-                    toolKit         : _.uniqueId("toolkit-"),
-                };
-                this.model.set("mainTemplate",mainTemplateConfig);
-                
-                var canvasConfig = {
+                var mainTemplateConfig = this.model.get("mainTemplateConfig");
+                var mainAxisConfig = {
                     target : mainTemplateConfig.mainAxis
                 };
 
-                this.mainAxis = new CanvasView({model:new CanvasModel(canvasConfig)});
-                this.mainAxis.model.on("change:transformations", function(){
+                this.mainAxis = new CanvasView({model:new CanvasModel(mainAxisConfig)});
+
+                this.mainAxis.model.on("change:transformations", function() {
                     console.log(arguments);
+                    model.set("transformations", arguments[0]);
                 });
             },
-            
+
+            processCSS: function(data) {
+                this.styleSheet.innerHTML = data[0];
+                this.styleSheetHelper.innerHTML = data[1];
+                this.spinerIcon.off.call(this);
+
+                $("#test").addClass("animate");
+                $("#testhelper").addClass("testhelper");
+
+                document.getElementById("text").innerHTML = this.styleSheet.innerHTML;
+            },
+
             events: function() {
+                var that = this;
+                // SubProcess events
+                function parseSubProcessResponse(workerResponse) {
+                    switch (workerResponse.data.type) {
+                        case "generateCSS":
+                            that.processCSS(workerResponse.data.data);
+                            break;
+                        case "error":
+                            console.log("the worker returned an error");
+                            console.log(workerResponse);
+                            break;
+                        default:
+                            console.log("no handled response type")
+                    }
+                }
+
+                this.SubProcess.addEventListener("message", parseSubProcessResponse);
+
+                // view Events
                 var events = new Object();
+                events["click #"+this.model.get("mainTemplateConfig").generateCSS] = "generateCSS";
                 return events;
             },
-            
+
             render: function() {
-                var mainTemplateConfig = this.model.get("mainTemplate");
+                var mainTemplateConfig = this.model.get("mainTemplateConfig");
                 var template = renderTemplate(mainTemplate, mainTemplateConfig);
                 this.$el.html(template);
                 this.model.get("target").html(this.el);
-
+            
                 document.getElementById(mainTemplateConfig.mainAxis).appendChild(this.mainAxis.render());
-                document.body.appendChild(this.loadIcon);
 
+                this.loadIcon           = document.getElementById(mainTemplateConfig.loadIcon);
+                this.styleSheet         = document.getElementById(mainTemplateConfig.styleSheet);
+                this.styleSheetHelper   = document.getElementById(mainTemplateConfig.styleSheetHelper);
 
                 return null;
             },
 
             spinerIcon: {
                 on:function(){
-                    $(this.loadIcon).addClass("animation-creator-loading"); 
+                    $(this.loadIcon).addClass("animation-creator-loading");
                 },
                 off: function(){
-                    $(this.loadIcon).removeClass("animation-creator-loading"); 
+                    $(this.loadIcon).removeClass("animation-creator-loading");
                 }
             },
 
             generateCSS: function() {
-                var transformations = this.model.get("transformations"),
-                    tLen = transformations.length;
-                var styleSheet = document.getElementById("styleSheet");
+                var transformations  = this.model.get("transformations");
+                var styleSheet       = document.getElementById("styleSheet");
                 var styleSheetHelper = document.getElementById("styleSheetHelper");
-                var tInitial = transformations[0].time
-                var duration = transformations[tLen-1].time - tInitial;
-                var matrix = transformations[0].cssMatrix;
-                var percentage = 0;
-                var vendors = ["-webkit-", "-moz-", ""],
-                    vLen=vendors.length;
-                var that = this;
-
                 var workerData = {
-                    vLen: vLen,
-                    tLen: tLen,
-                    transformations: transformations,
-                    vendors: vendors,
+                    transformations: transformations
                 }
 
-                function processCSS (d) {
-                    styleSheet.innerHTML = d.data[0];
-                    styleSheetHelper.innerHTML = d.data[1];
-                    that.spinerIcon.off.call(that);
-                    $("#test").addClass("animate");
-                    $("#testhelper").addClass("testhelper");
-                    document.getElementById("text").innerHTML = styleSheet.innerHTML;
-                    document.getElementById("text").innerHTML += styleSheetHelper.innerHTML;
-                    this.removeEventListener("message", processCSS);
-                }
-
-                // TODO: testing...
                 this.spinerIcon.on.call(this);
-                this.subProcess.addEventListener("message", processCSS);
-                this.subProcess.postMessage({message:"generateCSS", workerData:workerData});
+                this.SubProcess.postMessage({message:"generateCSS", workerData:workerData});
+
+                // what's this for?
                 $("#test").removeClass("animate");
                 $("#testhelper").removeClass("testhelper");
-
-                this.styleSheet = styleSheet;
-                this.styleSheetHelper = styleSheetHelper;
             },
 
             query: function() {
                 var styleSheetHelper = this.styleSheetHelper;
                 var styleSheet = this.styleSheet;
                 var percentage = parseFloat($("#testhelper").css("opacity"));
-
                 var cssPercentage = (percentage.toFixed(4)*100).toPrecision(4)
                 var opacityPercentage = ((percentage.toFixed(4)*100).toPrecision(4)/100).toPrecision(4);
-                opacityPercentage = parseFloat(opacityPercentage);
+                    opacityPercentage = parseFloat(opacityPercentage);
 
                 if (styleSheet.innerHTML.match(cssPercentage)) {
                     console.log('matched!');
@@ -135,105 +138,35 @@ define(
             },
 
             overdub: function() {
-                /* 
-                 *  Rewrite the current transformation loaded. 
-                 *  The process will actively listen for changes 
+                /*
+                 *  Rewrite the current transformation loaded.
+                 *  The process will actively listen for changes
                  *  from the set of active tools and make edits to
-                 *  the stylesheet as desired. 
+                 *  the stylesheet as desired.
                  */
-
             },
 
             animationEnd: function(e) {
                 if (this.model.get("transformations")[0]) this.generateCSS();
+                console.log("test");
             },
 
-            // defaults for moving box on canvas
-            boxDefaults: {
-                width   : 50,
-                height  : 50
-            },
-
-            animationStart: function(e) {
-                this.model.set("transformations", []);
-                var model = this.model;
-                var transformations = model.get("transformations");
-                var transformation = model.get("transformation");
-                var context = this.context;
-                var el = this.el;
-                var boxWidth = this.boxDefaults.width;
-                var boxHeight = this.boxDefaults.height;
-
-                function drawBox(x,y) {
-                    el.width = el.width; // reset canvas    
-                    context.fillRect((x - boxWidth/2.0), (y - boxHeight/2.0) ,boxWidth, boxHeight);
-                    context.lineTo(x,y);
-                }
-                function mouseMove (e) {
-                    var time = new Date().getTime();
-                    var offsets = $(this).offset();
-                    var x = e.pageX - offsets.left;
-                    var y = e.pageY - offsets.top;
-                    var centerX = el.width/2.0
-                    var centerY = el.height/2.0
-                    drawBox(x,y);
-                    // do more stuff!!!
-                    savePath(x-centerX,y-centerY,time);
-                    renderPath();
-                }
-                function touchMove (e) {
-                    e.preventDefault();
-                    var time = new Date().getTime();
-                    var offsets = $(this).offset();
-                    var x = e.touches[0].pageX - offsets.left;
-                    var y = e.touches[0].pageY - offsets.top;
-                    var centerX = el.width/2.0
-                    var centerY = el.height/2.0
-                    drawBox(x,y);
-                    // do more stuff!!!
-                    savePath(x-centerX,y-centerY,time);
-                    renderPath();
-                }
-                function renderPath() {
-                    var len = transformations.length;
-                    var centerX = el.width/2.0
-                    var centerY = el.height/2.0
-                    context.beginPath();
-                    for (var i=0; i<len; i++) {
-                        context.lineTo(
-                            centerX+transformations[i].cssMatrix[4], 
-                            centerY+transformations[i].cssMatrix[5]
-                        );
-                    }
-                    context.stroke();
-                }
-                function savePath(x,y,t) {
-                    transformations.push(new transformation([1,0,0,1,x,y], t));
-                }
-
-                el.addEventListener("mousemove", mouseMove);
-                el.addEventListener("touchmove", touchMove);
-                el.addEventListener("mouseup", function() {
-                    el.removeEventListener("mousemove", mouseMove);    
-                });
-            },
-            
             matrixMultiplication: function(A, B) {
                 /* defined as:
                  *
-                 *     [ a11 a12 a13 ]       [ b11 b12 b13 ]
-                 * A = [ a21 a22 a23 ] , B = [ b21 b22 b23 ]
+                 *     [ a0 a1 a4 ]       [ b0 b1 b4 ]
+                 * A = [ a2 a3 a5 ] , B = [ b2 b3 b5 ]
                  *
-                 *      [ a11b11+a12b21   a11b12+a12b22   a13+b13]
-                 * AB = [ a21b11+a22b21   a21b12+a22b22   a23+b23]
-                 *  
-                 *  where the mapping to the argument A is A := [a11,a12,a21,a22,a13,a23], or indexed A := [0,1,4,2,3,5]
-                 *  note: first 2 columns treated as standard 2x2 matrix -- multiplication as usual, 3rd columns add
+                 *      [ a0b0+a1b2   a0b1+a1b3   a5+b5]
+                 * AB = [ a2b0+a3b2   a3b1+a3b3   a5+b5]
+                 *
+                 *  note: the 'n' in a<n> represents the index in array a, so a1 == A[1]
                 */
-
-                return [ (A[0]*B[0]+A[1]*B[2]), (A[0]*B[1]+A[1]*B[3]), (A[2]*B[0]+A[3]*B[2]), (A[2]*B[1]+A[3]*B[3]), (A[4]+B[4]), (A[5]+B[5]) ];
+                return ([   (A[0]*B[0]+A[1]*B[2]), (A[0]*B[1]+A[1]*B[3]),
+                            (A[2]*B[0]+A[3]*B[2]), (A[2]*B[1]+A[3]*B[3]),
+                            (A[4]+B[4]), (A[5]+B[5])
+                        ]);
             }
-
 
         });
         return AnimationCreatorView;
