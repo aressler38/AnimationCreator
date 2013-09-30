@@ -53,7 +53,7 @@ function generateCSS(data) {
         cssHelperText += "\n}";
     }
 
-    cssHelperText += "\n\n.testhelper {\n";
+    cssHelperText += "\n\n.animation-creator-query {\n";
     for(var j=0; j<vLen; j++) {
         cssHelperText += "\n    "+vendors[j]+"animation: testDuration "
                          +duration/1000+"s step-end "+"infinite;";
