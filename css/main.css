@@ -106,6 +106,12 @@
 
 
 
+.animation-creator-button {
+    clear:both;
+    float:left;
+    margin:10px;
+}
+
 
 
 #test, #testhelper {
