@@ -2,6 +2,11 @@
     clear:both;
 }
 
+.animation-creator-float-left-clear-both {
+    float:left;
+    clear:both;
+}
+
 .animation-creator-canvas-active {
     cursor:pointer;
 }
@@ -113,8 +118,14 @@
 }
 
 
+#query {
+    position:absolute;
+    top:50%;
+    left:50%;
+    background: rgb(100,0,200);
+}
 
-#test, #testhelper {
+#test {
     position:absolute;
     top:50%;
     left:50%;
@@ -124,9 +135,6 @@
 }
 #text {
     width:800px;
-}
-body textarea {
-    height:900px;
 }
 
 
