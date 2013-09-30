@@ -22,9 +22,11 @@ define(
 
             tagName: "div",
 
+            workerURI: "js/utils/worker.js",
+
             initialize: function() {
                 var model = this.model;
-                this.SubProcess = new Worker("./worker.js");
+                this.SubProcess = new Worker(this.workerURI);
 
                 this.el.setAttribute("id", this.model.get("id"));
 
