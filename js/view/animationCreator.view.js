@@ -41,20 +41,9 @@ define(
                 });
             },
 
-            processCSS: function(data) {
-                this.styleSheet.innerHTML = data[0];
-                this.styleSheetHelper.innerHTML = data[1];
-                this.spinerIcon.off.call(this);
-
-                $("#test").addClass("animate");
-                $("#testhelper").addClass("testhelper");
-
-                document.getElementById("text").innerHTML = this.styleSheet.innerHTML;
-            },
-
             events: function() {
                 var that = this;
-                // SubProcess events
+                /* === SubProcess events === */
                 function parseSubProcessResponse(workerResponse) {
                     switch (workerResponse.data.type) {
                         case "generateCSS":
@@ -65,13 +54,13 @@ define(
                             console.log(workerResponse);
                             break;
                         default:
-                            console.log("no handled response type")
+                            throw new Error("no handled response type")
                     }
                 }
 
                 this.SubProcess.addEventListener("message", parseSubProcessResponse);
 
-                // view Events
+                /* === view Events === */
                 var events = new Object();
                 events["click #"+this.model.get("mainTemplateConfig").generateCSS] = "generateCSS";
                 return events;
@@ -88,6 +77,7 @@ define(
                 this.loadIcon           = document.getElementById(mainTemplateConfig.loadIcon);
                 this.styleSheet         = document.getElementById(mainTemplateConfig.styleSheet);
                 this.styleSheetHelper   = document.getElementById(mainTemplateConfig.styleSheetHelper);
+                this.queryElement       = document.getElementById(mainTemplateConfig.queryElement);
 
                 return null;
             },
@@ -103,38 +93,41 @@ define(
 
             generateCSS: function() {
                 var transformations  = this.model.get("transformations");
-                var styleSheet       = document.getElementById("styleSheet");
-                var styleSheetHelper = document.getElementById("styleSheetHelper");
                 var workerData = {
                     transformations: transformations
                 }
 
+                $("#test").removeClass("animate");
+
+                $(this.queryElement).removeClass("animation-creator-query");
+
                 this.spinerIcon.on.call(this);
                 this.SubProcess.postMessage({message:"generateCSS", workerData:workerData});
+            },
 
-                // what's this for?
-                $("#test").removeClass("animate");
-                $("#testhelper").removeClass("testhelper");
+            processCSS: function(data) {
+                this.styleSheet.innerHTML = data[0];
+                this.styleSheetHelper.innerHTML = data[1];
+                this.spinerIcon.off.call(this);
+
+                $("#test").addClass("animate");
+                $(this.queryElement).addClass("animation-creator-query");
+
+                document.getElementById("text").innerHTML = this.styleSheet.innerHTML;
             },
 
             query: function() {
-                var styleSheetHelper = this.styleSheetHelper;
-                var styleSheet = this.styleSheet;
-                var percentage = parseFloat($("#testhelper").css("opacity"));
-                var cssPercentage = (percentage.toFixed(4)*100).toPrecision(4)
-                var opacityPercentage = ((percentage.toFixed(4)*100).toPrecision(4)/100).toPrecision(4);
+                var percentage = parseFloat($(this.queryElement).css("opacity"));
+                var cssPercentage = (percentage.toFixed(4)*100).toPrecision(4);
+                var opacityPercentage = ((percentage.toFixed(4)*100).toPrecision(4)/100).toPrecision(4),
                     opacityPercentage = parseFloat(opacityPercentage);
 
-                if (styleSheet.innerHTML.match(cssPercentage)) {
-                    console.log('matched!');
+                if (this.styleSheet.innerHTML.match(cssPercentage)) {
+                    return cssPercentage;
                 }
                 else {
-                    console.log("failed match");
-                    console.log("your query: "+cssPercentage);
-                    console.log(styleSheetHelper.innerHTML);
-                    throw new Error("failed query");
+                    throw new Error("failed query "+cssPercentage);
                 }
-                return cssPercentage;
             },
 
             overdub: function() {
@@ -144,11 +137,6 @@ define(
                  *  from the set of active tools and make edits to
                  *  the stylesheet as desired.
                  */
-            },
-
-            animationEnd: function(e) {
-                if (this.model.get("transformations")[0]) this.generateCSS();
-                console.log("test");
             },
 
             matrixMultiplication: function(A, B) {
