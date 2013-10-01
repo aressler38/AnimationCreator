@@ -2,11 +2,11 @@
 
 ({
 
-    baseURL: '/opt/labs/peer_help',
+    baseURL: "/opt/animationCreator",
 
     shim: {
         jQuery: {
-            exports: "$"
+            exports: "jQuery"
         },
         underscore: {
             exports: "_"
@@ -16,9 +16,10 @@
             exports: "Backbone"
         }
     },
-    // Require paths * appends .js to each path
+
     paths: {
         "jQuery"                : "vendor/jquery/jquery-1.10.2.min",
+        "jQueryNC"              : "js/utils/noConflict/jQueryNC",
         "Backbone"              : "vendor/backbone/backbone-min",
         "underscore"            : "vendor/underscore/underscore-min",
         "noUiSlider"            : "vendor/noUiSlider/jquery.nouislider",
@@ -28,23 +29,34 @@
         "AnimationCreatorModel" : "js/model/animationCreator.model",
         "AnimationCreatorView"  : "js/view/animationCreator.view",
         "CanvasView"            : "js/view/canvas.view",
-        "CanvasModel"           : "js/model/canvas.model"
-
+        "CanvasModel"           : "js/model/canvas.model",
+        "InputFieldView"        : "js/view/inputfield.view",
+        "InputFieldModel"       : "js/model/inputfield.model",
+        "tools"                 : "js/collection/tools",
+        "Tool"                  : "js/utils/tool"
     },
 
+    map: {
+        "*" : {
+            "jQuery"    : "jQueryNC"
+        },
+        "jQueryNC": {
+            "jQuery" : "jQuery"    
+        }
+    },
 
     modules: [
         {
-            name: "require_config"
+            name: "AnimationCreator"
         }
     ],
 
-    dir: 'build',
+    dir: "build",
 
 
-    mainConfigFile:'require_config.js',
+    mainConfigFile:"AnimationCreator.js",
 
-    namespace: 'animationCreator'
+    namespace: "AnimationCreator"
 
     //If you want to be able to read it the file, then uncomment the next line.
     //optimize: "none"
