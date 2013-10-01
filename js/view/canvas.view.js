@@ -117,21 +117,29 @@ define(
                     context.beginPath();
                     for (var i=0; i<len-1; i++) {
                         context[transformations[i].type](
-                            centerX+transformations[i].cssMatrix[4], 
-                            centerY+transformations[i].cssMatrix[5]
+                            centerX+transformations[i].cssMatrix[12], 
+                            centerY+transformations[i].cssMatrix[13]
                         );
                     }
                     context.stroke();
                 }
 
                 function savePath(x,y,t) {
-                    transformations.push(new transformation([1,0,0,1,x,y], t, "lineTo"));
+                    transformations.push(new transformation(
+                        [1,0,0,0, 
+                         0,1,0,0,
+                         0,0,1,0, // interesting.. I require a 1 in this row3col3... det != 0
+                         x,y,0,1], t, "lineTo"));
                 }
 
                 e.preventDefault();
                 this.$el.addClass("animation-creator-canvas-active");
 
-                transformations.push(new transformation([1,0,0,1,xRelative,yRelative], new Date().getTime(), "moveTo"));
+                transformations.push(new transformation(
+                    [1,0,0,0, 
+                     0,1,0,0,
+                     0,0,1,0,
+                     xRelative,yRelative,0,1], new Date().getTime(), "moveTo"));
 
                 el.addEventListener("mousemove", mouseMove);
                 el.addEventListener("touchmove", touchMove);

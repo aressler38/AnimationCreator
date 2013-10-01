@@ -18,9 +18,12 @@ onmessage = function(d) {
     }
 }
 
+//TODO seperate the code that generates the animation for the query element. 
 function generateCSS(data) {
     var cssText = "";
-    var cssHelperText = "";
+    var cssQueryText = "";
+    var animationName = (data.animationName) ? data.animationName : "mymove";
+    var animationIterationCount = (data.animationIterationCount) ? data.animationIterationCount : "1";
     var transformations = data.transformations;
     var tLen = transformations.length;
     var percentage = 0;
@@ -29,44 +32,45 @@ function generateCSS(data) {
     var duration = transformations[tLen-1].time - tInitial;
 
     for (var j=0; j<vLen; j++) {
-        cssText += "\n@"+vendors[j]+"keyframes mymove {";
+        cssText += "\n@"+vendors[j]+"keyframes "+animationName+ " {";
         for (var i=0; i<tLen; i++) {
             percentage = (transformations[i].time - tInitial) / duration;
             percentage = (percentage.toFixed(4)*100).toPrecision(4);
             matrix = transformations[i].cssMatrix;
             cssText += "\n    "+percentage+"% {\n        "
-                               +vendors[j]+"transform: matrix("+matrix+");\n"
+                               +vendors[j]+"transform: matrix3d("+matrix+");\n"
                                +"    }";
         }
         cssText += "\n}";
     }
 
     for (var j=0; j<vLen; j++) {
-        cssHelperText += "\n@"+vendors[j]+"keyframes testDuration {";
+        cssQueryText += "\n@"+vendors[j]+"keyframes queryPercentage {";
         for (var i=0; i<tLen; i++) {
             percentage = (transformations[i].time - tInitial) / duration;
             percentage = (percentage.toFixed(4)*100).toPrecision(4);
-            cssHelperText += "\n    "+percentage+"% {\n"
+            cssQueryText += "\n    "+percentage+"% {\n"
                                +"        opacity: "+parseFloat((percentage/100).toPrecision(4))+";"
                                +"\n    }";
         }
-        cssHelperText += "\n}";
+        cssQueryText += "\n}";
     }
 
-    cssHelperText += "\n\n.animation-creator-query {\n";
+    cssQueryText += "\n\n.animation-creator-query {\n";
     for(var j=0; j<vLen; j++) {
-        cssHelperText += "\n    "+vendors[j]+"animation: testDuration "
-                         +duration/1000+"s step-end "+"infinite;";
-        cssHelperText += "\n    "+vendors[j]+"transform: matrix("+matrix+");";
+        cssQueryText += "\n    "+vendors[j]+"animation: queryPercentage "
+            +duration/1000+"s step-end "+"infinite;"
+            +"\n    "+vendors[j]+"transform: matrix3d("+matrix+");";
     }
-    cssHelperText += "\n}\n";
+    cssQueryText += "\n}\n";
     
     cssText += "\n\n.animate {";
     for(var j=0; j<vLen; j++) {
-        cssText += "\n    "+vendors[j]+"animation: mymove "+duration/1000+"s infinite;";
-        cssText += "\n    "+vendors[j]+"transform: matrix("+matrix+");";
+        cssText += "\n    "+vendors[j]+"animation: "+animationName+" "
+                            +duration/1000+"s "+animationIterationCount+";"
+                            +"\n    "+vendors[j]+"transform: matrix3d("+matrix+");";
     }
     cssText += "\n}\n\n";
 
-    return [cssText, cssHelperText];
+    return [cssText, cssQueryText];
 }
