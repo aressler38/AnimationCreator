@@ -5,12 +5,10 @@ define(
     [
         "jQuery",
         "underscore",
-        "Backbone",
-        "ToolModel"
+        "Backbone"
     ],
     function($, _, Backbone, ToolModel) {
         var Tools = Backbone.Collection.extend({
-            model:ToolModel
         });
 
         return Tools;
