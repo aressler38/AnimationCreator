@@ -28,8 +28,10 @@ require.config({
         "AnimationCreatorView"  : "js/view/animationCreator.view",
         "CanvasView"            : "js/view/canvas.view",
         "CanvasModel"           : "js/model/canvas.model",
-        "Tools"                 : "js/collection/tools",
-        "ToolModel"             : "js/model/tool.model"
+        "InputFieldView"        : "js/view/inputfield.view",
+        "InputFieldModel"       : "js/model/inputfield.model",
+        "tools"                 : "js/collection/tools",
+        "Tool"                  : "js/utils/tool"
     },
     map: {
         "*" : {
