@@ -31,8 +31,9 @@ define(
                     target : mainTemplateConfig.mainAxis
                 };
 
-                this.mainAxis = Tool("axes", mainAxisConfig);
+                this.mainAxis = Tool("Axes", mainAxisConfig);
                 //CanvasView({model:new CanvasModel(mainAxisConfig)});
+                
             },
 
             events: function() {

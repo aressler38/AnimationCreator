@@ -8,7 +8,7 @@ define(
         "CanvasModel",
         "InputFieldView",
         "InputFieldModel"
-        
+
     ],
     function($, _, Backbone, tools, CanvasView, CanvasModel,
         InputFieldView, InputFieldModel) {
@@ -16,11 +16,11 @@ define(
         return function(toolType, config) {
 
             switch(toolType) {
-                case "text-input":
+                case "TextInput":
                     return new InputFieldView({model:new InputFieldModel(config)});
-                case "axes":
+                case "Axes":
                     return new CanvasView({model:new CanvasModel(config)});
-                default: 
+                default:
                     throw new Error("TypeError: Unhandled toolType: "+toolType);
             }
         }
