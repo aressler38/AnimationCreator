@@ -30,7 +30,7 @@ require.config({
         "CanvasModel"           : "js/model/canvas.model",
         "InputFieldView"        : "js/view/inputfield.view",
         "InputFieldModel"       : "js/model/inputfield.model",
-        "tools"                 : "js/collection/tools",
+        "Tools"                 : "js/view/tools.view",
         "Tool"                  : "js/utils/tool"
     },
     map: {

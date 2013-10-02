@@ -7,13 +7,13 @@ define(
         "CanvasView",
         "CanvasModel",
 
-        "tools",
+        "Tools",
         "Tool",
 
         "renderTemplate",
         "hbs!templates/main"
     ],
-    function($, _, Backbone, CanvasView, CanvasModel, tools, 
+    function($, _, Backbone, CanvasView, CanvasModel, Tools, 
                Tool, renderTemplate, mainTemplate) {
 
         var AnimationCreatorView = Backbone.View.extend({
@@ -31,9 +31,10 @@ define(
                     target : mainTemplateConfig.mainAxis
                 };
 
-                this.mainAxis = Tool("Axes", mainAxisConfig);
-                //CanvasView({model:new CanvasModel(mainAxisConfig)});
-                
+                this.mainAxis = Tool("MainAxes", mainAxisConfig);
+                this.tools = new Tools({model:this.model});
+                this.tools.on("add", function(model) {console.log(model);});
+                this.tools.collection.add([Tool("TextInput"), Tool("TextInput")]);
             },
 
             events: function() {
