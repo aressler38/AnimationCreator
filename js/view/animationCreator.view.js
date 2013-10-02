@@ -33,8 +33,6 @@ define(
 
                 this.mainAxis = Tool("MainAxes", mainAxisConfig);
                 this.tools = new Tools({model:this.model});
-                this.tools.on("add", function(model) {console.log(model);});
-                this.tools.collection.add([Tool("TextInput"), Tool("TextInput")]);
             },
 
             events: function() {
@@ -71,9 +69,10 @@ define(
                 var template = renderTemplate(mainTemplate, mainTemplateConfig);
                 this.$el.html(template);
                 this.model.get("target").html(this.el);
-            
-                document.getElementById(mainTemplateConfig.mainAxis).appendChild(this.mainAxis.render());
 
+                this.tools.collection.add([Tool("TextInput"), Tool("TextInput")]);
+                document.getElementById(mainTemplateConfig.mainAxis).appendChild(this.mainAxis.render());
+                document.getElementById(mainTemplateConfig.tools).appendChild(this.tools.render());
                 this.loadIcon           = document.getElementById(mainTemplateConfig.loadIcon);
                 this.styleSheet         = document.getElementById(mainTemplateConfig.styleSheet);
                 this.styleSheetHelper   = document.getElementById(mainTemplateConfig.styleSheetHelper);
