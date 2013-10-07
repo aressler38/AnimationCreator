@@ -7,8 +7,7 @@ define(
     function($, _, Backbone) {
         var InputFieldModel = Backbone.Model.extend({
             defaults: {
-                type:"text"
-
+                type: "text"
             },
             initialize:function() {
 

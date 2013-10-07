@@ -35,6 +35,8 @@ define(
                 this.tools = new Tools({model:this.model});
                 this.tools.on("add", function(model) {console.log(model);});
                 this.tools.collection.add([Tool("TextInput"), Tool("TextInput")]);
+                
+                this.render();
             },
 
             events: function() {
@@ -126,14 +128,20 @@ define(
             },
 
             play: function(percentage) {
+                // apply style sheet
+
+                
                 return null;
             },
 
             stop: function() {
+                // capture current state
+                
                 return null;
             },
 
             overdub: function() {
+
                 /*
                  *  Rewrite the current transformation loaded.
                  *  The process will actively listen for changes
@@ -154,7 +162,8 @@ define(
                  * AB = [ a2b0+a3b2   a3b1+a3b3   a5+b5]
                  *
                 */
-                return ([   (A[0]*B[0]+A[1]*B[2]), (A[0]*B[1]+A[1]*B[3]),
+                return ([   
+                            (A[0]*B[0]+A[1]*B[2]), (A[0]*B[1]+A[1]*B[3]),
                             (A[2]*B[0]+A[3]*B[2]), (A[2]*B[1]+A[3]*B[3]),
                             (A[4]+B[4]), (A[5]+B[5])
                         ]);
@@ -173,9 +182,10 @@ define(
                  *   X^2 =  [ 0     0     0     0   ]
                  *          [ x+x   y+y   0     z+z ]
                 */
-                return ([(A[0]*B[0]+A[1]*B[4]), (A[0]*B[1]+A[1]*B[5]), 0    , (A[3]+B[3]),
+                return ([
+                         (A[0]*B[0]+A[1]*B[4]), (A[0]*B[1]+A[1]*B[5]), 0    , (A[3]+B[3]),
                          (A[4]*B[0]+A[5]*B[4]), (A[4]*B[1]+A[5]*B[5]), 0    , (A[7]+B[7]),
-                         0                    , 0                    , 0    , 0          ,
+                         0                    , 0                    , 1    , 0          ,
                          (A[12]+B[12])        , (A[13]+B[13])        , 0    , (A[15]+B[15])
                         ]);
             },

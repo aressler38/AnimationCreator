@@ -15,7 +15,6 @@ define(
                     return this;
                 },
                 mainTemplateConfig: {
-                    
                     mainAxis : _.uniqueId("mainaxis-"),
                     toolKit  : _.uniqueId("toolkit-"),
                     loadIcon : _.uniqueId("load-"),
@@ -23,7 +22,8 @@ define(
                     styleSheetHelper : _.uniqueId("ssh-"),
                     generateCSS : _.uniqueId("button-"),
                     queryElement : _.uniqueId("query-")
-                }
+                },
+                animatedObjects: []
             },
 
             initialize: function() {
