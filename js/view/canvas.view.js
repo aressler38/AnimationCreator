@@ -104,9 +104,11 @@ define(
                     var y = e.touches[0].pageY - offsets.top;
                     var centerX = el.width/2.0
                     var centerY = el.height/2.0
+                    var xRelative = x - centerX;
+                    var yRelative = y - centerY;
 
                     drawBox(x,y);
-                    savePath(x,y,time);
+                    savePath(xRelative,yRelative,time);
                     renderPath();
                 }
                 function renderPath(x,y) {
