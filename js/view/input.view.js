@@ -2,15 +2,17 @@ define(
     [
         "jQuery",
         "underscore",
-        "Backbone"
+        "Backbone",
+        "toolInitializer"
     ],
-    function($, _, Backbone) {
-        var InputFieldView = Backbone.View.extend({
+    function($, _, Backbone, toolInitializer) {
+        var InputView = Backbone.View.extend({
             tagName: "input",
 
             initialize:function() {
-                this.el.setAttribute("id", _.uniqueId("input-"));
+                toolInitializer.call(this);
             },
+
             events: function() {
                 var events = new Object();
                 events["#"+this.el.id+" keyup"] = "captureText";
@@ -20,6 +22,6 @@ define(
                 this.model.set("text", this.el.value());
             }
         });
-        return InputFieldView;
+        return InputView;
     }
 );

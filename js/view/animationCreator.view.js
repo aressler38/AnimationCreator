@@ -23,6 +23,7 @@ define(
             workerURI: "js/utils/worker.js",
 
             initialize: function() {
+                var that = this;
                 this.SubProcess = new Worker(this.workerURI);
                 this.el.setAttribute("id", this.model.get("id"));
 
@@ -34,7 +35,27 @@ define(
                 this.mainAxis = Tool("MainAxes", mainAxisConfig);
                 this.tools = new Tools({model:this.model});
                 this.tools.on("add", function(model) {console.log(model);});
-                this.tools.collection.add([Tool("TextInput"), Tool("TextInput")]);
+                //this.tools.collection.add([Tool("TextInput"), Tool("TextInput")]);
+                this.tools.collection.add([
+                    Tool("Button", {
+                        attributes: {
+                            type: "button",
+                        },
+                        innerHTML: "generate css",
+                        onclick: function() {
+                            that.generateCSS();
+                        }
+                    }),
+                    Tool("Button", {
+                        attributes: {
+                            type: "button",
+                        },
+                        innerHTML: "print css",
+                        onclick: function() {
+                            that.printCSS();
+                        }
+                    })
+                ]);
                 
                 this.render();
             },
@@ -52,7 +73,7 @@ define(
                             console.log(workerResponse);
                             break;
                         default:
-                            throw new Error("no handled response type")
+                            throw new Error("no handled response type");
                     }
                 }
                 this.SubProcess.addEventListener("message", parseSubProcessResponse);
@@ -64,19 +85,22 @@ define(
 
                 /* === user interface events === */
                 var events = new Object();
-                events["click #"+this.model.get("mainTemplateConfig").generateCSS] = "generateCSS";
+                //events["click #"+this.model.get("mainTemplateConfig").generateCSS] = "generateCSS";
                 return events;
             },
 
             render: function() {
                 var mainTemplateConfig = this.model.get("mainTemplateConfig");
+                console.log(mainTemplateConfig)
                 var template = renderTemplate(mainTemplate, mainTemplateConfig);
                 this.$el.html(template);
                 this.model.get("target").html(this.el);
 
-                this.tools.collection.add([Tool("TextInput"), Tool("TextInput")]);
+                // render mainAxis and Tools...
                 document.getElementById(mainTemplateConfig.mainAxis).appendChild(this.mainAxis.render());
                 document.getElementById(mainTemplateConfig.tools).appendChild(this.tools.render());
+                
+                // get contexts of other app specific dom elements
                 this.loadIcon           = document.getElementById(mainTemplateConfig.loadIcon);
                 this.styleSheet         = document.getElementById(mainTemplateConfig.styleSheet);
                 this.styleSheetHelper   = document.getElementById(mainTemplateConfig.styleSheetHelper);
@@ -130,7 +154,6 @@ define(
 
             play: function(percentage) {
                 // apply style sheet
-
                 
                 return null;
             },

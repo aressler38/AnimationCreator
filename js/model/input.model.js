@@ -5,7 +5,7 @@ define(
         "Backbone"
     ],
     function($, _, Backbone) {
-        var InputFieldModel = Backbone.Model.extend({
+        var InputModel = Backbone.Model.extend({
             defaults: {
                 type: "text"
             },
@@ -13,6 +13,6 @@ define(
                 this.on("add", function(model) {console.log(model);});
             }
         });
-        return InputFieldModel;
+        return InputModel;
     }
 );

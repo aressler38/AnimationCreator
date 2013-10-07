@@ -23,7 +23,7 @@ function generateCSS(data) {
     var cssText = "";
     var cssQueryText = "";
     var animationName = (data.animationName) ? data.animationName : "mymove";
-    var animationIterationCount = (data.animationIterationCount) ? data.animationIterationCount : "1";
+    var animationIterationCount = (data.animationIterationCount) ? data.animationIterationCount : "infinite";//"1";
     var transformations = data.transformations;
     var tLen = transformations.length;
     var percentage = 0;
