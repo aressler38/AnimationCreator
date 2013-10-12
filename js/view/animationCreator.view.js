@@ -13,14 +13,14 @@ define(
         "renderTemplate",
         "hbs!templates/main"
     ],
-    function($, _, Backbone, CanvasView, CanvasModel, Tools, 
+    function($, _, Backbone, CanvasView, CanvasModel, Tools,
                Tool, renderTemplate, mainTemplate) {
 
         var AnimationCreatorView = Backbone.View.extend({
 
-            className: "animation-creator-main",
-            tagName: "div",
-            workerURI: "js/utils/worker.js",
+            className   : "animation-creator-main",
+            tagName     : "div",
+            workerURI   : "js/utils/worker.js",
 
             initialize: function() {
                 this.SubProcess = new Worker(this.workerURI);
@@ -35,7 +35,7 @@ define(
                 this.tools = new Tools({model:this.model});
                 this.tools.on("add", function(model) {console.log(model);});
                 this.tools.collection.add([Tool("TextInput"), Tool("TextInput")]);
-                
+
                 this.render();
             },
 
@@ -109,7 +109,7 @@ define(
 
                 return null;
             },
-            
+
             printCSS: function() {
                 return (document.getElementById("text").innerHTML = this.styleSheet.innerHTML);
             },
@@ -130,14 +130,11 @@ define(
 
             play: function(percentage) {
                 // apply style sheet
-
-                
                 return null;
             },
 
             stop: function() {
                 // capture current state
-                
                 return null;
             },
 
@@ -163,7 +160,7 @@ define(
                  * AB = [ a2b0+a3b2   a3b1+a3b3   a5+b5]
                  *
                 */
-                return ([   
+                return ([
                             (A[0]*B[0]+A[1]*B[2]), (A[0]*B[1]+A[1]*B[3]),
                             (A[2]*B[0]+A[3]*B[2]), (A[2]*B[1]+A[3]*B[3]),
                             (A[4]+B[4]), (A[5]+B[5])
@@ -177,7 +174,7 @@ define(
                  *          [ c d 0 t ]   |   [ 4  5  6  7  ]
                  *    X  =  [ 0 0 0 0 ]   |   [ 8  9  10 11 ]
                  *          [ x y 0 z ]   |   [ 12 13 14 15 ]
-                 *    
+                 *
                  *          [ aa+bc ab+bd 0     r+r ]
                  *          [ ca+dc cb+dd 0     t+t ]
                  *   X^2 =  [ 0     0     0     0   ]

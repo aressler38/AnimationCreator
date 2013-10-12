@@ -38,7 +38,7 @@ require.config({
             "jQuery"    : "jQueryNC"
         },
         "jQueryNC": {
-            "jQuery" : "jQuery"    
+            "jQuery" : "jQuery"
         }
     }
 });

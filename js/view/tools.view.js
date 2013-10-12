@@ -1,4 +1,4 @@
-define( 
+define(
     [
         "jQuery",
         "underscore",
@@ -20,7 +20,7 @@ define(
                 var that = this;
                 // render any current
                 this.collection.each(function(model) {
-                     
+
                 });
                 return this.el;
             },
