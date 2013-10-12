@@ -3,20 +3,26 @@ define(
         "jQuery",
         "underscore",
         "Backbone",
+        "ButtonModel",
+        "InputModel",
         "CanvasView",
-        "CanvasModel",
-        "InputFieldView",
-        "InputFieldModel"
+        "CanvasModel"
 
     ],
-    function($, _, Backbone, CanvasView, CanvasModel,
-        InputFieldView, InputFieldModel) {
+    function($, _,  Backbone, 
+                    ButtonModel,
+                    InputModel, 
+                    CanvasView, 
+                    CanvasModel) 
+        {
 
         return function(toolType, config) {
 
             switch(toolType) {
+                case "Button":
+                    return new ButtonModel(config);
                 case "TextInput":
-                    return new InputFieldModel(config);
+                    return new InputModel(config);
                 case "MainAxes":
                     return new CanvasView({model:new CanvasModel(config)});
                 default:

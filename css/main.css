@@ -66,13 +66,15 @@
 
 .animation-creator-main-axis {
     position:relative;
+    max-width:80%;
     display:inline-block;
     float:left;
 }
 
-.animation-creator-tool-kit {
+.animation-creator-tools {
     position:relative;
     display:inline-block;
+    max-width:10%;
     float:left;
     border:1px dotted black;
     margin: 0px 0px 0px 10px;
@@ -108,8 +110,6 @@
     background: yellow;
     width:33%;
 }
-
-
 
 .animation-creator-button {
     clear:both;
