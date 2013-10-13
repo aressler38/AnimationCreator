@@ -7,6 +7,9 @@ define(
     ],
     function($, _, Backbone, toolInitializer) {
         var ButtonView = Backbone.View.extend({
+            defaults: {
+                type: "button"
+            },
         
             tagName     : "button",
             className   : "",

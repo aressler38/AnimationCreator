@@ -34,10 +34,9 @@ define(
 
                 this.mainAxis = Tool("MainAxes", mainAxisConfig);
                 this.tools = new Tools({model:this.model});
-                this.tools.on("add", function(model) {console.log(model);});
-                this.tools.collection.add([Tool("TextInput"), Tool("TextInput")]);
+                this.render();
 
-                //this.tools.collection.add([Tool("TextInput"), Tool("TextInput")]);
+              //  this.tools.collection.add([Tool("TextInput"), Tool("TextInput")]);
                 this.tools.collection.add([
                     Tool("Button", {
                         attributes: {
@@ -59,7 +58,10 @@ define(
                     })
                 ]);
                 
-                this.render();
+            },
+            
+            addInitialTools: function() {
+
             },
 
             events: function() {
@@ -85,7 +87,7 @@ define(
                     that.model.set("transformations", arguments[0]);
                 });
 
-                /* === user interface events === */
+                /* View Events */
                 var events = new Object();
                 //events["click #"+this.model.get("mainTemplateConfig").generateCSS] = "generateCSS";
                 return events;
@@ -93,7 +95,6 @@ define(
 
             render: function() {
                 var mainTemplateConfig = this.model.get("mainTemplateConfig");
-                console.log(mainTemplateConfig)
                 var template = renderTemplate(mainTemplate, mainTemplateConfig);
                 this.$el.html(template);
                 this.model.get("target").html(this.el);

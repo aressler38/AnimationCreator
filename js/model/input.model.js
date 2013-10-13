@@ -7,7 +7,7 @@ define(
     function($, _, Backbone) {
         var InputModel = Backbone.Model.extend({
             defaults: {
-                type: "text"
+                type: "text",
             },
             initialize:function() {
                 this.on("add", this.addModel);

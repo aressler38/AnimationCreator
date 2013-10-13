@@ -27,37 +27,38 @@ define(
     
             },
 
+            events: function() {
+                /* Collection Events */
+                this.collection.on("add", this.addTool, this);
+                
+                /* View Events */
+                var events = new Object();
+                return events;
+            },
+
             render: function() {
                 var that = this;
-                // render any current
-                this.collection.each(function(model) {
-                    that.initializeToolView(model);
-                });
-                _.each(this.views, function(view) {
-                    console.log("rendering tool view: ");
-                    console.log(view);
-                    that.el.appendChild(view.el);                        
-                });
                 return this.el;
             },
 
             initializeToolView: function(toolModel) {
                 var type = toolModel.get("type");
+                var toolView;
                 if (typeof type === "undefined")
                     throw new Error("missing tool type in the tool model");
                  
                 switch (type) {
                     case "button":
-                       this.views.push(new ButtonView({model: toolModel}));
+                       toolView = new ButtonView({model: toolModel});
                     break;
                     case "text":
-                       this.views.push(new InputView({model: toolModel}));
+                       toolView = new InputView({model: toolModel});
                     break;
                     default: 
                         throw new Error("unhandled tool type: "+type);
                 }
-
-
+                this.views.push(toolView); 
+                return toolView;
             },
 
             collectionChange: function() {
@@ -65,7 +66,8 @@ define(
             },
 
             addTool: function(model) {
-
+                var toolView = this.initializeToolView(model);
+                this.el.appendChild(toolView.el);                        
             }
         });
 
