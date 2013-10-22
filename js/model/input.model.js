@@ -5,18 +5,31 @@ define(
         "Backbone"
     ],
     function($, _, Backbone) {
+
         var InputModel = Backbone.Model.extend({
+
             defaults: {
                 type: "text",
             },
+
             initialize:function() {
-                this.on("add", this.addModel);
+                
+                if (this.get("onchange")) {
+                    if (this.get("callContext"))
+                        this.on("change", this.get("onchange"), this.get("callContext"));
+                    else {
+                        this.on("change", this.get("onchange"));
+                    }
+                }
+                else this.on("change", this.inputChanged);
             },
 
-            addModel: function(model) {
-                console.log("new model added: ");console.log(model);
+            inputChanged: function() {
+                console.log(arguments);
             }
+
         });
+
         return InputModel;
     }
 );
