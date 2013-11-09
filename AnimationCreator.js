@@ -1,4 +1,5 @@
-/* Description: configuration file for requirejs,
+/*
+ * Description: configuration file for requirejs,
  *              contains the main module at the bottom.
 */
 require.config({
