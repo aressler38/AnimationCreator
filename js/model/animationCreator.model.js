@@ -23,7 +23,7 @@ define(
                     generateCSS         : _.uniqueId("button-"),
                     queryElement        : _.uniqueId("query-")
                 },
-                animatedObjects: []
+                animatedObjects: new Backbone.Collection()
             },
 
             initialize: function() {

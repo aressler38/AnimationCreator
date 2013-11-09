@@ -86,7 +86,6 @@ define(
                         }
                     })
                 ]);
-
             },
 
             events: function() {
@@ -181,14 +180,18 @@ define(
 
             play: function(percentage) {
                 // apply style sheet
-                this.model.get("animatedObjects");
+                this.model.get("animatedObjects").forEach(function(model) {
+                    console.log(model);
+                });
                 $("#test").addClass("animate");
                 return null;
             },
 
             stop: function() {
                 // capture current state
-                this.model.get("animatedObjects");
+                this.model.get("animatedObjects").forEach(function(model) {
+                    console.log(model);
+                });
                 $("#test").removeClass("animate");
                 return null;
             },
@@ -203,6 +206,16 @@ define(
                  */
 
                 return null;
+            },
+
+            addAnimatedObject: function() {
+                this.model.get("animatdObjects").push(new Backbone.View.extend({
+                    initialize: function() { 
+                        for (var attr in this.options.DOMAttributes)
+                            if (this.options.DOMAttributes.hasOwnProperty(attr))
+                                this.el.setAttribute(attr, this.options.DOMAttributes[attr]);
+                    }
+                }));
             },
 
             multiplyMatrix2D: function(A, B) {
