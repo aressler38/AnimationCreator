@@ -39,7 +39,7 @@ define(
               //  this.tools.collection.add([Tool("TextInput"), Tool("TextInput")]);
                 this.tools.collection.add([
                     Tool("Button", {
-                        attributes: {
+                        viewAttributes: {
                             type: "button",
                         },
                         innerHTML: "generate css",
@@ -48,16 +48,25 @@ define(
                         }
                     }),
                     Tool("Button", {
-                        attributes: {
+                        viewAttributes: {
                             type: "button",
                         },
                         innerHTML: "print css",
                         onclick: function() {
                             that.printCSS();
                         }
+                    }),
+                    Tool("TextInput", {
+                        viewAttributes: {},
+                        onkeyup: this.setAnimationName,
+                        callContext: this
                     })
                 ]);
                 
+            },
+            
+            setAnimationName: function(event, text) {
+                this.model.set("animationName", text);
             },
             
             addInitialTools: function() {
@@ -116,6 +125,7 @@ define(
                 var workerInterface = {
                     message: "generateCSS",
                     workerData: {
+                        animationName: this.model.get("animationName"),
                         transformations: this.model.get("transformations")
                     }
                 }
