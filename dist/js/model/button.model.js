@@ -1,0 +1,1 @@
+AnimationCreator.define(["jQuery","underscore","Backbone"],function(e,t,n){var r=n.Model.extend({defaults:{type:"button"},initialize:function(){}});return r});

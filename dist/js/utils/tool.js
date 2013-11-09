@@ -1,0 +1,1 @@
+AnimationCreator.define(["jQuery","underscore","Backbone","ButtonModel","InputModel","CanvasView","CanvasModel"],function(e,t,n,r,i,s,o){return function(e,t){switch(e){case"Button":return new r(t);case"TextInput":return new i(t);case"MainAxes":return new s({model:new o(t)});default:throw new Error("TypeError: Unhandled toolType: "+e)}}});

@@ -1,0 +1,1 @@
+AnimationCreator.define(["jQuery","underscore","Backbone","toolInitializer"],function(e,t,n,r){var i=n.View.extend({defaults:{type:"button"},tagName:"button",className:"",initialize:function(){r.call(this)},events:function(){}});return i});

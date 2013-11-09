@@ -1,0 +1,1 @@
+AnimationCreator.define(["jQuery","underscore","Backbone","toolInitializer"],function(e,t,n,r){var i=n.View.extend({tagName:"input",initialize:function(){r.call(this)},events:function(){var e=new Object;return e["#"+this.el.id+" keyup"]="captureText",e},captureText:function(e){this.model.set("text",this.el.value())}});return i});

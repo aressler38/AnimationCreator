@@ -1,0 +1,1 @@
+AnimationCreator.define(["jQuery","underscore","Backbone"],function(e,t,n){return function(){var e=this.model.get("innerHTML"),n=this.model.get("attributes"),r=this.model.get("onclick");this.el.innerHTML=e,this.el.setAttribute("id",t.uniqueId(this.tagName)),r&&(this.el.onclick=r);for(var i in n)n.hasOwnProperty(i)&&this.el.setAttribute(i,n[i])}});

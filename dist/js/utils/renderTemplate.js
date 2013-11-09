@@ -1,0 +1,1 @@
+AnimationCreator.define(["Handlebars"],function(e){return function(t,n){var r={};return typeof t=="string"?(r=e.compile(t),r(n)):t(n)}});

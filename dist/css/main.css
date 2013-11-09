@@ -1,0 +1,215 @@
+.clear {
+    clear:both;
+}
+.animation-creator-float-left-clear-both {
+    float:left;
+    clear:both;
+}
+.animation-creator-canvas-active {
+    cursor:pointer;
+}
+.animation-creator-loading {
+    position:fixed;
+    top:50%;
+    left:50%;
+    height:50px;
+    width:50px;
+    background-image: url(../img/loader.gif);
+}
+.animation-creator-main {
+    position:relative;
+    clear:both;
+    border:1px dotted black;
+    width: 1024px;
+    height: 768px;
+}
+.animation-creator-header {
+    clear:both;
+}
+.animation-creator-header-left {
+    display:inline-block;
+    position:relative;
+    float:left;
+    border:1px dotted black;
+    background: red;
+    width:33%;
+}
+.animation-creator-header-center {
+    display:inline-block;
+    position:relative;
+    float:left;
+    border:1px dotted black;
+    background: orange;
+    width:33%;
+}
+.animation-creator-header-right {
+    display:inline-block;
+    position:relative;
+    float:left;
+    border:1px dotted black;
+    background: yellow;
+    width:33%;
+}
+.animation-creator-body {
+    width:100%;
+    height:100%;
+    clear:both;
+}
+.animation-creator-main-axis {
+    position:relative;
+    max-width:80%;
+    display:inline-block;
+    float:left;
+}
+.animation-creator-tools {
+    position:relative;
+    display:inline-block;
+    max-width:10%;
+    float:left;
+    border:1px dotted black;
+    margin: 0px 0px 0px 10px;
+    height:100%
+}
+.animation-creator-footer {
+    clear:both;
+}
+.animation-creator-footer-left {
+    display:inline-block;
+    position:relative;
+    float:left;
+    background: red;
+    border:1px dotted black;
+    width:33%;
+}
+.animation-creator-footer-center {
+    display:inline-block;
+    position:relative;
+    float:left;
+    background: orange;
+    border:1px dotted black;
+    width:33%;
+}
+.animation-creator-footer-right {
+    display:inline-block;
+    position:relative;
+    float:left;
+    border:1px dotted black;
+    background: yellow;
+    width:33%;
+}
+.animation-creator-button {
+    clear:both;
+    float:left;
+    margin:10px;
+}
+#query {
+    position:absolute;
+    top:50%;
+    left:50%;
+    background: rgb(100,0,200);
+}
+#test {
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:50px;
+    height:50px;
+    background: rgb(100,0,200);
+}
+#text {
+    width:800px;
+}
+	.noUiSlider,
+	.noUiSlider * {
+-webkit-box-sizing: border-box;
+   -moz-box-sizing: border-box;
+		box-sizing: border-box;
+-webkit-user-select: none;
+   -moz-user-select: none;
+	-ms-user-select: none;
+		display: block;
+		cursor: default;
+	}
+	.noUiSlider {
+		position: relative;
+	}
+	.noUiSlider a {
+		position: absolute;
+		z-index: 1;
+	}
+	.noUiSlider a:nth-child(2) {
+		background: inherit !important;
+	}
+	.noUiSlider.vertical a {
+		width: 100%;
+		bottom: 0;
+	}
+	.noUiSlider.horizontal a {
+		height: 100%;
+		right: 0;
+	}
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+	.noUiSlider:before,
+	body.TOUCH,
+	.noUiSlider div {
+		-ms-touch-action: none;
+	}
+	.noUiSlider:before {
+		display: block;
+		position: absolute;
+		width: 150%;
+		left: -25%;
+		height: 400%;
+		top: -150%;
+		content: "";
+		z-index: -1;
+	}
+	.noUiSlider.vertical:before {
+		width: 400%;
+		left: -150%;
+		height: 150%;
+		top: -25%;
+	}
+}
+	.noUiSlider {
+		border: 1px solid #908d84;
+		border-radius: 3px;
+	}
+	.noUiSlider.connect a,
+	.noUiSlider.connect.lower {
+		background: #b2a98f;
+	}
+	.noUiSlider,
+	.noUiSlider.connect.lower a {
+		background: #d9d7cb;
+		box-shadow: inset 0px 1px 7px #b6b4a8
+	}
+	.noUiSlider.disabled,
+	.noUiSlider.disabled.connect.lower a {
+		background: #ccc;
+		box-shadow: none;
+	}
+	.noUiSlider div {
+		height: 18px;
+		width: 18px;
+		border: 1px solid #99968f;
+		border-radius: 3px;
+		background: #efefe7;
+	}
+	.noUiSlider.disabled div {
+		background: transparent;
+	}
+	.noUiSlider.horizontal {
+		width: 300px;
+		height: 10px;
+	}
+	.noUiSlider.horizontal div {
+		margin: -5px 0 0 -9px;
+	}
+	.noUiSlider.vertical {
+		width: 10px;
+		height: 300px;
+	}
+	.noUiSlider.vertical div {
+		margin: -9px 0 0 -5px;
+	}

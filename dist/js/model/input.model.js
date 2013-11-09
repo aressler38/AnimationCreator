@@ -1,0 +1,1 @@
+AnimationCreator.define(["jQuery","underscore","Backbone"],function(e,t,n){var r=n.Model.extend({defaults:{type:"text"},initialize:function(){this.on("add",this.addModel)},addModel:function(e){console.log("new model added: "),console.log(e)}});return r});
