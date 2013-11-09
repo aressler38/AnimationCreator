@@ -33,6 +33,13 @@ define(
                 this.tools = new Tools({model:this.model});
                 this.render();
                 this.addInitialTools();
+
+                this.addAnimatedObject({ 
+                    DOMAttributes: {
+                        id:"test"
+                    }
+                });
+                this.renderAnimatedObjects();
             },
             
             setAnimationName: function(event, text) {
@@ -83,6 +90,12 @@ define(
                         innerHTML: "overdub",
                         onclick: function() {
                             that.overdub();
+                        }
+                    }),
+                    Tool("Button", {
+                        innerHTML: "resetAxes & css animations",
+                        onclick: function() {
+                            that.resetToZeroState();
                         }
                     })
                 ]);
@@ -136,13 +149,13 @@ define(
                 return null;
             },
 
-            generateCSS: function() {
+            generateCSS: function(clear) {
                 var workerInterface = {
                     message: "generateCSS",
                     workerData: {
                         animationName: this.model.get("animationName"),
-                        transformations: this.model.get("transformations")
-                    }
+                        transformations: (!clear) ? this.model.get("transformations") : []
+                    } 
                 }
 
                 $(this.queryElement).removeClass("animation-creator-query");
@@ -180,19 +193,18 @@ define(
 
             play: function(percentage) {
                 // apply style sheet
-                this.model.get("animatedObjects").forEach(function(model) {
-                    console.log(model);
+                this.model.get("animatedObjects").forEach(function(view) {
+                    console.log(view);
+                    view.$el.addClass("animate");
                 });
-                $("#test").addClass("animate");
                 return null;
             },
 
             stop: function() {
                 // capture current state
-                this.model.get("animatedObjects").forEach(function(model) {
-                    console.log(model);
+                this.model.get("animatedObjects").forEach(function(view) {
+                    view.$el.removeClass("animate");
                 });
-                $("#test").removeClass("animate");
                 return null;
             },
 
@@ -208,14 +220,29 @@ define(
                 return null;
             },
 
-            addAnimatedObject: function() {
-                this.model.get("animatdObjects").push(new Backbone.View.extend({
-                    initialize: function() { 
+            addAnimatedObject: function(config) {
+                // this will add a new backbone view to the list of animated objects
+                var animatedObject = Backbone.View.extend({
+                    initialize: function() {
                         for (var attr in this.options.DOMAttributes)
                             if (this.options.DOMAttributes.hasOwnProperty(attr))
                                 this.el.setAttribute(attr, this.options.DOMAttributes[attr]);
                     }
-                }));
+                });
+                this.model.get("animatedObjects").push(new animatedObject(config));
+            },
+
+            removeAnimatedObjects: function() {
+                this.model.get("animatedObjects").forEach(function(view) {
+                    view.$el.remove();        
+                });
+            }, 
+
+            renderAnimatedObjects: function() {
+                var that = this;
+                this.model.get("animatedObjects").forEach(function(view) {
+                    that.$el.append(view.$el);                 
+                });
             },
 
             multiplyMatrix2D: function(A, B) {
@@ -257,14 +284,21 @@ define(
             },
 
             spinerIcon: {
+                // this is the loader icon
                 on:function(){
                     $(this.loadIcon).addClass("animation-creator-loading");
                 },
                 off: function(){
                     $(this.loadIcon).removeClass("animation-creator-loading");
                 }
+            },
+            
+            resetToZeroState: function() {
+                this.model.set("transformations", []);
+                this.processCSS(["","",""]);
+                this.mainAxis.model.set("transformations", []);
+                this.mainAxis.drawAxes();
             }
-
         });
         return AnimationCreatorView;
     }

@@ -23,6 +23,7 @@ function generateCSS(data) {
     var cssText = "";
     var cssQueryText = "";
     var animationName = (data.animationName) ? data.animationName : "mymove";
+    var animationClassName = (data.animationClassName) ? data.animationClassName : "animate";
     var animationIterationCount = (data.animationIterationCount) ? data.animationIterationCount : "infinite";//"1";
     var transformations = data.transformations;
     var tLen = transformations.length;
@@ -64,7 +65,7 @@ function generateCSS(data) {
     }
     cssQueryText += "\n}\n";
     
-    cssText += "\n\n.animate {";
+    cssText += "\n\n."+animationClassName+" {";
     for(var j=0; j<vLen; j++) {
         cssText += "\n    "+vendors[j]+"animation: "+animationName+" "
                             +duration/1000+"s "+animationIterationCount+";"

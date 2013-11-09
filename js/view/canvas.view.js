@@ -35,6 +35,8 @@ define(
                 var width = this.model.get("width");
                 var height = this.model.get("height");
 
+                this.el.setAttribute("width", width); //clear the canvas first
+
                 this.context.beginPath();
                 this.context.moveTo(width/2.0, height);
                 this.context.lineTo(width/2.0, 0);
