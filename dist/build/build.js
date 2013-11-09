@@ -1,1 +1,0 @@
-({baseURL:"/opt/animationCreator",dir:"../dist",modules:[{name:"AnimationCreator"}],mainConfigFile:"../AnimationCreator.js",namespace:"AnimationCreator"});
