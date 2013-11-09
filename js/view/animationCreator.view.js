@@ -35,8 +35,23 @@ define(
                 this.addInitialTools();
 
                 this.addAnimatedObject({ 
+                    dragX:0,
+                    dragY:0,
                     DOMAttributes: {
-                        id:"test"
+                        id:"test",
+                        draggable:true,
+                    },
+                    ondrag: function(event) {
+                        if (event.y !== 0 && event.x !== 0) {
+                            $(this).css({top: event.y});
+                            $(this).css({left: event.x});
+                        }
+                    },
+                    ondrop: function(event) {
+                        console.log(event);
+                    },
+                    ondragend:function(event) {
+                        //console.log(event);
                     }
                 });
                 this.renderAnimatedObjects();
@@ -227,6 +242,10 @@ define(
                         for (var attr in this.options.DOMAttributes)
                             if (this.options.DOMAttributes.hasOwnProperty(attr))
                                 this.el.setAttribute(attr, this.options.DOMAttributes[attr]);
+                        
+                        if (this.options.ondrag) this.el.ondrag = this.options.ondrag;
+                        if (this.options.ondrag) this.el.ondrop = this.options.ondrop;
+                        if (this.options.ondrag) this.el.ondragend = this.options.ondragend;
                     }
                 });
                 this.model.get("animatedObjects").push(new animatedObject(config));
