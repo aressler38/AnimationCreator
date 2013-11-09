@@ -43,31 +43,24 @@ define(
                 var that = this;
                 this.tools.collection.add([
                     Tool("Button", {
-                        viewAttributes: {
-                            type: "button"
-                        },
                         innerHTML: "generate css",
                         onclick: function() {
                             that.generateCSS();
                         }
                     }),
                     Tool("Button", {
-                        viewAttributes: {
-                            type: "button"
-                        },
                         innerHTML: "print css",
                         onclick: function() {
                             that.printCSS();
                         }
                     }),
                     Tool("TextInput", {
-                        viewAttributes: {},
                         onkeyup: this.setAnimationName,
                         callContext: this
                     }),
                     Tool("Button", {
                         viewAttributes: {
-                            type: "button"
+                            class: "time-control"
                         },
                         innerHTML: "play",
                         onclick: function() {
@@ -76,7 +69,7 @@ define(
                     }),
                     Tool("Button", {
                         viewAttributes: {
-                            type: "button"
+                            class: "time-control"
                         },
                         innerHTML: "stop",
                         onclick: function() {
@@ -85,7 +78,7 @@ define(
                     }),
                     Tool("Button", {
                         viewAttributes: {
-                            type: "button"
+                            class: "time-control"
                         },
                         innerHTML: "overdub",
                         onclick: function() {
