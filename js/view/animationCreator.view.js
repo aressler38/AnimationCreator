@@ -3,13 +3,10 @@ define(
         "jQuery",
         "underscore",
         "Backbone",
-
         "CanvasView",
         "CanvasModel",
-
         "Tools",
         "Tool",
-
         "renderTemplate",
         "hbs!templates/main"
     ],
@@ -35,12 +32,19 @@ define(
                 this.mainAxis = Tool("MainAxes", mainAxisConfig);
                 this.tools = new Tools({model:this.model});
                 this.render();
-
-              //  this.tools.collection.add([Tool("TextInput"), Tool("TextInput")]);
+                this.addInitialTools();
+            },
+            
+            setAnimationName: function(event, text) {
+                this.model.set("animationName", text);
+            },
+            
+            addInitialTools: function() {
+                var that = this;
                 this.tools.collection.add([
                     Tool("Button", {
                         viewAttributes: {
-                            type: "button",
+                            type: "button"
                         },
                         innerHTML: "generate css",
                         onclick: function() {
@@ -49,7 +53,7 @@ define(
                     }),
                     Tool("Button", {
                         viewAttributes: {
-                            type: "button",
+                            type: "button"
                         },
                         innerHTML: "print css",
                         onclick: function() {
@@ -60,16 +64,35 @@ define(
                         viewAttributes: {},
                         onkeyup: this.setAnimationName,
                         callContext: this
+                    }),
+                    Tool("Button", {
+                        viewAttributes: {
+                            type: "button"
+                        },
+                        innerHTML: "play",
+                        onclick: function() {
+                            that.play();
+                        }
+                    }),
+                    Tool("Button", {
+                        viewAttributes: {
+                            type: "button"
+                        },
+                        innerHTML: "stop",
+                        onclick: function() {
+                            that.stop();
+                        }
+                    }),
+                    Tool("Button", {
+                        viewAttributes: {
+                            type: "button"
+                        },
+                        innerHTML: "overdub",
+                        onclick: function() {
+                            that.overdub();
+                        }
                     })
                 ]);
-                
-            },
-            
-            setAnimationName: function(event, text) {
-                this.model.set("animationName", text);
-            },
-            
-            addInitialTools: function() {
 
             },
 
@@ -130,7 +153,6 @@ define(
                     }
                 }
 
-                $("#test").removeClass("animate");
                 $(this.queryElement).removeClass("animation-creator-query");
                 this.spinerIcon.on.call(this);
                 this.SubProcess.postMessage(workerInterface);
@@ -141,7 +163,6 @@ define(
                 this.styleSheetHelper.innerHTML = data[1];
                 this.spinerIcon.off.call(this);
 
-                $("#test").addClass("animate");
                 $(this.queryElement).addClass("animation-creator-query");
 
                 return null;
@@ -167,11 +188,15 @@ define(
 
             play: function(percentage) {
                 // apply style sheet
+                this.model.get("animatedObjects");
+                $("#test").addClass("animate");
                 return null;
             },
 
             stop: function() {
                 // capture current state
+                this.model.get("animatedObjects");
+                $("#test").removeClass("animate");
                 return null;
             },
 

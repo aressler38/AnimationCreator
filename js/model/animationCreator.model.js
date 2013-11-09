@@ -4,7 +4,7 @@ define(
         "underscore",
         "Backbone",
     ],
-    function($, underscore ,Backbone) {
+    function($, _ ,Backbone) {
         var AnimationCreatorModel = Backbone.Model.extend({
 
             defaults: {
