@@ -19,6 +19,7 @@ require.config({
     paths: {
         "jQuery"                : "vendor/jquery/jquery-1.10.2.min",
         "jQueryNC"              : "js/utils/noConflict/jQueryNC",
+        "bootstrap"             : "vendor/bootstrap/bootstrap_amd",
         "Backbone"              : "vendor/backbone/backbone-min",
         "underscore"            : "vendor/underscore/underscore-min",
         "noUiSlider"            : "vendor/noUiSlider/jquery.nouislider",
@@ -51,13 +52,14 @@ require.config({
 define(
     [
         "jQuery",
+        "bootstrap",
         "noUiSlider",
         "underscore",
         "Backbone",
         "AnimationCreatorModel",
         "AnimationCreatorView"
     ],
-    function($, None, _, Backbone, AnimationCreatorModel, AnimationCreatorView) {
+    function($, bootstrap, None, _, Backbone, AnimationCreatorModel, AnimationCreatorView) {
         _.noConflict();
         Backbone.noConflict();
         Backbone.$ = $;
