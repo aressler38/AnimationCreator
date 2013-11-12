@@ -65,12 +65,19 @@ define(
                 var that = this;
                 this.tools.collection.add([
                     Tool("Button", {
+                        viewAttributes: {
+                            class: "btn btn-warning btn-lg" 
+                        },
                         innerHTML: "generate css",
                         onclick: function() {
                             that.generateCSS();
-                        }
+                        }    
                     }),
+                               
                     Tool("Button", {
+                        viewAttributes: {
+                            class: "btn btn-info"
+                        },
                         innerHTML: "print css",
                         onclick: function() {
                             that.printCSS();
@@ -82,7 +89,7 @@ define(
                     }),
                     Tool("Button", {
                         viewAttributes: {
-                            class: "time-control"
+                            class: "time-control btn btn-success"
                         },
                         innerHTML: "play",
                         onclick: function() {
@@ -91,7 +98,7 @@ define(
                     }),
                     Tool("Button", {
                         viewAttributes: {
-                            class: "time-control"
+                            class: "time-control btn btn-danger"
                         },
                         innerHTML: "stop",
                         onclick: function() {
@@ -100,7 +107,7 @@ define(
                     }),
                     Tool("Button", {
                         viewAttributes: {
-                            class: "time-control"
+                            class: "time-control btn btn-info"
                         },
                         innerHTML: "overdub",
                         onclick: function() {
@@ -108,6 +115,9 @@ define(
                         }
                     }),
                     Tool("Button", {
+                        viewAttributes: {
+                            class: "btn btn-info"
+                        },
                         innerHTML: "resetAxes & css animations",
                         onclick: function() {
                             that.resetToZeroState();
