@@ -37,6 +37,9 @@ define(
             for (var i in DOMAttributes)
                 if (DOMAttributes.hasOwnProperty(i))
                     this.el.setAttribute(i, DOMAttributes[i]);
+            
+            // draggable
+            $(this.el).draggable();
         }
     }
 );
