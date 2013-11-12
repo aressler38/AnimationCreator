@@ -19,6 +19,7 @@ require.config({
     paths: {
         "jQuery"                : "vendor/jquery/jquery-1.10.2.min",
         "jQueryNC"              : "js/utils/noConflict/jQueryNC",
+        "jQueryUI"              : "vendor/jquery/jquery-ui-1.10.3.custom",
         "bootstrap"             : "vendor/bootstrap/bootstrap_amd",
         "Backbone"              : "vendor/backbone/backbone-min",
         "underscore"            : "vendor/underscore/underscore-min",
@@ -52,14 +53,16 @@ require.config({
 define(
     [
         "jQuery",
+        "jQueryUI",
         "bootstrap",
         "noUiSlider",
         "underscore",
         "Backbone",
         "AnimationCreatorModel",
         "AnimationCreatorView"
-    ],
-    function($, bootstrap, None, _, Backbone, AnimationCreatorModel, AnimationCreatorView) {
+    ], // note: jqUI has already run and has attached all the widgets to $.
+    function($, jqUI, bootstrap, None, _, Backbone, AnimationCreatorModel, AnimationCreatorView) {
+
         _.noConflict();
         Backbone.noConflict();
         Backbone.$ = $;
@@ -74,6 +77,8 @@ define(
                 render:function(){return view.render();}
             });
         }
+        
+        window.$=$;
 
         return AnimationCreator;
     }

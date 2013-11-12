@@ -35,24 +35,20 @@ define(
                 this.addInitialTools();
 
                 this.addAnimatedObject({ 
-                    dragX:0,
-                    dragY:0,
                     DOMAttributes: {
                         id:"test",
-                        draggable:true,
+                        //draggable:true,
                     },
+                    offset: {x:381, y:-481}
+                    
+                    /*
                     ondrag: function(event) {
                         if (event.y !== 0 && event.x !== 0) {
                             $(this).css({top: event.y});
                             $(this).css({left: event.x});
                         }
-                    },
-                    ondrop: function(event) {
-                        console.log(event);
-                    },
-                    ondragend:function(event) {
-                        //console.log(event);
                     }
+                    */
                 });
                 this.renderAnimatedObjects();
             },
@@ -209,7 +205,6 @@ define(
             play: function(percentage) {
                 // apply style sheet
                 this.model.get("animatedObjects").forEach(function(view) {
-                    console.log(view);
                     view.$el.addClass("animate");
                 });
                 return null;
@@ -243,9 +238,14 @@ define(
                             if (this.options.DOMAttributes.hasOwnProperty(attr))
                                 this.el.setAttribute(attr, this.options.DOMAttributes[attr]);
                         
-                        if (this.options.ondrag) this.el.ondrag = this.options.ondrag;
-                        if (this.options.ondrag) this.el.ondrop = this.options.ondrop;
-                        if (this.options.ondrag) this.el.ondragend = this.options.ondragend;
+                       // if (this.options.ondrag) this.el.ondrag = this.options.ondrag;
+                       // if (this.options.ondrag) this.el.ondrop = this.options.ondrop;
+                       // if (this.options.ondrag) this.el.ondragend = this.options.ondragend;
+                        this.$el.draggable();
+                            
+                        if (this.options.offset !== undefined) {
+                            this.$el.css({top: this.options.offset.y, left: this.options.offset.x});
+                        }
                     }
                 });
                 this.model.get("animatedObjects").push(new animatedObject(config));
@@ -260,7 +260,8 @@ define(
             renderAnimatedObjects: function() {
                 var that = this;
                 this.model.get("animatedObjects").forEach(function(view) {
-                    that.$el.append(view.$el);                 
+                    //that.$el.append(view.$el);                 
+                    $(document.body).append(view.$el);
                 });
             },
 
