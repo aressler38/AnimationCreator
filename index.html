@@ -5,49 +5,39 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/jquery-ui-1.10.3.custom.css">
     <link rel="stylesheet" href="css/main.css">
-   
-  
 </head>
 
-<body>    
-    
-    
-    <div class="container">
-   
+<body>
+<div class="container">
+
     <div class="masthead">
         <h3 class="text-muted">name of project</h3>
             <ul class="nav nav-justified">
-                <li class="active">
-                    <a href="#">home</a>
-                </li>
+                <li class="active"><a href="#">home</a></li>
                 <li>projects</li>
             </ul>
     </div>
-    
+
     <div class="jumbotron">
         <h1>check it out</h1>
-            <p class="lead">"hey there hi there yeah"</p>
-            <p><a class="btn btn-lg btn-success" href="#" role="button">start here</a></p>
+        <p class="lead">"hey there hi there yeah"</p>
+        <p><a class="btn btn-lg btn-success" href="#" role="button">start here</a></p>
     </div>
-    
+
     <div class="row">
         <div class="col-lg-4">
             <h2>Heading</h2>
-                <p>"this is the text ajdkljakldjakld"</p>
-                <p><a class="btn btn-primary" href="#" role="button">View details</a></p>
+            <p>"this is the text ajdkljakldjakld"</p>
+            <p><a class="btn btn-primary" href="#" role="button">View details</a></p>
+        </div>
+
+        <h2 class="centered">Animation Creater</h2>
+        <div id="animation-creator-container"></div>
+
+        <div id="animation-creator-footer-left"></div>
     </div>
 
-
- 
-    <h2 class="centered">Animation Creater</h2>
-     
-    <div id="animation-creator-container"></div>
-    <div id="animation-creator-footer-left"></div> 
-    </div>
-    
-    <div id="background-image"></div>
-
-    <div id="footer">footer</div>   
+    <div id="footer">footer</div>
 
     <script data-main="AnimationCreator.js" src="vendor/require/require-full-2.1.8.js"></script>
     <script>
@@ -55,7 +45,8 @@
         ac_loader(["AnimationCreator"], function(AnimationCreator) {
             window.animationCreator = new AnimationCreator({target:"#animation-creator-container"});
         });
-    </script>   
+    </script>
 
+</div>
 </body>
 </html>
