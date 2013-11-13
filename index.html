@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/jquery-ui-1.10.3.custom.css">
     <link rel="stylesheet" href="css/main.css">
    
+   
   
 </head>
 
@@ -42,12 +43,26 @@
     <h2 class="centered">Animation Creater</h2>
      
     <div id="animation-creator-container"></div>
-    <div id="animation-creator-footer-left"></div> 
+     
     </div>
+    <div id="stop"></div>
     
     <div id="background-image"></div>
 
-    <div id="footer">footer</div>   
+    <div id="footer">
+       <nav>
+            <ul>
+                <li><a href="#">podcasts</a></li>
+                <li><a href="#">videos</a></li>
+                <li><a href="#">pictures</a></li>
+                <li><a href="#">books</a></li>
+                <li><a href="#">magazines</a></li>
+                <li><a href="#">records</a></li>
+                <li><a href="#">cassettes</a></li>
+                <li><a href="#">books on tape</a></li>
+            </ul>
+        </nav>
+    </div>   
 
     <script data-main="AnimationCreator.js" src="vendor/require/require-full-2.1.8.js"></script>
     <script>
@@ -55,7 +70,7 @@
         ac_loader(["AnimationCreator"], function(AnimationCreator) {
             window.animationCreator = new AnimationCreator({target:"#animation-creator-container"});
         });
-    </script>   
+    </script>
 
 </body>
 </html>
