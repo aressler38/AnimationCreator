@@ -12,6 +12,7 @@ define(
     ],
     function($, _, Backbone, CanvasView, CanvasModel, Tools,
                Tool, renderTemplate, mainTemplate) {
+        "use strict";
 
         var AnimationCreatorView = Backbone.View.extend({
 
@@ -22,7 +23,9 @@ define(
             initialize: function() {
                 var that = this;
                 this.SubProcess = new Worker(this.workerURI);
-                this.el.setAttribute("id", this.model.get("id"));
+                if (this.model.get("id") !== undefined)
+                    this.el.setAttribute("id", this.model.get("id"));
+                else this.el.setAttribute("id", "animation-creator-view");
 
                 var mainTemplateConfig = this.model.get("mainTemplateConfig");
                 var mainAxisConfig = {

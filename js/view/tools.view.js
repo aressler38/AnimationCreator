@@ -8,7 +8,7 @@ define(
     ],
     function($, _, Backbone,
                 InputView,
-                ButtonView) 
+                ButtonView)
     {
 
         var Tools = Backbone.View.extend({
@@ -20,17 +20,17 @@ define(
             initialize: function() {
                 this.el.setAttribute("id", this.cid);
                 this.collection = new Backbone.Collection();
-    
+
     //            this.collection.on("change", this.collectionChange);
     //maybe set after it renders with initial stuff
  //               this.collection.on("add", this.addTool);
-    
+
             },
 
             events: function() {
                 /* Collection Events */
                 this.collection.on("add", this.addTool, this);
-                
+
                 /* View Events */
                 var events = new Object();
                 return events;
@@ -46,7 +46,7 @@ define(
                 var toolView;
                 if (typeof type === "undefined")
                     throw new Error("missing tool type in the tool model");
-                 
+
                 switch (type) {
                     case "button":
                        toolView = new ButtonView({model: toolModel});
@@ -54,10 +54,10 @@ define(
                     case "text":
                        toolView = new InputView({model: toolModel});
                     break;
-                    default: 
+                    default:
                         throw new Error("unhandled tool type: "+type);
                 }
-                this.views.push(toolView); 
+                this.views.push(toolView);
                 return toolView;
             },
 
@@ -67,7 +67,11 @@ define(
 
             addTool: function(model) {
                 var toolView = this.initializeToolView(model);
-                this.el.appendChild(toolView.el);                        
+                var paddingDiv = document.createElement("div");
+
+                paddingDiv.setAttribute("class", "tool");
+                paddingDiv.appendChild(toolView.el);
+                this.el.appendChild(paddingDiv);
             }
         });
 
