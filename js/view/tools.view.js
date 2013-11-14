@@ -14,7 +14,7 @@ define(
         var Tools = Backbone.View.extend({
 
             tagName:"div",
-
+            className:"tools-container",
             views: [],
 
             initialize: function() {
