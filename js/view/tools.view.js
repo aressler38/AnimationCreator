@@ -21,10 +21,6 @@ define(
                 this.el.setAttribute("id", this.cid);
                 this.collection = new Backbone.Collection();
 
-    //            this.collection.on("change", this.collectionChange);
-    //maybe set after it renders with initial stuff
- //               this.collection.on("add", this.addTool);
-
             },
 
             events: function() {
@@ -72,6 +68,9 @@ define(
                 paddingDiv.setAttribute("class", "tool");
                 paddingDiv.appendChild(toolView.el);
                 this.el.appendChild(paddingDiv);
+                
+                // make the padding draggable
+                $(paddingDiv).draggable();
             }
         });
 
