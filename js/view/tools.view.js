@@ -70,7 +70,7 @@ define(
                 this.el.appendChild(paddingDiv);
                 
                 // make the padding draggable
-                $(paddingDiv).draggable();
+                $(paddingDiv).draggable({containment: "parent", axis:"x"});
             }
         });
 

@@ -65,7 +65,7 @@ define(
                 this.tools.collection.add([
                     Tool("Button", {
                         viewAttributes: {
-                            class: "btn btn-warning btn-lg" 
+                            class: "btn btn-info btn-lg" 
                         },
                         innerHTML: "generate css",
                         onclick: function() {
