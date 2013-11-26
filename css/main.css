@@ -57,6 +57,16 @@ h2, .h2 {
     text-shadow: 2px 2px 1px black;
 }
 
+#arrow-right {
+    position: absolute;
+    top: 65px;
+    width: 0;
+    height: 0;
+    border-top: 60px solid red;
+    border-bottom: 60px solid transparent;
+    border-left: 60px solid red;
+    border-right: 60px solid;
+}
 
 .animation-creator-float-left-clear-both {
     float:left;
