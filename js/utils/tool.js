@@ -3,6 +3,7 @@ define(
         "jQuery",
         "underscore",
         "Backbone",
+        "SliderModel",
         "ButtonModel",
         "InputModel",
         "CanvasView",
@@ -10,6 +11,7 @@ define(
 
     ],
     function($, _,  Backbone, 
+                    SliderModel,
                     ButtonModel,
                     InputModel, 
                     CanvasView, 
@@ -19,6 +21,9 @@ define(
         return function(toolType, config) {
 
             switch(toolType) {
+                case "Slider":
+                    return new SliderModel(config);
+                    break;
                 case "Button":
                     return new ButtonModel(config);
                     break;

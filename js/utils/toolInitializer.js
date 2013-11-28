@@ -14,7 +14,7 @@ define(
             var callContext     = this.model.get("callContext");
             var onkeyup         = this.model.get("onkeyup");
             // default properties and text stuff
-            this.el.innerHTML = innerHTML;
+            if (innerHTML !== undefined) this.el.innerHTML = innerHTML;
             this.el.setAttribute("id", _.uniqueId(this.tagName));
 
             // events
@@ -37,9 +37,6 @@ define(
             for (var i in DOMAttributes)
                 if (DOMAttributes.hasOwnProperty(i))
                     this.el.setAttribute(i, DOMAttributes[i]);
-            
-            // draggable
-            $(this.el).draggable();
         }
     }
 );

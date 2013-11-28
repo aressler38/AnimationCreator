@@ -36,6 +36,8 @@ require.config({
         "InputModel"            : "js/model/input.model",
         "ButtonView"            : "js/view/button.view",
         "ButtonModel"           : "js/model/button.model",
+        "SliderView"            : "js/view/slider.view",
+        "SliderModel"           : "js/model/slider.model",
         "Tools"                 : "js/view/tools.view",
         "Tool"                  : "js/utils/tool"
     },

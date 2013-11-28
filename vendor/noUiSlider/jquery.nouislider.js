@@ -176,7 +176,7 @@ define(
                         settings.margin = settings.margin ? percentage.from(settings.range, settings.margin) : 0;
 
                         // tests serialization to be strings or jQuery objects
-                        if (settings.serialization.to instanceof jQuery || typeof settings.serialization.to == 'string' || settings.serialization.to === false) {
+                        if (settings.serialization.to instanceof $ || typeof settings.serialization.to == 'string' || settings.serialization.to === false) {
                             settings.serialization.to = [settings.serialization.to];
                         }
 
@@ -355,8 +355,8 @@ define(
                 }
             }
             // remap the native/current val function to noUiSlider
-            var $_val = jQuery.fn.val;
-            jQuery.fn.val = function () {
+            var $_val = $.fn.val;
+            $.fn.val = function () {
                 return this.data('_isnS_') ? methods.val.apply(this, arguments) : $_val.apply(this, arguments);
             }
             return options == "disabled" ? methods.disabled.apply(this) : methods.create.apply(this);

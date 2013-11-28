@@ -39,19 +39,9 @@ define(
 
                 this.addAnimatedObject({ 
                     DOMAttributes: {
-                        id:"test",
-                        //draggable:true,
+                        id:"test"
                     },
-                    offset: {x:381, y:-481}
-                    
-                    /*
-                    ondrag: function(event) {
-                        if (event.y !== 0 && event.x !== 0) {
-                            $(this).css({top: event.y});
-                            $(this).css({left: event.x});
-                        }
-                    }
-                    */
+                    offset: {x:0, y:0}
                 });
                 this.renderAnimatedObjects();
             },
@@ -72,7 +62,6 @@ define(
                             that.generateCSS();
                         }    
                     }),
-                               
                     Tool("Button", {
                         viewAttributes: {
                             class: "btn btn-info"
@@ -121,7 +110,23 @@ define(
                         onclick: function() {
                             that.resetToZeroState();
                         }
+                    }),
+                    Tool("Slider", {
+                        // We want different types of sliders to controll different axes
+                        // z,x,y axes, rotation, etc..
+                        // We need a hook that can supply the type of slider desired,
+                        // and initialize it on demand.
+                        viewAttributes: {},
+                        rangeMin: -360,
+                        rangeMax: 360,
+                        startValue: 0,
+                        onslide: function() {
+                            
+                            that.model.set("transformations", arguments[0]);
+                        }
+                        
                     })
+
                 ]);
             },
 
@@ -145,6 +150,7 @@ define(
 
                 /* === tool model events === */
                 this.mainAxis.model.on("change:transformations", function() {
+                    // we need to think about what happens when the app is in overdub mode
                     that.model.set("transformations", arguments[0]);
                 });
 
@@ -179,9 +185,8 @@ define(
                     workerData: {
                         animationName: this.model.get("animationName"),
                         transformations: (!clear) ? this.model.get("transformations") : []
-                    } 
+                    }
                 }
-
                 $(this.queryElement).removeClass("animation-creator-query");
                 this.spinerIcon.on.call(this);
                 this.SubProcess.postMessage(workerInterface);
@@ -251,10 +256,6 @@ define(
                             if (this.options.DOMAttributes.hasOwnProperty(attr))
                                 this.el.setAttribute(attr, this.options.DOMAttributes[attr]);
                         
-                       // if (this.options.ondrag) this.el.ondrag = this.options.ondrag;
-                       // if (this.options.ondrag) this.el.ondrop = this.options.ondrop;
-                       // if (this.options.ondrag) this.el.ondragend = this.options.ondragend;
-                        this.$el.draggable();
                             
                         if (this.options.offset !== undefined) {
                             this.$el.css({top: this.options.offset.y, left: this.options.offset.x});
@@ -275,6 +276,7 @@ define(
                 this.model.get("animatedObjects").forEach(function(view) {
                     //that.$el.append(view.$el);                 
                     $(document.body).append(view.$el);
+                    view.$el.draggable();
                 });
             },
 

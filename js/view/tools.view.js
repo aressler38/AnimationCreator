@@ -4,11 +4,13 @@ define(
         "underscore",
         "Backbone",
         "InputView",
-        "ButtonView"
+        "ButtonView",
+        "SliderView"
     ],
     function($, _, Backbone,
                 InputView,
-                ButtonView)
+                ButtonView,
+                SliderView)
     {
 
         var Tools = Backbone.View.extend({
@@ -50,6 +52,9 @@ define(
                     case "text":
                        toolView = new InputView({model: toolModel});
                     break;
+                    case "slider":
+                        toolView = new SliderView({model: toolModel});
+                    break;
                     default:
                         throw new Error("unhandled tool type: "+type);
                 }
@@ -70,7 +75,8 @@ define(
                 this.el.appendChild(paddingDiv);
                 
                 // make the padding draggable
-                $(paddingDiv).draggable({containment: "parent", axis:"x"});
+                if (model.get("type") !== "slider")
+                    $(paddingDiv).draggable({containment: "parent", axis:"x"});
             }
         });
 
