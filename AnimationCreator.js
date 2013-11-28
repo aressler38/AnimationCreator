@@ -39,7 +39,8 @@ require.config({
         "SliderView"            : "js/view/slider.view",
         "SliderModel"           : "js/model/slider.model",
         "Tools"                 : "js/view/tools.view",
-        "Tool"                  : "js/utils/tool"
+        "Tool"                  : "js/utils/tool",
+        "Overdub"               : "js/utils/overdub"
     },
     map: {
         "*" : {

@@ -7,11 +7,12 @@ define(
         "CanvasModel",
         "Tools",
         "Tool",
+        "Overdub",
         "renderTemplate",
         "hbs!templates/main"
     ],
     function($, _, Backbone, CanvasView, CanvasModel, Tools,
-               Tool, renderTemplate, mainTemplate) {
+               Tool, Overdub, renderTemplate, mainTemplate) {
         "use strict";
 
         var AnimationCreatorView = Backbone.View.extend({
@@ -44,6 +45,7 @@ define(
                     offset: {x:0, y:0}
                 });
                 this.renderAnimatedObjects();
+                this.overdub = new Overdub(this);
             },
             
             setAnimationName: function(event, text) {
@@ -99,7 +101,7 @@ define(
                         },
                         innerHTML: "overdub",
                         onclick: function() {
-                            that.overdub();
+                            that.overdub.toggle();
                         }
                     }),
                     Tool("Button", {
@@ -220,6 +222,15 @@ define(
                 }
             },
 
+            // given a percentage, return the matrix3d css arguments
+            getMatrix: function(cssPercentage) {
+                var regex=RegExp(cssPercentage+"%.*{\n.*matrix3d\\((.*)\\);")
+                // regex must match
+                var stringArray = this.styleSheet.innerHTML.match(regex)[1];
+                var numericalArray = stringArray.map(function(x){return parseInt(x);});
+                return numericalArray;
+            },
+
             play: function(percentage) {
                 // apply style sheet
                 this.model.get("animatedObjects").forEach(function(view) {
@@ -233,18 +244,6 @@ define(
                 this.model.get("animatedObjects").forEach(function(view) {
                     view.$el.removeClass("animate");
                 });
-                return null;
-            },
-
-            overdub: function() {
-
-                /*
-                 *  Rewrite the current transformation loaded.
-                 *  The process will actively listen for changes
-                 *  from the set of active tools and make edits to
-                 *  the stylesheet as desired.
-                 */
-
                 return null;
             },
 
