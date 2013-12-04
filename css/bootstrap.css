@@ -206,7 +206,7 @@ textarea {
 body {
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 18px;
   line-height: 20px;
   color: #333333;
   background-color: #ffffff;
@@ -639,7 +639,10 @@ h3 {
   line-height: 40px;
 }
 h1 {
-  font-size: 38.5px;
+  font-size: 45px;
+  font-family: sans-serif;
+  text-shadow: 2px 3px 3px #292929;
+  letter-spacing: 1px;
 }
 h2 {
   font-size: 31.5px;
@@ -2034,10 +2037,10 @@ legend + .control-group {
   /* IE7 inline-block hack */
 
   *zoom: 1;
-  padding: 4px 12px;
+  padding: 4px 2px;
   margin-bottom: 0;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 19px;
+  line-height: 15px;
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
@@ -2057,7 +2060,7 @@ legend + .control-group {
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
 
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
-  border: 1px solid #cccccc;
+  border: 10px solid #cccccc;
   *border: 0;
   border-bottom-color: #b3b3b3;
   -webkit-border-radius: 4px;
@@ -2241,7 +2244,7 @@ input[type="button"].btn-block {
   background-color: #c67605 \9;
 }
 .btn-danger {
-  color: #ffffff;
+  color: black;  
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   background-color: #da4f49;
   background-image: -moz-linear-gradient(top, #ee5f5b, #bd362f);
@@ -2273,7 +2276,7 @@ input[type="button"].btn-block {
   background-color: #942a25 \9;
 }
 .btn-success {
-  color: #ffffff;
+  color: black;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   background-color: #5bb75b;
   background-image: -moz-linear-gradient(top, #62c462, #51a351);
@@ -2305,7 +2308,7 @@ input[type="button"].btn-block {
   background-color: #408140 \9;
 }
 .btn-info {
-  color: #ffffff;
+  color: black;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   background-color: #49afcd;
   background-image: -moz-linear-gradient(top, #5bc0de, #2f96b4);
@@ -3222,12 +3225,13 @@ input[type="submit"].btn.btn-mini {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+  color: black;
 }
 .nav-pills > .active > a,
 .nav-pills > .active > a:hover,
 .nav-pills > .active > a:focus {
   color: #ffffff;
-  background-color: #0088cc;
+  background-color: teal;
 }
 .nav-stacked > li {
   float: none;
