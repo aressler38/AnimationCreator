@@ -206,7 +206,8 @@ define(
             },
 
             printCSS: function() {
-                return (document.getElementById("text").innerHTML = this.styleSheet.innerHTML);
+                console.log(this.styleSheet.innerHTML);
+                //return (document.getElementById("text").innerHTML = this.styleSheet.innerHTML);
             },
 
             query: function() {

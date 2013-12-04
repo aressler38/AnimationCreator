@@ -5,65 +5,51 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 
-
 <body>
-
-
+<!-- BEGIN CONTAINER -->
 <div class="container">
+    <div class="top-container-style">
+        <div class="header">
+            <ul class="nav nav-pills pull-right">
+                <li class="active"><a href="#">Home</a>
+                <li><a href="#">About</a>
+                <li><a href="#">Contact</a>
+            </ul>
+                <h3 class="text-muted">Animation Creator</h3>
+        </div>
+        <div class="jumbotron">
+            <h1>Css animation code generator</h1>
+            <p class="lead">
+                Create your css animation and generate the code here.
+            </p>
+        </div> 
 
-
-<div class="top-container-style">
-
-    <div class="header">
-        <ul class="nav nav-pills pull-right">
-            <li class="active"><a href="#">Home</a>
-            <li><a href="#">About</a>
-            <li><a href="#">Contact</a>
-        </ul>
-            <h3 class="text-muted">Animation Creator</h3>
     </div>
-    
-    <div class="jumbotron">
-        <h1>Css animation code generator</h1>
-        <p class="lead">
-            Create your css animation and generate the code here.
-        </p>
-    </div> 
-
-</div>
-
-
-
-<nav>
-  <ul class="top-menu">
-    <li><a href=#>Home</a><div class="menu-item" id="home"></div></li>
-    <li><a href=#>About</a><div class="menu-item" id="about"></div></li>
-    <li><a href=#>Chat</a><div class="menu-item" id="chat"></div></li>
-    <li><a href=#>Examples</a><div class="menu-item" id="examples"></div></li>
-    <li><a href=#>Contact</a><div class="menu-item" id="contact"></div></li>
-  </ul>
-</nav>
-
-
-
-<div class="mid-container">
-    <p>Some content can go here. Maybe general info.</p>
-    <p>Also something here. You can put whatever you want.</p>
-    <p>Take a look at this. What do you think?</p>
-</div>
-
-
-        <h2 class="centered">Animation Creator</h2>
-        <div id="animation-creator-container"></div>
+    <nav>
+      <ul class="top-menu">
+        <li><a href=#>Home</a><div class="menu-item" id="home"></div></li>
+        <li><a href=#>About</a><div class="menu-item" id="about"></div></li>
+        <li><a href=#>Chat</a><div class="menu-item" id="chat"></div></li>
+        <li><a href=#>Examples</a><div class="menu-item" id="examples"></div></li>
+        <li><a href=#>Contact</a><div class="menu-item" id="contact"></div></li>
+      </ul>
+    </nav>
+    <div class="mid-container">
+        <p>Some content can go here. Maybe general info.</p>
+        <p>Also something here. You can put whatever you want.</p>
+        <p>Take a look at this. What do you think?</p>
     </div>
-    <div id="stop"></div>
-    
-       <div id="footer">
-            Copyright 2013 Alexander & Pauline 
-       </div>   
+    <h2 class="centered">Animation Creator</h2>
+    <div id="animation-creator-container"></div>
+
+    <div id="footer">
+        Copyright 2013 Alexander & Pauline 
+    </div>   
+
     <div id="footer"></div>
 
 
+<!-- BEGIN SCRIPT -->
     <script data-main="AnimationCreator.js" src="vendor/require/require-full-2.1.8.js"></script>
     <script>
         var ac_loader = (window.AnimationCreator) ? window.AnimationCreator.require : window.require;
@@ -71,7 +57,10 @@
             window.animationCreator = new AnimationCreator({target:"#animation-creator-container"});
         });
     </script>
+<!-- END SCRIPT -->
 
 </div>
+<!-- END CONTAINER -->
+
 </body>
 </html>
