@@ -1,4 +1,4 @@
-define([],function(){
+define([],function() {
     return function(context) {
         /*
          *  Rewrite the current transformation loaded.
@@ -23,8 +23,7 @@ define([],function(){
                 activate = false;
             },
             toggle: function() {
-                if (activate === true) 
-                    this.off();
+                if (activate === true) this.off();
                 else this.on(); 
             }
         })
