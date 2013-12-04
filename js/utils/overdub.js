@@ -1,4 +1,4 @@
-define([],function(){
+define(["jQuery"],function($){ 
     return function(context) {
         /*
          *  Rewrite the current transformation loaded.
@@ -16,10 +16,12 @@ define([],function(){
         
         return ({
             on: function() {
+                $("#overdub-button").addClass("push-button-active");
                 activate = true;
                 window.requestAnimationFrame(paintFrame);
             },
             off: function() {
+                $("#overdub-button").removeClass("push-button-active");
                 activate = false;
             },
             toggle: function() {
