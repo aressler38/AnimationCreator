@@ -97,6 +97,7 @@ define(
                     }),
                     Tool("Button", {
                         viewAttributes: {
+                            id: "overdub-button",
                             class: "time-control btn btn-info"
                         },
                         innerHTML: "overdub",
