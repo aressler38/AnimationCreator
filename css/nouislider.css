@@ -1,5 +1,3 @@
-/* noUiSlider CSS settings */
-
 	.noUiSlider,
 	.noUiSlider * {
 -webkit-box-sizing: border-box;
@@ -94,4 +92,3 @@
 	.noUiSlider.vertical div {
 		margin: -9px 0 0 -5px;
 	}
-/* END noUiSlider CSS settings */
