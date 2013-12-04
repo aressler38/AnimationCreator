@@ -25,8 +25,7 @@ define(["jQuery"],function($){
                 activate = false;
             },
             toggle: function() {
-                if (activate === true) 
-                    this.off();
+                if (activate === true) this.off();
                 else this.on(); 
             }
         })
