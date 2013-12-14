@@ -346,7 +346,7 @@ h2, .h2 {
     background: rgb(100,0,200);
 }
 
-#test {
+.test {
     position:absolute;
     top:50%;
     left:50%;

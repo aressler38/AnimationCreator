@@ -10,8 +10,13 @@ define(["jQuery"],function($){
         var that = context;
 
         function paintFrame(time) {
-            console.log(time);
-            if (activate) window.requestAnimationFrame(paintFrame);
+            // first check the mode
+            if (activate) {
+                // do stuff...
+                // let's make a couple of callbacks for requestAnimationFrame.
+                window.requestAnimationFrame(paintFrame);
+            }
+            return null;
         }
         
         return ({

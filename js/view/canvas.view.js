@@ -121,8 +121,8 @@ define(
                     context.beginPath();
                     for (var i=0; i<len-1; i++) {
                         context[transformations[i].type](
-                            centerX+transformations[i].cssMatrix[12], 
-                            centerY+transformations[i].cssMatrix[13]
+                            centerX+transformations[i].matrix[12], 
+                            centerY+transformations[i].matrix[13]
                         );
                     }
                     context.stroke();

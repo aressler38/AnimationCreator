@@ -15,6 +15,8 @@ define(
                Tool, Overdub, renderTemplate, mainTemplate) {
         "use strict";
 
+        var vendors = ["-webkit-", "-moz-", ""];
+
         var AnimationCreatorView = Backbone.View.extend({
 
             className   : "animation-creator-main",
@@ -24,23 +26,28 @@ define(
             initialize: function() {
                 var that = this;
                 this.SubProcess = new Worker(this.workerURI);
-                if (this.model.get("id") !== undefined)
-                    this.el.setAttribute("id", this.model.get("id"));
-                else this.el.setAttribute("id", "animation-creator-view");
-
+                this.el.setAttribute("id", (this.model.get("id") || "animation-creator-view"));
                 var mainTemplateConfig = this.model.get("mainTemplateConfig");
                 var mainAxisConfig = {
                     target : mainTemplateConfig.mainAxis
                 };
-
+                // preRender
                 this.mainAxis = Tool("MainAxes", mainAxisConfig);
                 this.tools = new Tools({model:this.model});
+                //
                 this.render();
+                // postRender
                 this.addInitialTools();
-
                 this.addAnimatedObject({ 
                     DOMAttributes: {
-                        id:"test"
+                        class:"test"
+                    },
+                    offset: {x:0, y:0}
+                });
+                // duplicate for multiple test objects
+                this.addAnimatedObject({ 
+                    DOMAttributes: {
+                        class:"test"
                     },
                     offset: {x:0, y:0}
                 });
@@ -182,6 +189,7 @@ define(
                 return null;
             },
 
+            // task for SubProcess
             generateCSS: function(clear) {
                 var workerInterface = {
                     message: "generateCSS",
@@ -195,13 +203,12 @@ define(
                 this.SubProcess.postMessage(workerInterface);
             },
 
+            // callback for SubProcess
             processCSS: function(data) {
                 this.styleSheet.innerHTML = data[0];
                 this.styleSheetHelper.innerHTML = data[1];
                 this.spinerIcon.off.call(this);
-
                 $(this.queryElement).addClass("animation-creator-query");
-
                 return null;
             },
 
@@ -225,27 +232,61 @@ define(
             },
 
             // given a percentage, return the matrix3d css arguments
+            // this is slow...
             getMatrix: function(cssPercentage) {
                 var regex=RegExp(cssPercentage+"%.*{\n.*matrix3d\\((.*)\\);")
                 // regex must match
-                var stringArray = this.styleSheet.innerHTML.match(regex)[1];
-                var numericalArray = stringArray.map(function(x){return parseInt(x);});
+                var stringMatch = this.styleSheet.innerHTML.match(regex)[1];
+                var arrayMatch = stringMatch.split(","); 
+                var numericalArray = arrayMatch.map(function(x){return parseInt(x);});
                 return numericalArray;
             },
 
+            // mode can be overdub, neutral, play, stop
+            mode:"neutral",
+
             play: function(percentage) {
+                var that = this;
+                this.mode="play";
+                /*
                 // apply style sheet
                 this.model.get("animatedObjects").forEach(function(view) {
                     view.$el.addClass("animate");
                 });
+                */
+                var animatedObjects = that.model.get("animatedObjects");
+                var transformations = this.model.get("transformations"); 
+                var tInitial = null; 
+                var tCounter = 0,
+                    tLen = transformations.length;
+                function start(timestamp) {
+                    if (tInitial === null) tInitial = timestamp;
+                    animatedObjects.forEach(function(view) {
+                        view.apply3DMatrix(transformations[tCounter++ % tLen].matrix);
+                    });
+                    if (that.mode !== "play") return null;
+                    else window.requestAnimationFrame(start);
+                }
+                window.requestAnimationFrame(start);
+                // start query
+                $(this.queryElement).addClass("animation-creator-query");
                 return null;
             },
 
             stop: function() {
+                this.mode="stop";
+                this.overdub.off();
                 // capture current state
+                var matrix;
+
+                /* freeze position
                 this.model.get("animatedObjects").forEach(function(view) {
                     view.$el.removeClass("animate");
-                });
+                    view.apply3DMatrix(this.getMatrix(this.query()));
+                }, this);
+                */
+
+                $(this.queryElement).removeClass("animation-creator-query");
                 return null;
             },
 
@@ -256,12 +297,16 @@ define(
                         for (var attr in this.options.DOMAttributes)
                             if (this.options.DOMAttributes.hasOwnProperty(attr))
                                 this.el.setAttribute(attr, this.options.DOMAttributes[attr]);
-                        
-                            
                         if (this.options.offset !== undefined) {
                             this.$el.css({top: this.options.offset.y, left: this.options.offset.x});
                         }
-                    }
+                    },
+                    // Given a DOM element, el, apply the css 3D matrix
+                    apply3DMatrix: function(matrix) {
+                        vendors.forEach(function(vendor) {
+                            this.$el.css(vendor+"transform", "matrix3d("+matrix+")");    
+                        }, this);
+                    },
                 });
                 this.model.get("animatedObjects").push(new animatedObject(config));
             },
@@ -281,6 +326,7 @@ define(
                 });
             },
 
+            // will I ever use this?
             multiplyMatrix2D: function(A, B) {
                 /* defined as:
                  *

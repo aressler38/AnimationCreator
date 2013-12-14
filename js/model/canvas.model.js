@@ -14,7 +14,7 @@ define(
 
                 transformations: [],
                 transformation: function() {
-                    this.cssMatrix  = arguments[0];
+                    this.matrix  = arguments[0];
                     this.time       = arguments[1];
                     this.type       = arguments[2];
                     return this;

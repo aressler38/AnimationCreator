@@ -17,6 +17,7 @@ require.config({
         }
     },
     paths: {
+        "requestAnimationFrame" : "js/utils/requestAnimationFrame",
         "jQuery"                : "vendor/jquery/jquery-1.10.2.min",
         "jQueryNC"              : "js/utils/noConflict/jQueryNC",
         "jQueryUI"              : "vendor/jquery/jquery-ui-1.10.3.custom",
@@ -28,6 +29,7 @@ require.config({
         "Handlebars"            : "vendor/handlebars/handlebars",
         "renderTemplate"        : "js/utils/renderTemplate",
         "toolInitializer"       : "js/utils/toolInitializer",
+        "ModalView"             : "js/view/modal.view",
         "AnimationCreatorView"  : "js/view/animationCreator.view",
         "AnimationCreatorModel" : "js/model/animationCreator.model",
         "CanvasView"            : "js/view/canvas.view",
@@ -55,6 +57,7 @@ require.config({
 
 define(
     [
+        "requestAnimationFrame",
         "jQuery",
         "jQueryUI",
         "bootstrap",
@@ -64,7 +67,7 @@ define(
         "AnimationCreatorModel",
         "AnimationCreatorView"
     ], // note: jqUI has already run and has attached all the widgets to $.
-    function($, jqUI, bootstrap, None, _, Backbone, AnimationCreatorModel, AnimationCreatorView) {
+    function(raf, $, jqUI, bootstrap, nouislider, _, Backbone, AnimationCreatorModel, AnimationCreatorView) {
 
         _.noConflict();
         Backbone.noConflict();
