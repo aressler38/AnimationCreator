@@ -18,7 +18,7 @@ define(["jQuery"],function($){
             }
             return null;
         }
-        
+
         return ({
             on: function() {
                 $("#overdub-button").addClass("push-button-active");

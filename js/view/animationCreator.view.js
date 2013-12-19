@@ -243,29 +243,32 @@ define(
             },
 
             // mode can be overdub, neutral, play, stop
-            mode:"neutral",
+            mode: "neutral",
 
             play: function(percentage) {
-                var that = this;
                 this.mode="play";
-                /*
-                // apply style sheet
-                this.model.get("animatedObjects").forEach(function(view) {
-                    view.$el.addClass("animate");
-                });
-                */
-                var animatedObjects = that.model.get("animatedObjects");
-                var transformations = this.model.get("transformations"); 
-                var tInitial = null; 
+                var that = this;
+                var animatedObjects = this.model.get("animatedObjects");
+                var transformations = this.model.get("transformations");
+                var tStart = window.performance.now();// null;
                 var tCounter = 0,
                     tLen = transformations.length;
+                var tInitial = transformations[0].time;
+                var tFinal = transformations[transformations.length-1].time;
+                var dt = tFinal - tInitial;
+                var lookAhead = 32;  
                 function start(timestamp) {
-                    if (tInitial === null) tInitial = timestamp;
-                    animatedObjects.forEach(function(view) {
-                        view.apply3DMatrix(transformations[tCounter++ % tLen].matrix);
-                    });
-                    if (that.mode !== "play") return null;
-                    else window.requestAnimationFrame(start);
+                    if ((lookAhead+((timestamp - tStart) % dt)) > (transformations[tCounter % tLen].time - tInitial)) {
+                        animatedObjects.forEach(function(view) {
+                            view.apply3DMatrix(transformations[tCounter++ % tLen].matrix);
+                        });
+                        if (that.mode !== "play") return null;
+                        else window.requestAnimationFrame(start);
+                    }
+                    else {
+                        if (that.mode !== "play") return null;
+                        window.requestAnimationFrame(start);
+                    }
                 }
                 window.requestAnimationFrame(start);
                 // start query
@@ -321,7 +324,8 @@ define(
                 var that = this;
                 this.model.get("animatedObjects").forEach(function(view) {
                     //that.$el.append(view.$el);                 
-                    $(document.body).append(view.$el);
+                    //$(document.body).append(view.$el);
+                    $(".animation-creator-main-axis").append(view.$el);
                     view.$el.draggable();
                 });
             },
