@@ -219,7 +219,6 @@ define(
                     body: this.styleSheet.innerHTML,
                     header: "this is your CSS"
                 });
-                console.log(this.styleSheet.innerHTML);
             },
 
             query: function() {
