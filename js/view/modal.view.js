@@ -17,7 +17,6 @@ define(
 
             render: function() {
                 document.body.appendChild(this.el);
-                this.$el.find(".modal-body").on("scroll", this.scroll);
                 $(document.body).addClass("noscroll");
                 return null;
             },
@@ -28,13 +27,7 @@ define(
             
             closeModal: function() {
                 this.remove();
-                this.$el.find(".modal-body").off("scroll", this.scroll);
                 $(document.body).removeClass("noscroll");
-            },
-            
-            scroll: function(event) {
-                event.preventDefault();
-                event.stopPropagation();
             }
             
         });
