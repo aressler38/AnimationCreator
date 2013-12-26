@@ -9,10 +9,11 @@ define(
         "Tool",
         "Overdub",
         "renderTemplate",
-        "hbs!templates/main"
+        "hbs!templates/main",
+        "ModalView"
     ],
     function($, _, Backbone, CanvasView, CanvasModel, Tools,
-               Tool, Overdub, renderTemplate, mainTemplate) {
+               Tool, Overdub, renderTemplate, mainTemplate, ModalView) {
         "use strict";
 
         var vendors = ["-webkit-", "-moz-", ""];
@@ -55,10 +56,12 @@ define(
                 this.overdub = new Overdub(this);
             },
             
+            // TODO: deprecate this method. 
             setAnimationName: function(event, text) {
                 this.model.set("animationName", text);
             },
             
+            // Add the initial set of tools when initialize is called.
             addInitialTools: function() {
                 var that = this;
                 this.tools.collection.add([
@@ -131,7 +134,6 @@ define(
                         rangeMax: 360,
                         startValue: 0,
                         onslide: function() {
-                            
                             that.model.set("transformations", arguments[0]);
                         }
                         
@@ -142,7 +144,7 @@ define(
 
             events: function() {
                 var that = this;
-                /* === SubProcess events === */
+                // SubProcess events
                 function parseSubProcessResponse(workerResponse) {
                     switch (workerResponse.data.type) {
                         case "generateCSS":
@@ -158,15 +160,15 @@ define(
                 }
                 this.SubProcess.addEventListener("message", parseSubProcessResponse);
 
-                /* === tool model events === */
+                // === tool model events 
                 this.mainAxis.model.on("change:transformations", function() {
                     // we need to think about what happens when the app is in overdub mode
                     that.model.set("transformations", arguments[0]);
                 });
 
-                /* View Events */
+                // View Events 
+                // lots of events are handled by individual tool objects created in addInitialTools.
                 var events = new Object();
-                //events["click #"+this.model.get("mainTemplateConfig").generateCSS] = "generateCSS";
                 return events;
             },
 
@@ -213,8 +215,11 @@ define(
             },
 
             printCSS: function() {
+                var view = new ModalView({
+                    body: this.styleSheet.innerHTML,
+                    header: "this is your CSS"
+                });
                 console.log(this.styleSheet.innerHTML);
-                //return (document.getElementById("text").innerHTML = this.styleSheet.innerHTML);
             },
 
             query: function() {

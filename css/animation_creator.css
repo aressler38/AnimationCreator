@@ -354,6 +354,46 @@ h2, .h2 {
     background: rgb(100,0,200);
 }
 
+.noscroll {
+    overflow-y: hidden;
+}
+
+.modal-wrapper {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    margin: 10% 10% 10% 10%;
+    padding: 25px;
+    background: white;
+    border-radius: 15px;
+    z-index: 100000;
+    min-width: 300px;
+    min-height: 400px;
+}
+.modal-close {
+    position: absolute;
+    display: inline-block;
+    width:1em;
+    height:1em;
+    top: 4px;
+    right: 4px;
+    border-radius: 15px;
+    background: rgba(0,0,255,0.4);
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+}
+.modal-close:before {
+    content: "\00d7";
+}
+
+.modal-wrapper .modal-header {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18pt;
+    padding: 20px;
+}
+
 .test {
     position:absolute;
     top:50%;
