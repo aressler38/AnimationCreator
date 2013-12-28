@@ -382,6 +382,7 @@ h2, .h2 {
     cursor: pointer;
     text-align: center;
     font-weight: bold;
+    line-height: 0.875em;
 }
 .modal-close:before {
     content: "\00d7";

@@ -35,7 +35,7 @@ define(
                 // preRender
                 this.mainAxis = Tool("MainAxes", mainAxisConfig);
                 this.tools = new Tools({model:this.model});
-                //
+
                 this.render();
                 // postRender
                 this.addInitialTools();
@@ -160,7 +160,7 @@ define(
                 }
                 this.SubProcess.addEventListener("message", parseSubProcessResponse);
 
-                // === tool model events 
+                // tool model events 
                 this.mainAxis.model.on("change:transformations", function() {
                     // we need to think about what happens when the app is in overdub mode
                     that.model.set("transformations", arguments[0]);
