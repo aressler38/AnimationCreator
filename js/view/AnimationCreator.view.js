@@ -1,3 +1,6 @@
+// AnimationCreatorView
+// Description: Defines the class for the main view. 
+
 define(
     [
         "jQuery",
@@ -137,6 +140,13 @@ define(
                             that.model.set("transformations", arguments[0]);
                         }
                         
+                    }),
+                    Tool("Button", {
+                        viewAttributes: {
+                            class: "btn"
+                        },
+                        innerHTML: "add a new animated object",
+                        onclick: this.newAddAnimatedObject
                     })
 
                 ]);
@@ -214,8 +224,9 @@ define(
                 return null;
             },
 
+            // show a modal
             printCSS: function() {
-                var view = new ModalView({
+                var modal = new ModalView({
                     body: this.styleSheet.innerHTML,
                     header: "this is your CSS"
                 });
@@ -295,6 +306,59 @@ define(
 
                 $(this.queryElement).removeClass("animation-creator-query");
                 return null;
+            },
+
+            newAddAnimatedObject: function(config) {
+                // this will add a new backbone view to the list of animated objects
+                var animatedObject = Backbone.View.extend({
+                    initialize: function() {
+                        for (var attr in this.options.DOMAttributes)
+                            if (this.options.DOMAttributes.hasOwnProperty(attr))
+                                this.el.setAttribute(attr, this.options.DOMAttributes[attr]);
+                        if (this.options.offset !== undefined) {
+                            this.$el.css({top: this.options.offset.y, left: this.options.offset.x});
+                        }
+                    },
+                    // Given a DOM element, el, apply the css 3D matrix
+                    apply3DMatrix: function(matrix) {
+                        vendors.forEach(function(vendor) {
+                            this.$el.css(vendor+"transform", "matrix3d("+matrix+")");    
+                        }, this);
+                    }
+                });
+
+                var $bodyTemplate = $("<div>");
+                var $input, modal;
+                $bodyTemplate.append("<input class='add-image' type='file'>");
+                $bodyTemplate.append("<img id='myimg' width='250' height='250'>");
+                $input = $bodyTemplate.find(".add-image");
+                modal = new ModalView({
+                    header: "Select an Image",
+                    partial: $bodyTemplate,
+                    initialize: function() {
+
+
+                        function fileSelected(event) {
+                            var selectedFile = event.target.files[0];
+                            var reader = new FileReader();
+                            var imgtag = document.getElementById("myimg");
+
+                            imgtag.title = selectedFile.name;
+                            reader.onload = function(event) {
+                                imgtag.src = event.target.result;
+                            };
+                            reader.readAsDataURL(selectedFile);
+                        }
+
+//                        $input[0].addEventListener("change", fileSelected);
+                        _.extend(this.events, {
+                            "change .add-image": fileSelected
+                        }); 
+                    }
+                });
+                
+                
+                //this.model.get("animatedObjects").push(new animatedObject(config));
             },
 
             addAnimatedObject: function(config) {
