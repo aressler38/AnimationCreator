@@ -24,12 +24,12 @@ function generateCSS(data) {
     var cssQueryText = "";
     var animationName = (data.animationName) ? data.animationName : "mymove";
     var animationClassName = (data.animationClassName) ? data.animationClassName : "animate";
-    var animationIterationCount = (data.animationIterationCount) ? data.animationIterationCount : "infinite";//"1";
+    var animationIterationCount = (data.animationIterationCount) ? data.animationIterationCount : "infinite";
     var transformations = data.transformations;
     var tLen = transformations.length;
     var percentage = 0;
     var tInitial = transformations[0].time;
-    var matrix = transformations[0].cssMatrix;
+    var matrix = transformations[0].matrix;
     var duration = transformations[tLen-1].time - tInitial;
 
     for (var j=0; j<vLen; j++) {
@@ -37,7 +37,7 @@ function generateCSS(data) {
         for (var i=0; i<tLen; i++) {
             percentage = (transformations[i].time - tInitial) / duration;
             percentage = (percentage.toFixed(4)*100).toPrecision(4);
-            matrix = transformations[i].cssMatrix;
+            matrix = transformations[i].matrix;
             cssText += "\n    "+percentage+"% {\n        "
                                +vendors[j]+"transform: matrix3d("+matrix+");\n"
                                +"    }";
