@@ -374,7 +374,6 @@ h2, .h2 {
     position: absolute;
     display: inline-block;
     width:1em;
-    height:1em;
     top: 4px;
     right: 4px;
     border-radius: 15px;
@@ -382,10 +381,15 @@ h2, .h2 {
     cursor: pointer;
     text-align: center;
     font-weight: bold;
-    line-height: 0.875em;
+    font: normal 12px Times New Roman;
+    font-weight: bold;
+    font-size: 1em;
+    line-height: 1em;
 }
 .modal-close:before {
     content: "\00d7";
+    font-size: 1em;
+    line-height: 1em;
 }
 
 .modal-wrapper .modal-header {
