@@ -1,4 +1,3 @@
-
 Alias /animation-creator /opt/AnimationCreator/
 <Directory "/opt/AnimationCreator">
     Options Indexes MultiViews FollowSymLinks

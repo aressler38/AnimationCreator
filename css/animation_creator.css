@@ -362,13 +362,17 @@ h2, .h2 {
     position: fixed;
     left: 0px;
     top: 0px;
-    margin: 10% 10% 10% 10%;
+    margin: 5% 5% 5% 5%;
     padding: 25px;
     background: white;
     border-radius: 15px;
     z-index: 100000;
-    min-width: 300px;
+    min-width: 88%;
     min-height: 400px;
+    max-width: 88%;
+    max-height: 88%;
+
+    height:100%;
 }
 .modal-close {
     position: absolute;
@@ -398,6 +402,26 @@ h2, .h2 {
     font-size: 18pt;
     padding: 20px;
 }
+
+.modal-wrapper span {
+    vertical-align: middle;
+}
+
+/* extra modal stuff for addAnimatedObject */
+.modal-wrapper .img-input-label:before {
+    content: "choose an image: ";
+}
+.modal-wrapper .img-width-label:before {
+    content: "width: ";
+}
+.modal-wrapper .img-height-label:before {
+    content: "height: ";
+}
+.modal-wrapper .img-name-label:before {
+    content: "specify a className: ";
+}
+
+/* ok end */
 
 .test {
     position:absolute;

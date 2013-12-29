@@ -308,9 +308,14 @@ define(
                 return null;
             },
 
+            // Add a new backbone view to the list of animated objects using a modal
             newAddAnimatedObject: function(config) {
-                // this will add a new backbone view to the list of animated objects
-                var animatedObject = Backbone.View.extend({
+                var $input  = null, 
+                    modal   = null;
+                var imgID                       = _.uniqueId("supercoolimagepreview-");
+                var $bodyTemplate               = $("<div>");
+                var animatedObjectConfiguration = new Object();
+                var AnimatedObject = Backbone.View.extend({
                     initialize: function() {
                         for (var attr in this.options.DOMAttributes)
                             if (this.options.DOMAttributes.hasOwnProperty(attr))
@@ -326,43 +331,113 @@ define(
                         }, this);
                     }
                 });
+                var imgWidth  = 250;
+                var imgHeight = 250;
 
-                var $bodyTemplate = $("<div>");
-                var $input, modal;
-                $bodyTemplate.append("<input class='add-image' type='file'>");
-                $bodyTemplate.append("<img id='myimg' width='250' height='250'>");
+                // make ready the template overides
+                $bodyTemplate.append("<span class='img-input-label'></span><input class='add-image' type='file'><br>");
+                $bodyTemplate.append("<span class='img-name-label'></span><input class='img-name' type='text'><br>");
+                $bodyTemplate.append("<span class='img-width-label'></span><input class='img-width' type='number' value="+imgWidth+"><br>");
+                $bodyTemplate.append("<span class='img-height-label'></span><input class='img-height' type='number' value="+imgHeight+"><br>");
+                $bodyTemplate.append("<button class='submit'>Submit</button><br>");
+                $bodyTemplate.append("<div><img id='"+imgID+"' width='250' height='250' value="+imgHeight+"></div>");
                 $input = $bodyTemplate.find(".add-image");
+                // start the modal view
                 modal = new ModalView({
                     header: "Select an Image",
                     partial: $bodyTemplate,
                     initialize: function() {
-
-
+                        var local       = new Object();
+                        var $imgtag     = $bodyTemplate.find("#"+imgID);
+                        var className   = null;
+                        var $imgWidth   = $bodyTemplate.find(".img-width");
+                        var $imgHeight  = $bodyTemplate.find(".img-height");
+                        var $imgName    = $bodyTemplate.find(".img-name");
+                        var $submitNewObject = $bodyTemplate.find(".submit");
+                        // onload callback for FileReader
+                        function fileReaderOnload(event) {
+                            var result = event.target.result;
+                            $imgtag.attr("src", result);
+                        }
+                        // onchange callback for file add event
                         function fileSelected(event) {
                             var selectedFile = event.target.files[0];
                             var reader = new FileReader();
-                            var imgtag = document.getElementById("myimg");
 
-                            imgtag.title = selectedFile.name;
-                            reader.onload = function(event) {
-                                imgtag.src = event.target.result;
-                            };
+                            $imgtag.title = selectedFile.name;
+                            reader.onload = fileReaderOnload;
                             reader.readAsDataURL(selectedFile);
                         }
 
-//                        $input[0].addEventListener("change", fileSelected);
-                        _.extend(this.events, {
-                            "change .add-image": fileSelected
-                        }); 
+                        function changeDimension(event) {
+                            if ($(this).hasClass("img-width")) {
+                                $imgtag.attr("width", event.currentTarget.value);
+                            }
+                            else {
+                                $imgtag.attr("height", event.currentTarget.value);
+                            }
+                        }
+                        
+                        function setClassName(event) {
+                            className = event.currentTarget.value;
+                        }
+                        
+                        function submitNewObject(event) {
+                            var width   = $imgWidth.val(), 
+                                height  = $imgHeight.val(), 
+                                className = $imgName.val();
+
+                            var classNameMatch = className.match(/[\^%\\!@#()+=`~\*&\|\{\}\[\]'"\?<>\.,]/g);
+                            // validate width 
+                            if (Number.isNaN(window.parseInt(width))) {
+                                alert("specify a number for the width");
+                                return null;
+                            }
+                            // validate height
+                            else if (Number.isNaN(window.parseInt(height))) {
+                                alert("specify a number for the width");
+                                return null;
+                            }
+                            // validate className
+                            else if (className.trim() === "") {
+                                alert("Enter a className.");
+                                return null; 
+                            }
+                            else if (className[0].match(/[0-9\^%\\!@#\$()+=-`~\*&\|\{\}\[\]'"\?<>\.,]/)) {
+                                alert("classNames can't start with "+className[0]+". Please use a letter.");
+                                return null; 
+                            }
+                            else if (classNameMatch !== null) {
+                                alert("classNames can't contain certain characters like this: '"+classNameMatch[0]+"'. Please change the className.");
+                                return null; 
+                            }
+                            // validate loaded img
+                            else if ($imgtag.attr("src") === undefined) {
+                                alert("You need to select an image from your computer");
+                                return null; 
+                            }
+
+
+                            // TODO:
+                            // append new animated object to the list of animated objects
+
+                            return null;
+                        }
+                        
+                        // event binding
+                        $input[0].addEventListener("change", fileSelected);
+                        $imgWidth.on("change", changeDimension);
+                        $imgHeight.on("change", changeDimension);
+                        $imgName.on("change", setClassName);
+                        $submitNewObject.on("click", submitNewObject);
                     }
                 });
                 
-                
-                //this.model.get("animatedObjects").push(new animatedObject(config));
+                //this.model.get("animatedObjects").push(new AnimatedObject(config));
             },
 
+            // Add a new backbone view to the list of animated objects
             addAnimatedObject: function(config) {
-                // this will add a new backbone view to the list of animated objects
                 var animatedObject = Backbone.View.extend({
                     initialize: function() {
                         for (var attr in this.options.DOMAttributes)
