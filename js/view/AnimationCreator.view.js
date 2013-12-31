@@ -195,7 +195,6 @@ define(
                     height: this.mainAxesConfig.height + 2
                 });
                 
-                console.log( this.$el.find(".animation-creator-main-axes"));
                 // get contexts of other app specific dom elements
                 this.loadIcon           = document.getElementById(mainTemplateConfig.loadIcon);
                 this.styleSheet         = document.getElementById(mainTemplateConfig.styleSheet);
@@ -266,16 +265,20 @@ define(
 
             play: function(percentage) {
                 var animatedObjectViews = this.model.get("animatedObjectViews");
-                var transformations = this.model.get("transformations");
-                var that = this;
-                var tStart  = window.performance.now();
-                var tCounter = 0,
-                    tLen    = transformations.length;
-                var tInitial = transformations[0].time;
-                var tFinal  = transformations[transformations.length-1].time;
-                var dt      = tFinal - tInitial;
-                var lookAhead = 32;
+                var transformations     = this.model.get("transformations");
+                var viewIndex   = 0;
+                var tStart      = window.performance.now();
+                var tCounter    = 0,
+                    tLen        = transformations.length;
+                var tInitial    = transformations[0].time;
+                var tFinal      = transformations[transformations.length-1].time;
+                var dt          = tFinal - tInitial;
+                var lookAhead   = 32;
+                var that        = this;
+
+
                 function start(timestamp) {
+                    /*
                     if ((lookAhead+((timestamp - tStart) % dt)) > (transformations[tCounter % tLen].time - tInitial)) {
                         animatedObjectViews.forEach(function(view) {
                             view.apply3DMatrix(transformations[tCounter++ % tLen].matrix);
@@ -287,6 +290,11 @@ define(
                         if (that.mode !== "play") return null;
                         window.requestAnimationFrame(start);
                     }
+                    */
+
+                    animatedObjectViews.forEach(function(view, index, views) {
+                        
+                    });
                 }
 
                 this.mode ="play";
