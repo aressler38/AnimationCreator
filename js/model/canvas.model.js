@@ -15,16 +15,20 @@ define(
                 transformations: [],
                 transformation: function() {
                     this.matrix  = arguments[0];
-                    this.time       = arguments[1];
-                    this.type       = arguments[2];
+                    this.time    = arguments[1];
+                    this.type    = arguments[2];
                     return this;
                 }
             },
 
             initialize: function() {
                 this.set("target", $(this.get("target")));
-                this.set("width", this.get("width").replace("px", "")); // just in case someone uses px
-                this.set("height", this.get("height").replace("px", ""));
+                if (typeof this.get("width") === "string") {
+                    this.set("width", this.get("width").replace("px", "")); // just in case someone uses px
+                }
+                if (typeof this.get("height") === "string") {
+                    this.set("height", this.get("height").replace("px", ""));
+                }
             }
         });
         return CanvasModel;

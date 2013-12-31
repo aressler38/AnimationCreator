@@ -7,7 +7,7 @@ define(
     function($, _ ,Backbone) {
         var AnimationCreatorModel = Backbone.Model.extend({
 
-            defaults: {
+            defaults: function() { return ({
                 transformations: [],
                 transformation: function() {
                     this.matrix  = arguments[0];
@@ -15,7 +15,7 @@ define(
                     return this;
                 },
                 mainTemplateConfig: {
-                    mainAxis            : _.uniqueId("mainaxis-"),
+                    mainAxes            : _.uniqueId("mainaxes-"),
                     tools               : _.uniqueId("toolkit-"),
                     loadIcon            : _.uniqueId("load-"),
                     styleSheet          : _.uniqueId("ss-"),
@@ -23,8 +23,11 @@ define(
                     generateCSS         : _.uniqueId("button-"),
                     queryElement        : _.uniqueId("query-")
                 },
-                animatedObjects: new Array()
-            },
+                // collection of animatedObjectModels
+                animatedObjectModels: new Backbone.Collection(),
+                // array of views created by adding new models to animatedObjectModels
+                animatedObjectViews: new Array()
+            });},
 
             initialize: function() {
                 this.set("target", $(this.get("target"))); //deal with querySelector cases

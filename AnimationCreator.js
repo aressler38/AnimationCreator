@@ -32,6 +32,8 @@ require.config({
         "ModalView"             : "js/view/modal.view",
         "AnimationCreatorView"  : "js/view/AnimationCreator.view",
         "AnimationCreatorModel" : "js/model/AnimationCreator.model",
+        "AnimatedObjectView"    : "js/view/AnimatedObject.view",
+        "AnimatedObjectModel"   : "js/model/AnimatedObject.model",
         "CanvasView"            : "js/view/canvas.view",
         "CanvasModel"           : "js/model/canvas.model",
         "InputView"             : "js/view/input.view",

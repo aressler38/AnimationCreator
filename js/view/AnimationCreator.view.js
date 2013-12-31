@@ -13,10 +13,14 @@ define(
         "Overdub",
         "renderTemplate",
         "hbs!templates/main",
-        "ModalView"
+        "ModalView",
+        "AnimatedObjectView",
+        "AnimatedObjectModel"
     ],
     function($, _, Backbone, CanvasView, CanvasModel, Tools,
-               Tool, Overdub, renderTemplate, mainTemplate, ModalView) {
+                Tool, Overdub, renderTemplate, mainTemplate, ModalView,
+                AnimatedObjectView, AnimatedObjectModel) 
+    {
         "use strict";
 
         var vendors = ["-webkit-", "-moz-", ""];
@@ -32,30 +36,19 @@ define(
                 this.SubProcess = new Worker(this.workerURI);
                 this.el.setAttribute("id", (this.model.get("id") || "animation-creator-view"));
                 var mainTemplateConfig = this.model.get("mainTemplateConfig");
-                var mainAxisConfig = {
-                    target : mainTemplateConfig.mainAxis
+                this.mainAxesConfig = {
+                    target: mainTemplateConfig.mainAxes,
+                    width: 800,
+                    height: 600
                 };
                 // preRender
-                this.mainAxis = Tool("MainAxes", mainAxisConfig);
+                this.mainAxes = Tool("MainAxes", this.mainAxesConfig);
+                
                 this.tools = new Tools({model:this.model});
 
                 this.render();
                 // postRender
                 this.addInitialTools();
-                this.addAnimatedObject({ 
-                    DOMAttributes: {
-                        class:"test"
-                    },
-                    offset: {x:0, y:0}
-                });
-                // duplicate for multiple test objects
-                this.addAnimatedObject({ 
-                    DOMAttributes: {
-                        class:"test"
-                    },
-                    offset: {x:0, y:0}
-                });
-                this.renderAnimatedObjects();
                 this.overdub = new Overdub(this);
             },
             
@@ -146,7 +139,9 @@ define(
                             class: "btn"
                         },
                         innerHTML: "add a new animated object",
-                        onclick: this.newAddAnimatedObject
+                        onclick: function() {
+                            that.addNewAnimatedObject()
+                        }
                     })
 
                 ]);
@@ -171,10 +166,13 @@ define(
                 this.SubProcess.addEventListener("message", parseSubProcessResponse);
 
                 // tool model events 
-                this.mainAxis.model.on("change:transformations", function() {
+                this.mainAxes.model.on("change:transformations", function() {
                     // we need to think about what happens when the app is in overdub mode
                     that.model.set("transformations", arguments[0]);
                 });
+                
+                // animatedObjectModels collection events
+                this.listenTo(this.model.get("animatedObjectModels"), "add", this.renderAnimatedObjectModel);
 
                 // View Events 
                 // lots of events are handled by individual tool objects created in addInitialTools.
@@ -188,10 +186,16 @@ define(
                 this.$el.html(template);
                 this.model.get("target").html(this.el);
 
-                // render mainAxis and Tools...
-                document.getElementById(mainTemplateConfig.mainAxis).appendChild(this.mainAxis.render());
+                // render mainAxes and Tools...
+                document.getElementById(mainTemplateConfig.mainAxes).appendChild(this.mainAxes.render());
                 document.getElementById(mainTemplateConfig.tools).appendChild(this.tools.render());
+
+                this.$el.find(".animation-creator-main-axes").css({
+                    width: this.mainAxesConfig.width + 2,
+                    height: this.mainAxesConfig.height + 2
+                });
                 
+                console.log( this.$el.find(".animation-creator-main-axes"));
                 // get contexts of other app specific dom elements
                 this.loadIcon           = document.getElementById(mainTemplateConfig.loadIcon);
                 this.styleSheet         = document.getElementById(mainTemplateConfig.styleSheet);
@@ -263,9 +267,9 @@ define(
             play: function(percentage) {
                 this.mode="play";
                 var that = this;
-                var animatedObjects = this.model.get("animatedObjects");
+                var animatedObjectViews = this.model.get("animatedObjectViews");
                 var transformations = this.model.get("transformations");
-                var tStart = window.performance.now();// null;
+                var tStart = window.performance.now();
                 var tCounter = 0,
                     tLen = transformations.length;
                 var tInitial = transformations[0].time;
@@ -273,8 +277,9 @@ define(
                 var dt = tFinal - tInitial;
                 var lookAhead = 32;  
                 function start(timestamp) {
+                    console.log(timestamp);
                     if ((lookAhead+((timestamp - tStart) % dt)) > (transformations[tCounter % tLen].time - tInitial)) {
-                        animatedObjects.forEach(function(view) {
+                        animatedObjectViews.forEach(function(view) {
                             view.apply3DMatrix(transformations[tCounter++ % tLen].matrix);
                         });
                         if (that.mode !== "play") return null;
@@ -298,7 +303,7 @@ define(
                 var matrix;
 
                 /* freeze position
-                this.model.get("animatedObjects").forEach(function(view) {
+                this.model.get("animatedObjectModels").forEach(function(view) {
                     view.$el.removeClass("animate");
                     view.apply3DMatrix(this.getMatrix(this.query()));
                 }, this);
@@ -309,30 +314,17 @@ define(
             },
 
             // Add a new backbone view to the list of animated objects using a modal
-            newAddAnimatedObject: function(config) {
-                var $input  = null, 
-                    modal   = null;
-                var imgID                       = _.uniqueId("supercoolimagepreview-");
-                var $bodyTemplate               = $("<div>");
-                var animatedObjectConfiguration = new Object();
-                var AnimatedObject = Backbone.View.extend({
-                    initialize: function() {
-                        for (var attr in this.options.DOMAttributes)
-                            if (this.options.DOMAttributes.hasOwnProperty(attr))
-                                this.el.setAttribute(attr, this.options.DOMAttributes[attr]);
-                        if (this.options.offset !== undefined) {
-                            this.$el.css({top: this.options.offset.y, left: this.options.offset.x});
-                        }
-                    },
-                    // Given a DOM element, el, apply the css 3D matrix
-                    apply3DMatrix: function(matrix) {
-                        vendors.forEach(function(vendor) {
-                            this.$el.css(vendor+"transform", "matrix3d("+matrix+")");    
-                        }, this);
-                    }
-                });
-                var imgWidth  = 250;
-                var imgHeight = 250;
+            addNewAnimatedObject: function(event) {
+                var that        = this;
+                var $input      = null, 
+                    modal       = null;
+                var imgID       = _.uniqueId("supercoolimagepreview-");
+                var imgWidth    = 250;
+                var imgHeight   = 250;
+                var objectConfig = null;
+                var $bodyTemplate       = $("<div>");
+                var animatedObjectView  = null, 
+                    animatedObjectModel = null;
 
                 // make ready the template overides
                 $bodyTemplate.append("<span class='img-input-label'></span><input class='add-image' type='file'><br>");
@@ -347,6 +339,7 @@ define(
                     header: "Select an Image",
                     partial: $bodyTemplate,
                     initialize: function() {
+                        var self        = this;
                         var local       = new Object();
                         var $imgtag     = $bodyTemplate.find("#"+imgID);
                         var className   = null;
@@ -386,8 +379,8 @@ define(
                             var width   = $imgWidth.val(), 
                                 height  = $imgHeight.val(), 
                                 className = $imgName.val();
-
                             var classNameMatch = className.match(/[\^%\\!@#()+=`~\*&\|\{\}\[\]'"\?<>\.,]/g);
+
                             // validate width 
                             if (Number.isNaN(window.parseInt(width))) {
                                 alert("specify a number for the width");
@@ -418,9 +411,19 @@ define(
                             }
 
 
-                            // TODO:
                             // append new animated object to the list of animated objects
+                            objectConfig = {
+                                DOMAttributes: {
+                                    class   : className,
+                                    width   : width,
+                                    height  : height,
+                                    src     : $imgtag.attr("src")
+                                },
+                                tagName : "img"
+                            };
 
+                            that.model.get("animatedObjectModels").add(new AnimatedObjectModel(objectConfig));
+                            self.closeModal();
                             return null;
                         }
                         
@@ -433,9 +436,9 @@ define(
                     }
                 });
                 
-                //this.model.get("animatedObjects").push(new AnimatedObject(config));
             },
 
+            /* ***** DEPRECATED *****
             // Add a new backbone view to the list of animated objects
             addAnimatedObject: function(config) {
                 var animatedObject = Backbone.View.extend({
@@ -454,23 +457,45 @@ define(
                         }, this);
                     },
                 });
-                this.model.get("animatedObjects").push(new animatedObject(config));
+                this.model.get("animatedObjectModels").push(new animatedObject(config));
             },
+            */
 
-            removeAnimatedObjects: function() {
-                this.model.get("animatedObjects").forEach(function(view) {
-                    view.$el.remove();        
+            removeAnimatedObjects: function(view) {
+                this.model.get("animatedObjectViews").forEach(function(view) {
+                    view.remove();        
                 });
             }, 
 
-            renderAnimatedObjects: function() {
+            /* ***** DEPRECATED *****
+            // callback function for animatedObjectModels collection
+            renderAnimatedObjects: function(view) {
                 var that = this;
-                this.model.get("animatedObjects").forEach(function(view) {
-                    //that.$el.append(view.$el);                 
-                    //$(document.body).append(view.$el);
+
+                console.log(arguments);
+                // render all if no view was passed
+                if (view === undefined) {
+                    this.model.get("animatedObjectModels").forEach(function(view) {
+                        $(".animation-creator-main-axis").append(view.$el);
+                        view.$el.draggable();
+                    });
+                }
+                else {
                     $(".animation-creator-main-axis").append(view.$el);
                     view.$el.draggable();
-                });
+                }
+            },
+            */
+
+            // callback function for animatedObjectModels collection
+            renderAnimatedObjectModel: function(model, collection, options) {
+                var that = this;
+                var view = new AnimatedObjectView({model: model})
+
+                this.model.get("animatedObjectViews").push(view);
+                // render all if no view was passed
+                $(".animation-creator-main-axes").append(view.$el);
+                view.$el.draggable();
             },
 
             // will I ever use this?
@@ -525,8 +550,8 @@ define(
             resetToZeroState: function() {
                 this.model.set("transformations", []);
                 this.processCSS(["","",""]);
-                this.mainAxis.model.set("transformations", []);
-                this.mainAxis.drawAxes();
+                this.mainAxes.model.set("transformations", []);
+                this.mainAxes.drawAxes();
             }
         });
         return AnimationCreatorView;

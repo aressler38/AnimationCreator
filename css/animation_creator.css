@@ -250,11 +250,17 @@ h2, .h2 {
     outline: 5px solid grey;
 }
 
-.animation-creator-main-axis {
-    position:relative;
+.animation-creator-main-axes {
+    position: relative;
     max-width:80%;
     display:inline-block;
     float:left;
+    border: 1px solid blue;
+    min-width:100px;
+    min-height:100px;
+}
+.animation-creator-main-axes canvas {
+    position: absolute;
 }
 
 .animation-creator-tools {
@@ -420,7 +426,12 @@ h2, .h2 {
 .modal-wrapper .img-name-label:before {
     content: "specify a className: ";
 }
+/* ok end */
 
+/* animated object css */
+.animated-object {
+    position: absolute;
+}
 /* ok end */
 
 .test {

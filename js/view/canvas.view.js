@@ -34,8 +34,8 @@ define(
             drawAxes: function() {
                 var width = this.model.get("width");
                 var height = this.model.get("height");
-
-                this.el.setAttribute("width", width); //clear the canvas first
+                // first clear the canvas
+                this.el.setAttribute("width", width); 
 
                 this.context.beginPath();
                 this.context.moveTo(width/2.0, height);
@@ -79,7 +79,8 @@ define(
                 var yRelative = e.pageY - offsets.top - el.height/2.0;
 
                 function drawBox(x,y) {
-                    el.width = el.width; // reset canvas    
+                    // reset canvas    
+                    el.width = el.width;
                     context.fillRect((x - boxWidth/2.0), (y - boxHeight/2.0), boxWidth, boxHeight);
                 }
 
