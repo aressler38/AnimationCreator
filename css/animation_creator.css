@@ -252,6 +252,7 @@ h2, .h2 {
 
 .animation-creator-main-axes {
     position: relative;
+    overflow: hidden;
     max-width:80%;
     display:inline-block;
     float:left;
