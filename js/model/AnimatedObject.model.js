@@ -15,7 +15,8 @@ define(
                         this.matrix  = arguments[0];
                         this.time    = arguments[1];
                         return this;
-                    }
+                    },
+                    transformations: []
                 });
             },
             initialize: function() {

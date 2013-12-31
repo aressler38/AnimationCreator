@@ -265,19 +265,17 @@ define(
             mode: "neutral",
 
             play: function(percentage) {
-                this.mode="play";
-                var that = this;
                 var animatedObjectViews = this.model.get("animatedObjectViews");
                 var transformations = this.model.get("transformations");
-                var tStart = window.performance.now();
+                var that = this;
+                var tStart  = window.performance.now();
                 var tCounter = 0,
-                    tLen = transformations.length;
+                    tLen    = transformations.length;
                 var tInitial = transformations[0].time;
-                var tFinal = transformations[transformations.length-1].time;
-                var dt = tFinal - tInitial;
-                var lookAhead = 32;  
+                var tFinal  = transformations[transformations.length-1].time;
+                var dt      = tFinal - tInitial;
+                var lookAhead = 32;
                 function start(timestamp) {
-                    console.log(timestamp);
                     if ((lookAhead+((timestamp - tStart) % dt)) > (transformations[tCounter % tLen].time - tInitial)) {
                         animatedObjectViews.forEach(function(view) {
                             view.apply3DMatrix(transformations[tCounter++ % tLen].matrix);
@@ -290,6 +288,8 @@ define(
                         window.requestAnimationFrame(start);
                     }
                 }
+
+                this.mode ="play";
                 window.requestAnimationFrame(start);
                 // start query
                 $(this.queryElement).addClass("animation-creator-query");
