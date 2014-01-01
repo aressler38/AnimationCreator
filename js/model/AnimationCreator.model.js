@@ -20,8 +20,8 @@ define(
                     loadIcon            : _.uniqueId("load-"),
                     styleSheet          : _.uniqueId("ss-"),
                     styleSheetHelper    : _.uniqueId("ssh-"),
-                    generateCSS         : _.uniqueId("button-"),
-                    queryElement        : _.uniqueId("query-")
+                    generateCSS         : _.uniqueId("button-")
+                    /*queryElement        : _.uniqueId("query-")*/
                 },
                 // collection of animatedObjectModels
                 animatedObjectModels: new Backbone.Collection(),

@@ -44,6 +44,8 @@ define(
                 // preRender
                 this.mainAxes = Tool("MainAxes", this.mainAxesConfig);
                 
+                // dummy object for now..
+                this.setActiveAnimatedObjects(new Backbone.View({model: new Backbone.Model()}));
                 this.tools = new Tools({model:this.model});
 
                 this.render();
@@ -168,7 +170,10 @@ define(
                 // tool model events 
                 this.mainAxes.model.on("change:transformations", function() {
                     // we need to think about what happens when the app is in overdub mode
-                    that.model.set("transformations", arguments[0]);
+                    that.activeAnimatedObjects.forEach(function(view, index, views){
+                        view.model.set("transformations", arguments[0]);
+                    });
+                    /*that.model.set("transformations", arguments[0]);*/
                 });
                 
                 // animatedObjectModels collection events
@@ -199,21 +204,35 @@ define(
                 this.loadIcon           = document.getElementById(mainTemplateConfig.loadIcon);
                 this.styleSheet         = document.getElementById(mainTemplateConfig.styleSheet);
                 this.styleSheetHelper   = document.getElementById(mainTemplateConfig.styleSheetHelper);
+
+                /* ***** DEPRECATED *****
                 this.queryElement       = document.getElementById(mainTemplateConfig.queryElement);
+                */
 
                 return null;
             },
 
+            // TODO: fix me
             // task for SubProcess
+            // Get all the transformations from the animatedObjects (not necessarialy active), 
+            // and process the transformations into CSS.  
             generateCSS: function(clear) {
-                var workerInterface = {
-                    message: "generateCSS",
-                    workerData: {
+                var transformations = new Array(), 
+                    workerInterface = new Object();
+
+                this.model.get("animatedObjectModels").forEach(function(model, index, models) {
+                    transformations.push(model.get("transformations"));
+                });
+                
+                workerInterface["message"]      = "generateCSS";
+                workerInterface["workerData"]   = {
                         animationName: this.model.get("animationName"),
-                        transformations: (!clear) ? this.model.get("transformations") : []
-                    }
+                        transformations: (!clear) ? transformations : []
                 }
+
+                /* ***** DEPRECATED *****
                 $(this.queryElement).removeClass("animation-creator-query");
+                */
                 this.spinerIcon.on.call(this);
                 this.SubProcess.postMessage(workerInterface);
             },
@@ -223,7 +242,10 @@ define(
                 this.styleSheet.innerHTML = data[0];
                 this.styleSheetHelper.innerHTML = data[1];
                 this.spinerIcon.off.call(this);
+
+                /* ***** DEPRECATED *****
                 $(this.queryElement).addClass("animation-creator-query");
+                */
                 return null;
             },
 
@@ -235,6 +257,7 @@ define(
                 });
             },
 
+            /* ***** DEPRECATED *****
             query: function() {
                 var percentage = parseFloat($(this.queryElement).css("opacity"));
                 var cssPercentage = (percentage.toFixed(4)*100).toPrecision(4);
@@ -248,6 +271,7 @@ define(
                     throw new Error("failed query "+cssPercentage);
                 }
             },
+            */
 
             // given a percentage, return the matrix3d css arguments
             // this is slow...
@@ -270,12 +294,11 @@ define(
                 var tStart      = window.performance.now();
                 var tCounter    = 0,
                     tLen        = transformations.length;
-                var tInitial    = transformations[0].time;
+                var tInitial    = Number.MAX_VALUE;
                 var tFinal      = transformations[transformations.length-1].time;
                 var dt          = tFinal - tInitial;
                 var lookAhead   = 32;
                 var that        = this;
-
 
                 function start(timestamp) {
                     /*
@@ -293,14 +316,21 @@ define(
                     */
 
                     animatedObjectViews.forEach(function(view, index, views) {
-                        
+                                
                     });
                 }
-
-                this.mode ="play";
+                
+                this.mode = "play";
+                // get first tInitial (find min value of transformations[0])
+                animatedObjectViews.forEach(function(view, index, views) {
+                    if (view.model.get("transformations")[0].time < tInitial) {
+                        tInitial = view.model.get("transformations")[0].time;
+                    }
+                }); 
                 window.requestAnimationFrame(start);
-                // start query
-                $(this.queryElement).addClass("animation-creator-query");
+                /* ***** DEPRECATED *****
+                $(this.queryElement).addClass("animation-creator-query");//start query 
+                */
                 return null;
             },
 
@@ -317,7 +347,9 @@ define(
                 }, this);
                 */
 
+                /* ***** DEPRECATED *****
                 $(this.queryElement).removeClass("animation-creator-query");
+                */
                 return null;
             },
 
@@ -444,6 +476,18 @@ define(
                     }
                 });
                 
+            },
+            
+            // Set some animated object's view as the active animated object. The active animated object
+            // is the only element(s) storing transformation data into its (their) model(s).
+            // TODO: pluralize the method. 
+            setActiveAnimatedObjects: function(/*view, view, ...*/) {
+                if (arguments.length === 0) throw new Error("pass some views to setActiveAnimatedObjects()");
+                var len = arguments.length;
+                var views = new Array(len); 
+                for (var i=0; i<len; i++) views[i] = arguments[i];
+                this.model.set("activeAnimatedObjects", views); 
+                this.activeAnimatedObjects = views;
             },
 
             /* ***** DEPRECATED *****
