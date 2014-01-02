@@ -316,7 +316,9 @@ define(
                     */
 
                     animatedObjectViews.forEach(function(view, index, views) {
-                                
+                        
+                        view.apply3DMatrix(transformations[tCounter++ % tLen].matrix);
+                        view.applyNextMatrix();
                     });
                 }
                 
@@ -450,7 +452,6 @@ define(
                                 return null; 
                             }
 
-
                             // append new animated object to the list of animated objects
                             objectConfig = {
                                 DOMAttributes: {
@@ -475,7 +476,6 @@ define(
                         $submitNewObject.on("click", submitNewObject);
                     }
                 });
-                
             },
             
             // Set some animated object's view as the active animated object. The active animated object
@@ -589,8 +589,8 @@ define(
                         ]);
             },
 
-            spinerIcon: {
                 // this is the loader icon
+            spinerIcon: {
                 on:function(){
                     $(this.loadIcon).addClass("animation-creator-loading");
                 },

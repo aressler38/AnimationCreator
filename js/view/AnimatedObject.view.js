@@ -24,12 +24,16 @@ define(
                     this.$el.css({top: this.options.offset.y, left: this.options.offset.x});
                 }
                 this.$el.addClass("animated-object");
+                this.matrixCounter = 0;
             },
-            // Given a DOM element, el, apply the css 3D matrix
+            // Apply matrix to this.el
             apply3DMatrix: function(matrix) {
                 vendors.forEach(function(vendor) {
                     this.$el.css(vendor+"transform", "matrix3d("+matrix+")");    
                 }, this);
+            },
+            applyNextMatrix: function() {
+                this.apply3DMatrix(this.model.get(this.matrixCounter++;
             }
         });
     
