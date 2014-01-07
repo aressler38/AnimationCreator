@@ -32,8 +32,9 @@ define(
                     this.$el.css(vendor+"transform", "matrix3d("+matrix+")");    
                 }, this);
             },
+
             applyNextMatrix: function() {
-                this.apply3DMatrix(this.model.get(this.matrixCounter++;
+                this.apply3DMatrix(this.model.get(this.matrixCounter++));
             }
         });
     

@@ -25,6 +25,13 @@ define(
 
         var vendors = ["-webkit-", "-moz-", ""];
 
+
+        /**
+         * @constructor
+         * @description 
+         * creates the main view for which other tools attach and communicate through.
+         * @return Backbone.View
+        */
         var AnimationCreatorView = Backbone.View.extend({
 
             className   : "animation-creator-main",
@@ -59,96 +66,6 @@ define(
                 this.model.set("animationName", text);
             },
             
-            // Add the initial set of tools when initialize is called.
-            addInitialTools: function() {
-                var that = this;
-                this.tools.collection.add([
-                    Tool("Button", {
-                        viewAttributes: {
-                            class: "btn btn-info btn-lg" 
-                        },
-                        innerHTML: "generate css",
-                        onclick: function() {
-                            that.generateCSS();
-                        }    
-                    }),
-                    Tool("Button", {
-                        viewAttributes: {
-                            class: "btn btn-info"
-                        },
-                        innerHTML: "print css",
-                        onclick: function() {
-                            that.printCSS();
-                        }
-                    }),
-                    Tool("TextInput", {
-                        onkeyup: this.setAnimationName,
-                        callContext: this
-                    }),
-                    Tool("Button", {
-                        viewAttributes: {
-                            class: "time-control btn btn-success"
-                        },
-                        innerHTML: "play",
-                        onclick: function() {
-                            that.play();
-                        }
-                    }),
-                    Tool("Button", {
-                        viewAttributes: {
-                            class: "time-control btn btn-danger"
-                        },
-                        innerHTML: "stop",
-                        onclick: function() {
-                            that.stop();
-                        }
-                    }),
-                    Tool("Button", {
-                        viewAttributes: {
-                            id: "overdub-button",
-                            class: "time-control btn btn-info"
-                        },
-                        innerHTML: "overdub",
-                        onclick: function() {
-                            that.overdub.toggle();
-                        }
-                    }),
-                    Tool("Button", {
-                        viewAttributes: {
-                            class: "btn btn-info"
-                        },
-                        innerHTML: "resetAxes & css animations",
-                        onclick: function() {
-                            that.resetToZeroState();
-                        }
-                    }),
-                    Tool("Slider", {
-                        // We want different types of sliders to controll different axes
-                        // z,x,y axes, rotation, etc..
-                        // We need a hook that can supply the type of slider desired,
-                        // and initialize it on demand.
-                        viewAttributes: {},
-                        rangeMin: -360,
-                        rangeMax: 360,
-                        startValue: 0,
-                        onslide: function() {
-                            that.model.set("transformations", arguments[0]);
-                        }
-                        
-                    }),
-                    Tool("Button", {
-                        viewAttributes: {
-                            class: "btn"
-                        },
-                        innerHTML: "add a new animated object",
-                        onclick: function() {
-                            that.addNewAnimatedObject()
-                        }
-                    })
-
-                ]);
-            },
-
             events: function() {
                 var that = this;
                 // SubProcess events
@@ -205,10 +122,6 @@ define(
                 this.styleSheet         = document.getElementById(mainTemplateConfig.styleSheet);
                 this.styleSheetHelper   = document.getElementById(mainTemplateConfig.styleSheetHelper);
 
-                /* ***** DEPRECATED *****
-                this.queryElement       = document.getElementById(mainTemplateConfig.queryElement);
-                */
-
                 return null;
             },
 
@@ -230,9 +143,6 @@ define(
                         transformations: (!clear) ? transformations : []
                 }
 
-                /* ***** DEPRECATED *****
-                $(this.queryElement).removeClass("animation-creator-query");
-                */
                 this.spinerIcon.on.call(this);
                 this.SubProcess.postMessage(workerInterface);
             },
@@ -243,9 +153,6 @@ define(
                 this.styleSheetHelper.innerHTML = data[1];
                 this.spinerIcon.off.call(this);
 
-                /* ***** DEPRECATED *****
-                $(this.queryElement).addClass("animation-creator-query");
-                */
                 return null;
             },
 
@@ -257,21 +164,6 @@ define(
                 });
             },
 
-            /* ***** DEPRECATED *****
-            query: function() {
-                var percentage = parseFloat($(this.queryElement).css("opacity"));
-                var cssPercentage = (percentage.toFixed(4)*100).toPrecision(4);
-                var opacityPercentage = ((percentage.toFixed(4)*100).toPrecision(4)/100).toPrecision(4),
-                    opacityPercentage = parseFloat(opacityPercentage);
-
-                if (this.styleSheet.innerHTML.match(cssPercentage)) {
-                    return cssPercentage;
-                }
-                else {
-                    throw new Error("failed query "+cssPercentage);
-                }
-            },
-            */
 
             // given a percentage, return the matrix3d css arguments
             // this is slow...
@@ -316,7 +208,6 @@ define(
                     */
 
                     animatedObjectViews.forEach(function(view, index, views) {
-                        
                         view.apply3DMatrix(transformations[tCounter++ % tLen].matrix);
                         view.applyNextMatrix();
                     });
@@ -330,9 +221,6 @@ define(
                     }
                 }); 
                 window.requestAnimationFrame(start);
-                /* ***** DEPRECATED *****
-                $(this.queryElement).addClass("animation-creator-query");//start query 
-                */
                 return null;
             },
 
@@ -342,16 +230,6 @@ define(
                 // capture current state
                 var matrix;
 
-                /* freeze position
-                this.model.get("animatedObjectModels").forEach(function(view) {
-                    view.$el.removeClass("animate");
-                    view.apply3DMatrix(this.getMatrix(this.query()));
-                }, this);
-                */
-
-                /* ***** DEPRECATED *****
-                $(this.queryElement).removeClass("animation-creator-query");
-                */
                 return null;
             },
 
@@ -490,54 +368,11 @@ define(
                 this.activeAnimatedObjects = views;
             },
 
-            /* ***** DEPRECATED *****
-            // Add a new backbone view to the list of animated objects
-            addAnimatedObject: function(config) {
-                var animatedObject = Backbone.View.extend({
-                    initialize: function() {
-                        for (var attr in this.options.DOMAttributes)
-                            if (this.options.DOMAttributes.hasOwnProperty(attr))
-                                this.el.setAttribute(attr, this.options.DOMAttributes[attr]);
-                        if (this.options.offset !== undefined) {
-                            this.$el.css({top: this.options.offset.y, left: this.options.offset.x});
-                        }
-                    },
-                    // Given a DOM element, el, apply the css 3D matrix
-                    apply3DMatrix: function(matrix) {
-                        vendors.forEach(function(vendor) {
-                            this.$el.css(vendor+"transform", "matrix3d("+matrix+")");    
-                        }, this);
-                    },
-                });
-                this.model.get("animatedObjectModels").push(new animatedObject(config));
-            },
-            */
-
             removeAnimatedObjects: function(view) {
                 this.model.get("animatedObjectViews").forEach(function(view) {
                     view.remove();        
                 });
             }, 
-
-            /* ***** DEPRECATED *****
-            // callback function for animatedObjectModels collection
-            renderAnimatedObjects: function(view) {
-                var that = this;
-
-                console.log(arguments);
-                // render all if no view was passed
-                if (view === undefined) {
-                    this.model.get("animatedObjectModels").forEach(function(view) {
-                        $(".animation-creator-main-axis").append(view.$el);
-                        view.$el.draggable();
-                    });
-                }
-                else {
-                    $(".animation-creator-main-axis").append(view.$el);
-                    view.$el.draggable();
-                }
-            },
-            */
 
             // callback function for animatedObjectModels collection
             renderAnimatedObjectModel: function(model, collection, options) {
@@ -589,7 +424,8 @@ define(
                         ]);
             },
 
-                // this is the loader icon
+            // TODO: deprecate
+            // this is the loader icon
             spinerIcon: {
                 on:function(){
                     $(this.loadIcon).addClass("animation-creator-loading");
@@ -604,7 +440,99 @@ define(
                 this.processCSS(["","",""]);
                 this.mainAxes.model.set("transformations", []);
                 this.mainAxes.drawAxes();
-            }
+            },
+
+            // TODO: this goes in a seperate file 
+            // Add the initial set of tools when initialize is called.
+            addInitialTools: function() {
+                var that = this;
+                this.tools.collection.add([
+                    Tool("Button", {
+                        viewAttributes: {
+                            class: "btn btn-info btn-lg" 
+                        },
+                        innerHTML: "generate css",
+                        onclick: function() {
+                            that.generateCSS();
+                        }    
+                    }),
+                    Tool("Button", {
+                        viewAttributes: {
+                            class: "btn btn-info"
+                        },
+                        innerHTML: "print css",
+                        onclick: function() {
+                            that.printCSS();
+                        }
+                    }),
+                    Tool("TextInput", {
+                        onkeyup: this.setAnimationName,
+                        callContext: this
+                    }),
+                    Tool("Button", {
+                        viewAttributes: {
+                            class: "time-control btn btn-success"
+                        },
+                        innerHTML: "play",
+                        onclick: function() {
+                            that.play();
+                        }
+                    }),
+                    Tool("Button", {
+                        viewAttributes: {
+                            class: "time-control btn btn-danger"
+                        },
+                        innerHTML: "stop",
+                        onclick: function() {
+                            that.stop();
+                        }
+                    }),
+                    Tool("Button", {
+                        viewAttributes: {
+                            id: "overdub-button",
+                            class: "time-control btn btn-info"
+                        },
+                        innerHTML: "overdub",
+                        onclick: function() {
+                            that.overdub.toggle();
+                        }
+                    }),
+                    Tool("Button", {
+                        viewAttributes: {
+                            class: "btn btn-info"
+                        },
+                        innerHTML: "resetAxes & css animations",
+                        onclick: function() {
+                            that.resetToZeroState();
+                        }
+                    }),
+                    Tool("Slider", {
+                        // We want different types of sliders to controll different axes
+                        // z,x,y axes, rotation, etc..
+                        // We need a hook that can supply the type of slider desired,
+                        // and initialize it on demand.
+                        viewAttributes: {},
+                        rangeMin: -360,
+                        rangeMax: 360,
+                        startValue: 0,
+                        onslide: function() {
+                            that.model.set("transformations", arguments[0]);
+                        }
+                        
+                    }),
+                    Tool("Button", {
+                        viewAttributes: {
+                            class: "btn"
+                        },
+                        innerHTML: "add a new animated object",
+                        onclick: function() {
+                            that.addNewAnimatedObject()
+                        }
+                    })
+
+                ]);
+            },
+
         });
         return AnimationCreatorView;
     }
