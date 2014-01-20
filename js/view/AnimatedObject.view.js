@@ -34,8 +34,23 @@ define(
             },
 
             applyNextMatrix: function() {
-                this.apply3DMatrix(this.model.get(this.matrixCounter++));
+                var transformations = this.model.get("transformations");
+                this.apply3DMatrix(transformations[(this.matrixCounter++) % transformations.length]);
+            },
+            
+            getMaxTransformTime: function() {
+                var t = this.model.get("transformations"); 
+                return t[t.length-1].time;
+            },
+            
+            getMinTransformationTime: function() {
+                return this.model.get("transformations")[0].time;
+            },
+            
+            getDeltaTransformationTime: function() {
+                return (this.getMaxTransformationTime() - this.getMinTransformationTime());
             }
+
         });
     
         return AnimatedObjectView;

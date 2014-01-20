@@ -28,8 +28,7 @@ define(
 
         /**
          * @constructor
-         * @description 
-         * creates the main view for which other tools attach and communicate through.
+         * Creates the main view for which other tools attach and communicate through.
          * @return Backbone.View
         */
         var AnimationCreatorView = Backbone.View.extend({
@@ -51,8 +50,10 @@ define(
                 // preRender
                 this.mainAxes = Tool("MainAxes", this.mainAxesConfig);
                 
+                //TODO: DEPRECATE
                 // dummy object for now..
-                this.setActiveAnimatedObjects(new Backbone.View({model: new Backbone.Model()}));
+                //this.setActiveAnimatedObjects(null);
+                //ook..
                 this.tools = new Tools({model:this.model});
 
                 this.render();
@@ -87,8 +88,9 @@ define(
                 // tool model events 
                 this.mainAxes.model.on("change:transformations", function() {
                     // we need to think about what happens when the app is in overdub mode
-                    that.activeAnimatedObjects.forEach(function(view, index, views){
-                        view.model.set("transformations", arguments[0]);
+                    var transformations = arguments[0];
+                    that.activeAnimatedObjects.forEach(function(view, index, views) {
+                        view.model.set("transformations", transformations);
                     });
                     /*that.model.set("transformations", arguments[0]);*/
                 });
@@ -136,6 +138,8 @@ define(
                 this.model.get("animatedObjectModels").forEach(function(model, index, models) {
                     transformations.push(model.get("transformations"));
                 });
+                console.log(transformations);
+                console.log(workerInterface);
                 
                 workerInterface["message"]      = "generateCSS";
                 workerInterface["workerData"]   = {
@@ -143,6 +147,7 @@ define(
                         transformations: (!clear) ? transformations : []
                 }
 
+                console.log(workerInterface);
                 this.spinerIcon.on.call(this);
                 this.SubProcess.postMessage(workerInterface);
             },
@@ -179,15 +184,28 @@ define(
             // mode can be overdub, neutral, play, stop
             mode: "neutral",
 
+            getMaxAnimatedObjectTransformationTimeDelta: function() {
+                var animatedObjectViews = this.model.get("animatedObjectViews");
+                var maxDelta = 0;
+                var newDelta = null;
+                animatedObjectViews.forEach(function(view, index, views) {
+                    newDelta = view.getDeltaTransformationTime(); 
+                    if (newDelta > maxDelta) {
+                        maxDelta = newDelta;    
+                    } 
+                    return null;
+                });
+                return maxDelta;
+            },
+
             play: function(percentage) {
                 var animatedObjectViews = this.model.get("animatedObjectViews");
                 var transformations     = this.model.get("transformations");
                 var viewIndex   = 0;
                 var tStart      = window.performance.now();
-                var tCounter    = 0,
-                    tLen        = transformations.length;
                 var tInitial    = Number.MAX_VALUE;
                 var tFinal      = transformations[transformations.length-1].time;
+                var tDelta      = this.getMaxAnimatedObjectTransformationTimeDelta();
                 var dt          = tFinal - tInitial;
                 var lookAhead   = 32;
                 var that        = this;
@@ -208,13 +226,14 @@ define(
                     */
 
                     animatedObjectViews.forEach(function(view, index, views) {
-                        view.apply3DMatrix(transformations[tCounter++ % tLen].matrix);
+                        //view.apply3DMatrix(transformations[tCounter++ % tLen].matrix);
                         view.applyNextMatrix();
                     });
                 }
                 
                 this.mode = "play";
                 // get first tInitial (find min value of transformations[0])
+                console.log("about to forEach...");
                 animatedObjectViews.forEach(function(view, index, views) {
                     if (view.model.get("transformations")[0].time < tInitial) {
                         tInitial = view.model.get("transformations")[0].time;
@@ -360,12 +379,22 @@ define(
             // is the only element(s) storing transformation data into its (their) model(s).
             // TODO: pluralize the method. 
             setActiveAnimatedObjects: function(/*view, view, ...*/) {
-                if (arguments.length === 0) throw new Error("pass some views to setActiveAnimatedObjects()");
-                var len = arguments.length;
-                var views = new Array(len); 
-                for (var i=0; i<len; i++) views[i] = arguments[i];
+                var views = new Array(); 
+                if (arguments.length === 0) {
+                    throw new Error("pass some views to setActiveAnimatedObjects()");
+                }
+                if (arguments[0] instanceof Array) {
+                    views = views.concat(arguments[0]);
+                }
+                else {
+                    for (var i=0; i<len; i++) views.push(arguments[i]);
+                }
                 this.model.set("activeAnimatedObjects", views); 
                 this.activeAnimatedObjects = views;
+            },
+            
+            getActiveAnimatedObjects: function() {
+                return this.model.get("activeAnimatedObjects");
             },
 
             removeAnimatedObjects: function(view) {
@@ -378,11 +407,18 @@ define(
             renderAnimatedObjectModel: function(model, collection, options) {
                 var that = this;
                 var view = new AnimatedObjectView({model: model})
+                var activeAnimatedObjects = this.getActiveAnimatedObjects();
 
                 this.model.get("animatedObjectViews").push(view);
                 // render all if no view was passed
                 $(".animation-creator-main-axes").append(view.$el);
                 view.$el.draggable();
+                
+
+                //TODO: find a better way of adding view to activeAnimatedObjects
+                activeAnimatedObjects.push(view);
+                this.setActiveAnimatedObjects(activeAnimatedObjects);
+                
             },
 
             // will I ever use this?
