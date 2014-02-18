@@ -69,6 +69,22 @@ define(
                 height  : 5
             },
 
+            draw: function(event) {
+                var x = event.pageX;
+                var y = event.pageY;
+                var offset = this.$el.offset();
+
+                x -= offset.left;
+                y -= offset.top;
+
+                this.context.fillStyle = "rgba(25,25,100, 1.0)";
+                this.context.strokeColor = "black";
+                this.context.fillRect(x, y, 1, 1);
+               // this.context.stroke();
+
+                return null;
+            },
+
             /*
             animationStart: function(event) {
                 var model = this.model;

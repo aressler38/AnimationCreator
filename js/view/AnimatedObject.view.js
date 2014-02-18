@@ -26,6 +26,23 @@ define(
                 this.$el.addClass("animated-object");
                 this.matrixCounter = 0;
             },
+
+            events: function() {
+                var events = new Object();
+                var that = this;
+
+                this.$el.on("drag", function(event) {that.ondrag.call(that, event);});
+                //events['someevent selector'] = 'handler on this';
+                return events;
+            },
+
+            ondrag: function(event) {
+                var offset = this.$el.offset();
+                event.pageY = offset.top;
+                event.pageX = offset.left;
+                this.options.canvas.draw(event);
+            }, 
+
             // Apply matrix to this.el
             apply3DMatrix: function(matrix) {
                 vendors.forEach(function(vendor) {

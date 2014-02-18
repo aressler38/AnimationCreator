@@ -378,7 +378,7 @@ define(
             // callback function for animatedObjectModels collection
             renderAnimatedObjectModel: function(model, collection, options) {
                 var that = this;
-                var view = new AnimatedObjectView({model: model})
+                var view = new AnimatedObjectView({model: model, canvas: this.mainAxes})
                 var activeAnimatedObjects = this.getActiveAnimatedObjects();
 
                 this.model.get("animatedObjectViews").push(view);
