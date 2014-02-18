@@ -75,6 +75,7 @@ define(
         _.noConflict();
         Backbone.noConflict();
         Backbone.$ = $;
+        window.$=$;
 
         function AnimationCreator(config) {
             var model = new AnimationCreatorModel(config);
@@ -87,8 +88,6 @@ define(
             });
         }
         
-        window.$=$;
-
         return AnimationCreator;
     }
 );
