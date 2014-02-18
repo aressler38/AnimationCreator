@@ -85,6 +85,7 @@ define(
                 // tool model events 
                 this.mainAxes.model.on("change:transformations", function() {
                     // we need to think about what happens when the app is in overdub mode
+                    if (that.activeAnimatedObjects === undefined) {return (console.log("No active objects on board."));}
                     var transformations = arguments[0];
                     that.activeAnimatedObjects.forEach(function(view, index, views) {
                         view.model.set("transformations", transformations);
@@ -180,35 +181,10 @@ define(
             // mode can be overdub, neutral, play, stop
             mode: "neutral",
 
-            getMaxAnimatedObjectTransformationTimeDelta: function() {
-                var animatedObjectViews = this.model.get("animatedObjectViews");
-                var maxDelta = 0;
-                var newDelta = null;
-                animatedObjectViews.forEach(function(view, index, views) {
-                    newDelta = view.getDeltaTransformationTime(); 
-                    if (newDelta > maxDelta) {
-                        maxDelta = newDelta;    
-                    } 
-                    return null;
-                });
-                return maxDelta;
-            },
-
             play: function(percentage) {
-                var animatedObjectViews = this.model.get("animatedObjectViews");
-                var transformations     = this.model.get("transformations");
-                var viewIndex   = 0;
-                var tStart      = window.performance.now();
-                var tInitial    = Number.MAX_VALUE;
-                var tFinal      = transformations[transformations.length-1].time;
-                var tDelta      = this.getMaxAnimatedObjectTransformationTimeDelta();
-                var dt          = tFinal - tInitial;
-                var lookAhead   = 32;
                 var that        = this;
-
-                
-                this.mode = "play";
-                // get first tInitial (find min value of transformations[0])
+                var tStart      = window.performance.now();
+                var animatedObjectViews = this.model.get("animatedObjectViews");
 
                 /** @callback - requestAnimationFrame step */
                 function renderLoop(timestamp) {
@@ -219,6 +195,9 @@ define(
                     });
                     window.requestAnimationFrame(renderLoop);
                 }
+
+                this.mode = "play";
+
                 window.requestAnimationFrame(renderLoop);
 
                 return null;

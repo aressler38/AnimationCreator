@@ -15,14 +15,15 @@ define(
                 this.el.setAttribute("height", this.model.get("height"));
 
                 this.context = this.el.getContext("2d");
+                this.$el.css({"pointer-events":"none"});
             },
             
             events: function() {
                 var events = new Object();
-                events["touchstart"] = "animationStart";
-                events["touchend"]   = "animationEnd";
-                events["mousedown"]  = "animationStart";
-                events["mouseup"]    = "animationEnd";
+//                events["touchstart"] = "animationStart";
+ //               events["touchend"]   = "animationEnd";
+  //              events["mousedown"]  = "animationStart";
+   //             events["mouseup"]    = "animationEnd";
                 return events;
             },
 
@@ -54,11 +55,13 @@ define(
                 });
             },
 
+            /*
             animationEnd: function(e) {
                 this.model.trigger("change:transformations", this.model.get("transformations"));
                 this.$el.removeClass("animation-creator-canvas-active");
                 return null;
             },
+            */
 
             // defaults for moving box on canvas
             boxDefaults: {
@@ -66,7 +69,8 @@ define(
                 height  : 5
             },
 
-            animationStart: function(e) {
+            /*
+            animationStart: function(event) {
                 var model = this.model;
                 var transformations = model.get("transformations");
                 var transformation = model.get("transformation");
@@ -75,8 +79,8 @@ define(
                 var boxWidth = this.boxDefaults.width;
                 var boxHeight = this.boxDefaults.height;
                 var offsets = $(el).offset();
-                var xRelative = e.pageX - offsets.left - el.width/2.0;
-                var yRelative = e.pageY - offsets.top - el.height/2.0;
+                var xRelative = event.pageX - offsets.left - el.width/2.0;
+                var yRelative = event.pageY - offsets.top - el.height/2.0;
 
                 function drawBox(x,y) {
                     // reset canvas    
@@ -84,8 +88,8 @@ define(
                     context.fillRect((x - boxWidth/2.0), (y - boxHeight/2.0), boxWidth, boxHeight);
                 }
 
-                function mouseMove (e) {
-                    e.preventDefault();
+                function mouseMove (event) {
+                    event.preventDefault();
                     var time = new Date().getTime();
                     var offsets = $(this).offset();
                     var x = e.pageX - offsets.left;
@@ -99,12 +103,12 @@ define(
                     savePath(xRelative,yRelative,time);
                     renderPath();
                 }
-                function touchMove (e) {
-                    e.preventDefault();
+                function touchMove (event) {
+                    event.preventDefault();
                     var time = new Date().getTime();
                     var offsets = $(this).offset();
-                    var x = e.touches[0].pageX - offsets.left;
-                    var y = e.touches[0].pageY - offsets.top;
+                    var x = event.touches[0].pageX - offsets.left;
+                    var y = event.touches[0].pageY - offsets.top;
                     var centerX = el.width/2.0
                     var centerY = el.height/2.0
                     var xRelative = x - centerX;
@@ -137,7 +141,7 @@ define(
                          x,y,0,1], t, "lineTo"));
                 }
 
-                e.preventDefault();
+                event.preventDefault();
                 this.$el.addClass("animation-creator-canvas-active");
 
                 transformations.push(new transformation(
@@ -152,6 +156,7 @@ define(
                     el.removeEventListener("mousemove", mouseMove);    
                 });
             }
+            */
         });
         return CanvasView;
     }
