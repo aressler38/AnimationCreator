@@ -17,6 +17,7 @@ require.config({
         }
     },
     paths: {
+        "addInitialTools"       : "js/extras/addInitialTools",
         "requestAnimationFrame" : "js/utils/requestAnimationFrame",
         "jQuery"                : "vendor/jquery/jquery-1.10.2.min",
         "jQueryNC"              : "js/utils/noConflict/jQueryNC",

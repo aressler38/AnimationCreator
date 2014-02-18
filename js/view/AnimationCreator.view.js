@@ -206,38 +206,35 @@ define(
                 var lookAhead   = 32;
                 var that        = this;
 
-                function start(timestamp) {
-                    /*
-                    if ((lookAhead+((timestamp - tStart) % dt)) > (transformations[tCounter % tLen].time - tInitial)) {
-                        animatedObjectViews.forEach(function(view) {
-                            view.apply3DMatrix(transformations[tCounter++ % tLen].matrix);
-                        });
-                        if (that.mode !== "play") return null;
-                        else window.requestAnimationFrame(start);
-                    }
-                    else {
-                        if (that.mode !== "play") return null;
-                        window.requestAnimationFrame(start);
-                    }
-                    */
+                
+                this.mode = "play";
+                // get first tInitial (find min value of transformations[0])
 
+                /** @callback - requestAnimationFrame step */
+                function renderLoop(timestamp) {
+                    if (this.mode !== "play" ) return null;
                     animatedObjectViews.forEach(function(view, index, views) {
                         //view.apply3DMatrix(transformations[tCounter++ % tLen].matrix);
                         view.applyNextMatrix();
                     });
+                    window.requestAnimationFrame(renderLoop);
                 }
-                
-                this.mode = "play";
-                // get first tInitial (find min value of transformations[0])
-                console.log("about to forEach...");
+                window.requestAnimationFrame(renderLoop);
+
+                return null;
+            },
+
+            getInitialTime: function() {
+                var animatedObjectViews = this.model.get("animatedObjectViews");
+                var tInitial = null;
                 animatedObjectViews.forEach(function(view, index, views) {
                     if (view.model.get("transformations")[0].time < tInitial) {
                         tInitial = view.model.get("transformations")[0].time;
                     }
                 }); 
-                window.requestAnimationFrame(start);
-                return null;
-            },
+                
+                return tInitial; 
+            },  
 
             stop: function() {
                 this.mode="stop";
