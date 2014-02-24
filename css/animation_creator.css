@@ -29,7 +29,7 @@ body:before {
 
 .top-container-style {
     background:silver;
-    margin-top:10px;
+    margin:35px 0 35px 0;
     padding-top:20px;
     padding-left:20px;
     padding-right:20px;
@@ -53,127 +53,6 @@ body:before {
     text-align: center;
 }
 
-nav {
-    width: 960px;
-    height: 100px;
-    margin: 40px 0px 100px 90px;
-    text-align: center;
-}
-
-.top-menu li {
-    display: inline-block;
-    text-align: center;
-    margin: 30px 5px;
-    position: relative;
-    -webkit-transition: all 0.3s ease; 
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
-}
-
-.top-menu li:hover {
-    margin: 30px 20px; 
-}
-
-.top-menu li:active {
-    margin: 30px 33px; 
-}
-
-.top-menu li a {
-    width: 100px;
-    height: 100px;
-    z-index: 9999;
-    position: absolute;
-    top: 25px;
-    font-weight: bold;
-    display: block;
-    text-decoration: none;
-    font-size: 20px;
-    color: darkblue;
-    text-shadow: 0px 1px 1px rgba(0,0,0,0.4), 0px 4px 6px rgba(0,0,0,0.1), 0px 9px 11px rgba(0,0,0,0.1);
-    -webkit-transition: all 0.1s linear; 
-    -moz-transition: all 0.1s linear;
-    -o-transition: all 0.1s linear;
-}
-
-.top-menu li:active a {
-    font-size: 26px;
-    top: 30px;
-    text-shadow: none;
-}
-
-.top-menu li div.menu-item {    
-    width: 100px;
-    height: 100px;
-    border-radius: 10px;
-    display: block;
-    -webkit-transition: all 0.2s ease; 
-    -moz-transition: all 0.2s ease;
-    -o-transition: all 0.2s ease;
-    -webkit-border-top-left-radius: 100px; 
-    -webkit-border-bottom-right-radius: 100px; 
-    -moz-border-radius-topleft: 100px; 
-    -moz-border-radius-bottomright: 100px; 
-    border-top-left-radius: 10px; 
-    border-bottom-right-radius: 10px;
-    -webkit-transform: rotate(49deg);
-    -moz-transform: rotate(49deg);
-    -o-transform: rotate(49deg);
-}
-
-.top-menu li:hover div.menu-item{ 
-    -webkit-border-top-left-radius: 80px; 
-    -webkit-border-bottom-right-radius: 80px; 
-    -moz-border-radius-topleft: 80px; 
-    -moz-border-radius-bottomright: 80px; 
-    border-top-left-radius: 50px; 
-    border-bottom-right-radius: 50px; 
-}
-
-.top-menu li:active div.menu-item{ 
-    -webkit-border-top-left-radius: 50px; 
-    -webkit-border-bottom-right-radius: 50px; 
-    -moz-border-radius-topleft: 50px; 
-    -moz-border-radius-bottomright: 50px; 
-    border-top-left-radius: 50px; 
-    border-bottom-right-radius: 50px; 
-}
-
-#home {
-    background: darkgrey;
-    box-shadow: inset 0 1px rgba(255,255,255,0.3),
-    inset 0 1px rgba(255,255,255,0.3), inset 0 10px 20px rgba(255,255,255,0.25),
-    inset 0 -15px 30px rgba(0,0,0,0.3)
-}
-
-#about { 
-    background: sandybrown; 
-    box-shadow: inset 0 1px rgba(255,255,255,0.3),
-    inset 0 1px rgba(255,255,255,0.3), inset 0 10px 20px rgba(255,255,255,0.25),
-    inset 0 -15px 30px rgba(0,0,0,0.3)
-}
-
-#chat {
-    background: rosybrown;
-    box-shadow: inset 0 1px rgba(255,255,255,0.3),
-    inset 0 1px rgba(255,255,255,0.3), inset 0 10px 20px rgba(255,255,255,0.25),
-    inset 0 -15px 30px rgba(0,0,0,0.3)
-}
-
-#examples { 
-    background: cadetblue;
-    box-shadow: inset 0 1px rgba(255,255,255,0.3),
-    inset 0 1px rgba(255,255,255,0.3), inset 0 10px 20px rgba(255,255,255,0.25),
-    inset 0 -15px 30px rgba(0,0,0,0.3)
-}
-
-#contact {
-    background: #FFCC00;
-    box-shadow: inset 0 1px rgba(255,255,255,0.3),
-    inset 0 1px rgba(255,255,255,0.3), inset 0 10px 20px rgba(255,255,255,0.25),
-    inset 0 -15px 30px rgba(0,0,0,0.3)
-}
-
-
 li {
     line-height: 39px;
 }
@@ -185,11 +64,9 @@ li {
     padding-bottom: 10px;
 }
 
-
 .text-muted {
     color:black;
 }
-
 
 .marketing {
     margin:40px 0;
@@ -204,6 +81,7 @@ h2, .h2 {
     color: black;
     font-size: 45px;
     text-shadow: 2px 2px 1px black;
+    margin: 55px 0 25px 0;
 }
 
 .animation-creator-canvas-active {
